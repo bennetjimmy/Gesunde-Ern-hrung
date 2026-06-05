@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Mein NNG-Küchenbuch</title>
+<meta name="theme-color" content="#c1623a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NNG Küche">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%23c1623a'/%3E%3Ctext x='50%25' y='50%25' font-family='Georgia,serif' font-size='58' fill='%23fff' text-anchor='middle' dominant-baseline='middle' font-weight='bold'%3ENNG%3C/text%3E%3Ctext x='50%25' y='82%25' font-size='30' text-anchor='middle'%3E%F0%9F%8D%B2%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' rx='14' fill='%23c1623a'/%3E%3Ctext x='50%25' y='58%25' font-size='34' text-anchor='middle' dominant-baseline='middle'%3E%F0%9F%8D%AF%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7ecd9; --paper2:#fbf4e7; --card:#fffaf0; --ink:#3a2a1d; --ink-soft:#7a6650;
+    --line:#e7d4ba; --terra:#c1623a; --terra-d:#a64f2c; --olive:#6f7a44; --honey:#dca33a;
+    --brick:#b34a3a; --leaf:#5f7a3e;
+    --shadow:0 8px 24px rgba(90,60,30,.12); --shadow-sm:0 3px 10px rgba(90,60,30,.10); --r:20px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{font-family:'Nunito Sans',system-ui,sans-serif;color:var(--ink);font-size:17px;line-height:1.55;
+    background:radial-gradient(120% 80% at 50% -10%, #fcf6ea 0%, var(--paper) 55%, #f1e2c7 100%) fixed;min-height:100vh;}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.25'/%3E%3C/svg%3E");mix-blend-mode:multiply;}
+  .wrap{position:relative;z-index:1;max-width:600px;margin:0 auto;padding:0 16px 120px}
+  header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg, rgba(247,236,217,.97), rgba(247,236,217,.86));backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .bar{max-width:600px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:1.18rem;color:var(--ink);letter-spacing:.2px}
+  .brand .dot{width:30px;height:30px;border-radius:9px;background:var(--terra);display:grid;place-items:center;color:#fff;font-size:17px;box-shadow:var(--shadow-sm)}
+  .homebtn{margin-left:auto;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-family:inherit;font-size:.92rem;padding:9px 14px;border-radius:999px;cursor:pointer;display:none;align-items:center;gap:6px}
+  .homebtn.show{display:inline-flex} .homebtn:active{transform:scale(.97)}
+  .hero{margin:22px 0 8px;animation:rise .5s ease both}
+  .hero h1{font-family:'Fraunces',serif;font-weight:600;font-size:2rem;line-height:1.1;margin:0 0 6px}
+  .hero p{margin:0;color:var(--ink-soft);font-weight:600}
+  .goalrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .goalchip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:.86rem;font-weight:700;color:var(--terra-d);box-shadow:var(--shadow-sm)}
+  .goalchip b{color:var(--ink)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:18px}
+  .tile{grid-column:span 1;cursor:pointer;text-align:left;font-family:inherit;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm);transition:transform .12s ease, box-shadow .12s ease;display:flex;flex-direction:column;gap:8px;min-height:118px;color:var(--ink);animation:rise .5s ease both;}
+  .tile:active{transform:translateY(1px) scale(.99)} .tile:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+  .tile .emo{font-size:1.7rem;line-height:1}
+  .tile .tt{font-family:'Fraunces',serif;font-weight:600;font-size:1.12rem;line-height:1.15}
+  .tile .sub{font-size:.82rem;color:var(--ink-soft);font-weight:600;line-height:1.3}
+  .tile.hero-tile{grid-column:span 2;min-height:auto;flex-direction:row;align-items:center;gap:16px;background:linear-gradient(135deg,#c1623a,#a64f2c);border:none;color:#fff}
+  .tile.hero-tile .tt{color:#fff;font-size:1.4rem} .tile.hero-tile .sub{color:#ffe9dc} .tile.hero-tile .emo{font-size:2.4rem}
+  .tile.t-terra{background:linear-gradient(135deg,#f6ddcf,#f3d2bf)}
+  .tile.t-olive{background:linear-gradient(135deg,#e8edd6,#dde6c4)}
+  .tile.t-honey{background:linear-gradient(135deg,#f8e8c4,#f5dfaf)}
+  .sec{animation:rise .4s ease both}
+  .sec h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.7rem;margin:18px 0 4px}
+  .sec .lead{color:var(--ink-soft);font-weight:600;margin:0 0 14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:16px;margin-bottom:13px}
+  .card h3{font-family:'Fraunces',serif;font-weight:600;margin:0 0 8px;font-size:1.2rem}
+  .muted{color:var(--ink-soft)}
+  .note{font-size:.82rem;color:var(--ink-soft);background:#fbf0dc;border:1px dashed var(--line);border-radius:12px;padding:9px 12px;margin:10px 0;font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0}
+  .pill{border:1px solid var(--line);background:var(--paper2);color:var(--ink-soft);font-size:.78rem;font-weight:800;border-radius:999px;padding:5px 11px;letter-spacing:.2px}
+  .pill.page{background:#efe1c6;color:#7a5a2a;border-color:#e3cfa3}
+  .pill.dev{background:#e8edd6;color:#586a32;border-color:#d6e0bd}
+  .pill.src{background:#f7ddd0;color:#a14e2e;border-color:#eecabb}
+  .pill.prot{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+  .pill.cat{background:#fff;color:var(--terra-d);border-color:#eecdbd}
+  .filterbar{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch}
+  .filterbar::-webkit-scrollbar{display:none}
+  .fbtn{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-family:inherit;font-weight:800;font-size:.86rem;padding:8px 14px;border-radius:999px;cursor:pointer}
+  .fbtn.on{background:var(--terra);color:#fff;border-color:var(--terra)}
+  input[type=text],input[type=number],textarea,select{width:100%;font-family:inherit;font-size:1rem;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:12px 14px;outline:none;}
+  input:focus,textarea:focus,select:focus{border-color:var(--terra)}
+  label.fld{display:block;font-weight:800;font-size:.86rem;color:var(--ink-soft);margin:10px 0 5px;letter-spacing:.2px}
+  textarea{resize:vertical;min-height:54px}
+  .search{position:relative;margin-bottom:10px}
+  .search input{padding-left:42px}
+  .search .ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.05rem;opacity:.6}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:.96rem;padding:12px 18px;border-radius:13px;background:var(--terra);color:#fff;box-shadow:var(--shadow-sm)}
+  .btn:active{transform:scale(.98)} .btn.full{width:100%}
+  .btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
+  .btn.olive{background:var(--olive)} .btn.sm{padding:8px 13px;font-size:.86rem;border-radius:11px}
+  .row{display:flex;gap:10px;flex-wrap:wrap} .row .grow{flex:1 1 120px}
+  .rec{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);margin-bottom:11px;overflow:hidden}
+  .rec .head{padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;gap:12px}
+  .rec .head .emo{font-size:1.45rem;margin-top:2px}
+  .rec .head .ttl{font-family:'Fraunces',serif;font-weight:600;font-size:1.12rem;line-height:1.2;flex:1}
+  .rec .head .fav{font-size:1.3rem;background:none;border:none;cursor:pointer;color:#d8c39c;padding:0 2px;line-height:1}
+  .rec .head .fav.on{color:var(--terra)}
+  .rec .meta{padding:0 16px 6px}
+  .rec .body{display:none;padding:4px 16px 16px;border-top:1px dashed var(--line);margin-top:6px}
+  .rec.open .body{display:block;animation:rise .25s ease both}
+  .rec .body ul{margin:8px 0 0;padding-left:20px} .rec .body li{margin:3px 0}
+  .rec .pdf{margin-top:12px;font-weight:800;color:var(--terra-d);font-size:.92rem;background:#fbeee0;border:1px solid #eed3bf;border-radius:11px;padding:9px 12px}
+  .checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .chk{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;font-weight:700;font-size:.92rem}
+  .chk input{width:19px;height:19px;accent-color:var(--terra);flex:none}
+  .chk.on{background:#f3ddcf;border-color:#e6bda6}
+  .grouphd{font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;margin:14px 0 8px;color:var(--terra-d)}
+  .meter{height:20px;border-radius:999px;background:#eaddc4;overflow:hidden;border:1px solid var(--line);position:relative}
+  .meter .fill{height:100%;width:0;background:linear-gradient(90deg,var(--honey),var(--terra));transition:width .35s ease}
+  .meter .fill.good{background:linear-gradient(90deg,#7faa4e,var(--leaf))}
+  .bignum{font-family:'Fraunces',serif;font-weight:600;font-size:2.6rem;line-height:1}
+  .bignum small{font-size:1rem;color:var(--ink-soft);font-family:'Nunito Sans';font-weight:800}
+  .listrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+  .listrow:last-child{border-bottom:none}
+  .listrow .x{margin-left:auto;background:none;border:none;cursor:pointer;font-size:1.1rem;color:#b06a4e}
+  .resultcard{border-left:6px solid var(--line)}
+  .resultcard.good{border-left-color:var(--leaf)}
+  .resultcard.bad{border-left-color:var(--brick)}
+  .resultcard.unk{border-left-color:var(--honey)}
+  .daypick{display:flex;gap:8px;margin:6px 0 12px}
+  .daypick button{flex:1;border:1.5px solid var(--line);background:var(--card);font-family:inherit;font-weight:800;padding:10px;border-radius:12px;cursor:pointer;color:var(--ink-soft)}
+  .daypick button.on{background:var(--olive);color:#fff;border-color:var(--olive)}
+  .plist li{margin:5px 0} .small{font-size:.85rem} .center{text-align:center}
+  .saved-flash{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 20px;border-radius:999px;font-weight:800;font-size:.9rem;opacity:0;transition:all .3s ease;z-index:50;box-shadow:var(--shadow)}
+  .saved-flash.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media(max-width:380px){ .checkgrid{grid-template-columns:1fr} .grid{grid-template-columns:1fr} .tile.hero-tile{grid-column:span 1} }
+  /* Dunkelmodus */
+  body[data-theme=dark]{--paper:#241a14;--paper2:#2c211a;--card:#30251d;--ink:#f1e4d4;--ink-soft:#c2ab8c;--line:#473627;--shadow:0 8px 24px rgba(0,0,0,.4);--shadow-sm:0 3px 10px rgba(0,0,0,.35);background:radial-gradient(120% 80% at 50% -10%, #2c2018 0%, #241a14 55%, #1c140e 100%) fixed;}
+  body[data-theme=dark]::before{opacity:.22}
+  body[data-theme=dark] header{background:linear-gradient(180deg, rgba(36,26,20,.97), rgba(36,26,20,.86))}
+  body[data-theme=dark] input,body[data-theme=dark] textarea,body[data-theme=dark] select{background:#241a14;color:var(--ink)}
+  body[data-theme=dark] .pill{background:#3a2c21} body[data-theme=dark] .meter{background:#3a2c21}
+  body[data-theme=dark] .note{background:#2c211a}
+  /* Navi-Leiste unten */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:space-around;align-items:center;padding:8px 6px calc(8px + env(safe-area-inset-bottom));background:linear-gradient(180deg, rgba(251,244,231,.82), var(--paper));backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+  body[data-theme=dark] .tabbar{background:linear-gradient(180deg, rgba(36,26,20,.82), var(--paper))}
+  .tab{flex:1;border:none;background:none;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px;color:var(--ink-soft);font-weight:800;font-size:.66rem}
+  .tab .ti{font-size:1.35rem;line-height:1;opacity:.65;transition:all .15s}
+  .tab.on{color:var(--terra-d)} .tab.on .ti{opacity:1;transform:translateY(-1px)}
+  /* Heute-Seite */
+  .dash-greet{font-family:'Fraunces',serif;font-weight:600;font-size:1.9rem;margin:20px 0 2px}
+  .dash-sub{color:var(--ink-soft);font-weight:700;margin:0 0 16px}
+  .today{background:linear-gradient(135deg,#c1623a,#a64f2c);color:#fff;border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .today.ruhe{background:linear-gradient(135deg,#6f7a44,#586a32)}
+  .today .lab{font-weight:800;font-size:.72rem;letter-spacing:.6px;text-transform:uppercase;opacity:.85}
+  .today h3{font-family:'Fraunces',serif;font-weight:600;font-size:1.4rem;margin:4px 0 10px;color:#fff}
+  .today p{margin:0;font-size:.92rem;opacity:.95}
+  .ring-wrap{display:flex;align-items:center;gap:16px}
+  .ring{--p:0;width:84px;height:84px;border-radius:50%;flex:none;background:conic-gradient(var(--honey) calc(var(--p)*1%), rgba(255,255,255,.22) 0);display:grid;place-items:center}
+  .ring.good{background:conic-gradient(#cde8a0 calc(var(--p)*1%), rgba(255,255,255,.22) 0)}
+  .ring .inner{width:64px;height:64px;border-radius:50%;background:#a64f2c;display:grid;place-items:center;text-align:center;line-height:1}
+  .today.ruhe .ring .inner{background:#4f5f2c}
+  .ring .inner b{font-family:'Fraunces',serif;font-size:1.2rem;color:#fff}
+  .ring .inner span{font-size:.58rem;color:#ffe9dc;display:block;margin-top:2px}
+  .qrow{display:flex;gap:10px;margin:0 0 14px}
+  .qbtn{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 8px;cursor:pointer;font-family:inherit;font-weight:800;font-size:.78rem;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:var(--shadow-sm)}
+  .qbtn .qe{font-size:1.4rem}
+  .tipcard{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--honey);border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
+  .tipcard .lab{font-weight:800;font-size:.7rem;letter-spacing:.5px;text-transform:uppercase;color:var(--honey)}
+  /* Auswahl-Overlay */
+  .overlay{position:fixed;inset:0;z-index:60;background:rgba(40,28,18,.55);backdrop-filter:blur(3px);display:none;align-items:flex-end}
+  .overlay.show{display:flex}
+  .sheet{background:var(--paper2);width:100%;max-width:600px;margin:0 auto;max-height:82vh;border-radius:22px 22px 0 0;padding:16px;overflow-y:auto;box-shadow:0 -10px 30px rgba(0,0,0,.25);animation:slideup .25s ease}
+  @keyframes slideup{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+  .sheet h3{font-family:'Fraunces',serif;margin:0 0 10px}
+  .pickrow{padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:8px;cursor:pointer;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .pickrow:active{transform:scale(.99)}
+  .slotchip{display:inline-flex;align-items:center;gap:6px;background:#f3ddcf;border:1px solid #e6bda6;color:var(--terra-d);border-radius:999px;padding:5px 10px;font-weight:800;font-size:.82rem;margin:2px 0 6px}
+  body[data-theme=dark] .slotchip{background:#3a2c21;border-color:#5a4636}
+  .slotchip button{background:none;border:none;color:var(--terra-d);cursor:pointer;font-size:1rem;line-height:1;padding:0}
+  /* Gewichtskurve */
+  .chart{display:flex;align-items:flex-end;gap:6px;height:130px;padding:18px 0 6px}
+  .bar{flex:1;background:linear-gradient(180deg,var(--terra),var(--honey));border-radius:6px 6px 0 0;min-height:4px;position:relative;display:flex;justify-content:center}
+  .bar span{position:absolute;top:-17px;font-size:.68rem;font-weight:800;color:var(--ink-soft);white-space:nowrap}
+  .barlbls{display:flex;gap:6px} .barlbl{flex:1;font-size:.6rem;color:var(--ink-soft);text-align:center}
+  /* Optionen & Schalter */
+  .opt{display:block;border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer}
+  .opt.on{border-color:var(--terra);background:#f3ddcf} body[data-theme=dark] .opt.on{background:#3a2c21}
+  .opt .ol{font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem}
+  .opt .od{font-size:.82rem;color:var(--ink-soft);font-weight:600}
+  .switch{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .tog{width:52px;height:30px;border-radius:999px;background:#d9c6a8;border:none;cursor:pointer;position:relative;flex:none;transition:background .2s}
+  .tog.on{background:var(--terra)}
+  .tog::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .2s}
+  .tog.on::after{left:25px}
+  a{color:var(--terra-d)}
+  .warnbox{background:#fbe7e0;border:1px solid #eab3a0;border-radius:12px;padding:10px 12px;margin:0 0 12px}
+  body[data-theme=dark] .warnbox{background:#3a261d;border-color:#6b4030}
+  .wb-h{font-weight:800;font-size:.7rem;text-transform:uppercase;letter-spacing:.4px;color:var(--terra-d);margin-bottom:4px}
+  .wb-h+.wb-h,.warnline+.wb-h,.tipline+.wb-h{margin-top:8px}
+  .warnline,.tipline{font-size:.86rem;margin:3px 0;line-height:1.35;color:var(--ink)}
+  .portsel{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.8rem;font-weight:800;color:var(--ink-soft);margin:6px 0 8px}
+  .pbtn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 10px;cursor:pointer;font-family:inherit;font-weight:800;color:var(--ink)}
+  .pbtn.on{background:var(--terra);color:#fff;border-color:var(--terra)}
+  .zub{margin-top:14px}
+  .zub>b{display:block;margin-bottom:4px;font-family:Fraunces,serif;font-size:1.02rem}
+  .zub ol{margin:0;padding-left:22px}
+  .zub li{margin:5px 0;line-height:1.45}
+  .pill.nut{background:var(--paper);border:1px solid var(--line);color:var(--ink-soft);font-weight:700}
+  .seg{display:flex;gap:6px}
+  .seg button{flex:1;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px;cursor:pointer;font-family:inherit;font-weight:800;color:var(--ink)}
+  .seg button.on{background:var(--terra);color:#fff;border-color:var(--terra)}
+  .daysum{margin:8px 0 2px;font-weight:800;font-size:.86rem;color:#6f8a3a}
+  .remind{background:#f6ead0;border:1px solid var(--terra);border-radius:14px;padding:12px 14px;margin:0 0 14px;cursor:pointer}
+  body[data-theme=dark] .remind{background:#3a311d}
+  .kcaldash{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:.95rem;cursor:pointer}
+  .kcalrow{margin:10px 0 0;font-weight:800;color:#c2410c}
+  body[data-theme=dark] .kcalrow{color:#f0a060}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <div class="brand" data-go="home" style="cursor:pointer"><span class="dot">🍯</span> Mein NNG-Küchenbuch</div>
+  <button class="homebtn" data-go="home">← Start</button>
+</div></header>
+<div class="wrap"><div id="app"></div></div>
+<div class="saved-flash" id="flash">Gespeichert ✓</div>
+<nav class="tabbar" id="tabbar"></nav>
+<div class="overlay" id="overlay"></div>
+<script>
+/* DATEN — aus den Projektdateien; Zubereitung aus den Original-Büchern (in eigenen Worten zusammengefasst). */
+const PROFILE={ziel:"Muskelaufbau",protein:"130–150 g",mahlzeiten:"3 pro Tag"};
+const RECIPES=[
+ {n:"Karotten-Apfel-Salat",c:"Salate",p:"2–3",i:"Karotten; Bio-Äpfel; Limetten; Apfelessig (naturtrüb); Olivenöl; Ursalz; Pfeffer; frischer Koriander"},
+ {n:"Kartoffelstampf",c:"Gemüse",p:"4–5",i:"Kartoffeln; Butter; Salz; Pfeffer; Muskatnuss; Zimt; Kümmel"},
+ {n:"Mangoldsalat mit gebratenen Pilzen",c:"Salate",p:"6–7",i:"Mangold; Champignons; Knoblauch; Balsamico-Essig; Walnussöl; Thymian"},
+ {n:"Ofengemüse",c:"Gemüse",p:"8–9",i:"Paprika; Zucchini; Aubergine; Kartoffeln; passierte Tomaten; Knoblauch"},
+ {n:"Orientalischer Salat",c:"Salate",p:"10–11",i:"Gurke; Tomaten; Zwiebel; Olivenöl; Granatapfelessig oder Zitronensaft; Salz; Pfeffer; Petersilie"},
+ {n:"Tortilla de España",c:"Eier",p:"12–13",i:"Eier; Gemüse nach Wahl (Paprika, Zucchini, Kartoffeln, Karotten); Knoblauch; Salz; Pfeffer; Gewürze; Petersilie; Butter; Kokosöl"},
+ {n:"Clean Eating Mayo",c:"Basis",p:"14–15",i:"Zitronensaft; Apfelessig; gemahlene Senfkörner; Rohhonig; Ursalz; Olivenöl; Kokosöl"},
+ {n:"Eiersalat mit Avocado",c:"Eier",p:"16–17",i:"Eier; Avocado; Frühlingszwiebeln; Zitrone; Olivenöl; Petersilie; Schnittlauch; Salz; Pfeffer"},
+ {n:"Spinat-Feta-Quiche ohne Teig",c:"Herzhaft",p:"18–19",i:"frischer Spinat; Feta-Käse; Eier; Sahne; Zwiebel; Muskatnuss"},
+ {n:"Zucchini-Röllchen mit Walnuss-Feta-Füllung",c:"Gemüse",p:"20–21",i:"Zucchini; Feta-Käse; Walnüsse; Knoblauch; Basilikum"},
+ {n:"Kartoffelchips",c:"Süßes",p:"22–23",i:"Kartoffeln (oder nur Schalen); Gewürze nach Wahl; Kokosöl"},
+ {n:"Dattel-Schnittlauch-Creme",c:"Süßes",p:"24–25",i:"Datteln; Schnittlauch; Ziegenfrischkäse"},
+ {n:"Menemen mit cleanem Sucuk",c:"Eier",p:"26–27",i:"Eier; Sucuk (ohne Zucker/Samenöle, Empf. Josef's Bio); Tomaten; grüne Paprika; rote Paprika; Zwiebel; Knoblauch; Olivenöl; Salz; Pfeffer; Paprikapulver; Petersilie"},
+ {n:"Quinoa-Gemüse-Pfanne",c:"Herzhaft",p:"28–29",i:"Quinoa; Gemüse nach Wahl (Paprika, Zucchini, Brokkoli, Karotten); Gemüsebrühe; Avocado; optional Ei oder Käse"},
+ {n:"Spinat-Ei-Muffins",c:"Eier",p:"30–31",i:"Eier; frischer Spinat; Parmesan; Milch (z. B. Hafermilch); Zwiebel; Olivenöl; Salz; Pfeffer"},
+ {n:"Wassermelonen-Salat",c:"Salate",p:"32–33",i:"Wassermelone; Gurken; Ziegenkäse; Petersilie; Koriander; Limetten; Rohhonig (optional)"},
+ {n:"Süßkartoffel-Falafel",c:"Herzhaft",p:"34–35",i:"Süßkartoffeln; Kichererbsen; Knoblauch; Kreuzkümmel; Paprika; Petersilie; Olivenöl"},
+ {n:"Süßkartoffel-Mash mit Pilzen",c:"Gemüse",p:"36–37",i:"Süßkartoffeln; Zwiebeln; Knoblauch; Pilze nach Wahl; Butter; Kräuter; Salat; Avocados; rote Beete mit Schale"},
+ {n:"Rote-Linsen-Suppe",c:"Suppe",p:"38–39",i:"rote Linsen; Natron; Zwiebeln; Knoblauch; Möhren; Paprika; Tomaten; Tomatenmark; Kokosmilch; Öl; Kräuter; optional Joghurt"},
+ {n:"Sardinensalat mit Pommes",c:"Fisch & Meer",p:"40–41",i:"Kartoffeln; Bio-Sardinen; Tomaten; Gurken; Avocados; Zitronen; Knoblauch; Olivenöl; Kräuter; Gewürze"},
+ {n:"Mango-Curry mit Geflügel",c:"Fleisch",p:"42–43",i:"Geflügelfleisch; Möhren; Paprika; Zwiebeln; Lauchzwiebeln; Knoblauch; Mango; Datteln; Koriander; Petersilie; Kokosmilch; Curry; Cayennepfeffer; Paprika; Limette; Butter"},
+ {n:"Lucky Gut Burger",c:"Fleisch",p:"44–45",i:"500 g Rinderhack; Süßkartoffel; Zwiebel; Knoblauch; Petersilie; Eier; Olivenöl; Dijon-Senf; Ghee oder Butter; Salat; Salz; Pfeffer; Paprika; Muskat; Kurkuma; Kümmel; Oregano"},
+ {n:"Bolognese mit glutenfreien Nudeln",c:"Pasta & Nudeln",p:"46–47",i:"Rinderhackfleisch; Zwiebeln; Knoblauch; Chili (optional); Gemüse (Karotten, Sellerie, Paprika); Tomatenmark; Tomatenpassata; Oregano; Basilikum; glutenfreie Nudeln"},
+ {n:"Wraps mit Auberginen-Creme & würzigem Blumenkohl",c:"Herzhaft",p:"48–49",i:"Flohsamenschalen; Roggenmehl; Buchweizenmehl; Olivenöl; Kräuter; Auberginen; Tahin; Blumenkohl; Medjool-Datteln; Cashews; Gewürze"},
+ {n:"Wildreispfanne mit gefüllter Aubergine",c:"Fleisch",p:"50–51",i:"Demeter-Wildreis; Fassbutter; rote Zwiebeln; Knoblauch; Auberginen; 500 g Hackfleisch; Petersilie; Koriander; Oregano; Thymian; Tomatenmark"},
+ {n:"Rinderbrust mit Cranberry-Chili-Sauce",c:"Fleisch",p:"52–53",i:"600 g Rinderbrust; frische Cranberries; rote Chilischoten; Zwiebel; Kreuzkümmel; Honig; Apfelessig"},
+ {n:"Pasta Scampi Spinaci",c:"Pasta & Nudeln",p:"54–55",i:"hausgemachtes Pesto; Sahne; Buchweizennudeln; Zwiebel; Knoblauch; Cherry-Tomaten; Blattspinat; Scampis; Butter; Salz; Pfeffer; Chili"},
+ {n:"Kürbis-Linsen-Auflauf",c:"Herzhaft",p:"56–57",i:"Hokkaido-Kürbis; grüne oder braune Linsen; Zwiebeln; Knoblauch; Thymian; Feta-Käse; Olivenöl; Salz; Pfeffer; Kreuzkümmel"},
+ {n:"Rinderfilet mit Balsamico-Zwiebeln",c:"Fleisch",p:"58–59",i:"Rinderfilet; rote Zwiebeln; Balsamico-Essig; Honig; Olivenöl; Salz; Pfeffer"},
+ {n:"Süßkartoffel-Gnocchi in Pesto",c:"Pasta & Nudeln",p:"60–61",i:"Süßkartoffeln; glutenfreies oder Roggenmehl; Buchweizenmehl; Olivenöl; Ursalz; Muskat; Oregano; Thymian; Basilikum; Petersilie; Koriander; Cashews; Pinienkerne; Knoblauch"},
+ {n:"Rindersteak mit Rote-Bete-Relish",c:"Fleisch",p:"62–63",i:"Rindersteaks; gekochte Rote Bete; Apfelessig; Senf; Honig; Schnittlauch"},
+ {n:"Glutenfreie Lasagne",c:"Pasta & Nudeln",p:"64–65",i:"glutenfreie Lasagneblätter; 1 kg Hackfleisch; rote Zwiebeln; Knoblauch; Tomatenmark; Tomaten-Passata; Oregano; Basilikum; Thymian; Ziegenjoghurt; Petersilie; Koriander; Bio-Ziegenkäse"},
+ {n:"Buchweizen-Spaghetti mit Gambas",c:"Pasta & Nudeln",p:"66–67",i:"Buchweizen-Spaghetti; Bio-Gambas; Knoblauch; Bio-Fassbutter; Tomaten; Zucchini; Petersilie; Basilikum; Olivenöl; Salz; Pfeffer; Chili"},
+ {n:"Brokkoli-Nudeln mit Tomaten-Salsa",c:"Pasta & Nudeln",p:"68–69",i:"Brokkoli; Buchweizenmehl; glutenfreies Mehl; Olivenöl; Ursalz; Muskat; Oregano; rote Zwiebeln; Knoblauch; Tomatenmark; Tomaten-Passata; Karotten oder Pastinaken; gelbe Paprika; Petersilie; Koriander; Kreuzkümmel; Paprika; Chili"},
+ {n:"Gulasch",c:"Fleisch",p:"70–71",i:"300 g Rindergulasch; Paprikas; Tomate; Zwiebeln; Knoblauch; Salz; Pfeffer; Muskatnuss; Kümmel; Paprika süß & scharf; Butter"},
+ {n:"Lammfilet mit Fenchel-Pflaumen-Salsa",c:"Fleisch",p:"72–73",i:"500 g Lammfilet; Fenchelknolle; getrocknete Pflaumen; rote Zwiebel; Balsamico-Essig; Olivenöl; Thymian"},
+ {n:"Nur Noch Gesund Eistee",c:"Getränke",p:"74–75",i:"loser Tee nach Wahl; Zitronensaft; Honig; gefrorene Beeren und Obst"},
+ {n:"Super Roh Avocado Torte",c:"Süßes",p:"76–77",i:"Mandeln; getrocknete Datteln; Paranüsse; Pekanüsse; Kokosfett; Kokosflocken; reife Avocados; Zitronen; Limette; Rohhonig; Rosenwasser"},
+ {n:"Apfel-Smoothie",c:"Getränke",p:"78–79",i:"Äpfel; griechischer Joghurt; Zimt; Honig; Wasser oder Pflanzenmilch"},
+ {n:"Obstsalat",c:"Süßes",p:"80–81",i:"Obst nach Wahl (Äpfel, Bananen, Beeren, Orangen, Kiwis, Trauben); Honig; Zitrone; Petersilie"},
+ {n:"Avocado-Ei-Boote",c:"Eier",p:"14",i:"Avocado; Eier; Salz; Pfeffer; frische Kräuter"},
+ {n:"Bunter Gemüsesalat mit Hähnchen",c:"Salate",p:"14",i:"Hähnchenbrust (Bio); grünes Gemüse (Rucola, Feldsalat, Spinat); Olivenöl; Zitronensaft; Salz; Pfeffer"},
+ {n:"Gefüllte Paprika mit Rinderhack",c:"Fleisch",p:"14",i:"Paprika; Rinderhackfleisch; Zwiebel; Knoblauch; Tomaten; Salz; Pfeffer; Paprikapulver; Kreuzkümmel; Oregano; optional Hummus"},
+ {n:"Spinatomelett mit Feta",c:"Eier",p:"14",i:"Eier; frischer Spinat; Feta-Käse; Olivenöl; Salz; Pfeffer"},
+ {n:"Gefüllte Avocado mit Garnelen",c:"Fisch & Meer",p:"15",i:"Avocado; Garnelen; Knoblauch; Zitrone; Petersilie; Olivenöl; Salz; Pfeffer"},
+ {n:"Hähnchensalat mit Nüssen und Beeren",c:"Salate",p:"15",i:"Hähnchenbrust; gemischter Salat; Beeren (Himbeeren, Blaubeeren); Nüsse (Mandeln, Walnüsse); Olivenöl; Balsamico-Essig; Salz; Pfeffer"},
+ {n:"Gebratene Eier mit Gemüse",c:"Eier",p:"15",i:"Eier; gemischtes Gemüse (Paprika, Zwiebeln, Pilze); Kokosöl; Salz; Pfeffer; Gewürze"},
+ {n:"Kokos-Chia-Pudding mit Beeren",c:"Süßes",p:"15",i:"Chiasamen; Kokosmilch; Vanilleextrakt; Honig; Beeren (Erdbeeren, Himbeeren, Blaubeeren)"},
+ {n:"Gebratene Rumpsteaks mit Süßkartoffelpüree",c:"Fleisch",p:"17",i:"2 Rumpsteaks; Süßkartoffeln; Olivenöl; Salz; Pfeffer; Rosmarin; Thymian; Ghee"},
+ {n:"Lammrücken / Koteletts mit Grillgemüse",c:"Fleisch",p:"18",i:"350 g Lammrücken oder Koteletts; Zucchini; Aubergine; Paprika; karamellisierte Zwiebeln; Knoblauch; Koriander; Petersilie; Minze; Oregano; Thymian; Ursalz; Pfeffer; Ghee (optional)"},
+ {n:"Rindergulasch mit Paprika, Tomaten & Süßkartoffeln",c:"Fleisch",p:"19",i:"300 g Rindergulasch; grüne Paprika; Tomaten; Zwiebel; Süßkartoffel; Knoblauch; Olivenöl; Paprikapulver; Salz; Pfeffer; Petersilie oder Koriander"},
+ {n:"Gefüllte Zucchiniboote mit Hackfleisch & Feta",c:"Fleisch",p:"20 / 32",i:"Zucchini; 200 g Hackfleisch; Zwiebel; Knoblauch; Feta-Käse; stückige Tomaten; Basilikum; Olivenöl; Salz; Pfeffer"},
+ {n:"Glutenfreie Avocadonudeln mit Dorade",c:"Fisch & Meer",p:"21",i:"glutenfreie Nudeln; Doradenfilets; Avocado; Knoblauch; Zitrone; Olivenöl; Salz; Pfeffer; Basilikum"},
+ {n:"Ente Gut, Alles Gut (Entenbrust mit Erdnusssauce)",c:"Fleisch",p:"22–23",i:"Entenbrust; Zwiebel; Sauerkraut/Rotkohl/Rosenkohl/Blumenkohl; Gemüse nach Wahl; Erdnussmus; Ingwer; Kurkuma; Knoblauch; Cayennepfeffer; Paprikapulver; Dattelsirup; Kokosmilch"},
+ {n:"Spinat-Wraps mit Hackfleischgemüsefüllung",c:"Fleisch",p:"24–25",i:"Spinat; Eier; Mandelmehl; Salz; Pfeffer; 250 g Hackfleisch (Rind oder Geflügel); Zwiebel; Paprika; Zucchini; Knoblauch; Olivenöl; Paprikapulver; Kreuzkümmel; Chili"},
+ {n:"Fleischbällchen in scharfer Tomatensauce mit Buchweizenbrot",c:"Fleisch",p:"26–27",i:"400 g Rinderhackfleisch; passierte Tomaten; frische Tomaten; Ei; Knoblauch; Zwiebel; Paprikapulver; Salz; Pfeffer; Buchweizenmehl; glutenfreies Mehl; Backpulver; Olivenöl; Oregano"},
+ {n:"Rindfleisch-Burrito-Bowl",c:"Fleisch",p:"28",i:"150 g Rindfleisch; Quinoa; schwarze Bohnen; Paprika; Zwiebel; Guacamole; saure Sahne; Koriander; Salz; Pfeffer"},
+ {n:"Steak 'n' Shrimps",c:"Fleisch",p:"29–30",i:"2 Rumpsteaks oder Entrecôtes; Bio-Garnelen oder Shrimps; Zwiebel (mit Dattelsirup); Knoblauch; Brokkoli; Brechbohnen; rote Paprika; Tomaten; Avocado"},
+ {n:"Kichererbsen-Bites auf Rucola-Salat",c:"Herzhaft",p:"33–34",i:"Rucola; Spitzpaprika; Ziegenkäse; Limettensaft; Honig; Salz; Pfeffer; Kichererbsenmehl; Backpulver; Curry; Paprika; Chili; Kreuzkümmel; Kurkuma; Kichererbsen; rote Zwiebel; Knoblauch; Koriander"},
+ {n:"Grüne Nudeln à la Tofu",c:"Pasta & Nudeln",p:"35",i:"glutenfreie Nudeln; Zwiebel; Knoblauch; Seidentofu; Cashewnüsse; Hanfsamen; Olivenöl; Salz; Pfeffer"},
+ {n:"Dreierlei Currynudeln",c:"Pasta & Nudeln",p:"36–37",i:"Zucchini; Karotte; rote Paprika; Zwiebel; glutenfreie Nudeln; Kokosmilch; Salz; Limette; Basilikum; Koriander; Medjool-Datteln; Knoblauch; Jalapeño; Currypulver"},
+ {n:"Kartoffelauflauf mit Champignonhack",c:"Herzhaft",p:"38",i:"Zwiebel; Champignons; Kartoffeln; Paprikapulver; passierte Tomaten; Bohnenkraut; Salz; Pflanzenmilch; Kartoffelstärke; Schnittlauch"},
+ {n:"Tofu- und Gemüse-Spieße mit Bulgur",c:"Herzhaft",p:"39",i:"Tofu; Bulgur; Zucchini; Champignons; rote Paprika; Sesamöl; Gewürze"},
+ {n:"Gebackene Falafel mit Salat & Minze-Tahin-Soße",c:"Herzhaft",p:"40–41",i:"gekochte Kichererbsen; Zwiebeln; Knoblauch; Petersilie; Koriander; Salz; Kreuzkümmel; Salatkopf; Gurke; Tomaten; Rotkohl; Karotte; Zucchini; Dattel; Tahin; Zitronensaft; Dill; Minze; Meersalz"},
+ {n:"Buchweizen-Crêpes mit Gemüsefüllung",c:"Herzhaft",p:"42–43",i:"Buchweizenmehl; Pflanzenmilch; Leinsamenmehl; Olivenöl; Salz; Kräuter; Zucchini; rote Paprika; gelbe Paprika; rote Zwiebel; Champignons; Knoblauch; Petersilie oder Basilikum"},
+ {n:"Blumenkohl-Steaks",c:"Gemüse",p:"44",i:"Blumenkohl; Öl; Gewürze nach Wahl"},
+ {n:"Brathirse mit Gemüse",c:"Herzhaft",p:"45",i:"200 g Hirse; Salz; Zwiebel; Knoblauch; Tomaten; Paprika; Zucchini; Blumenkohlröschen; Pfeffer; Kurkuma; Curry; Kreuzkümmel; Chiliflocken"},
+ {n:"Erdbeer-Kokos-Chia-Pudding",c:"Süßes",p:"47–48",i:"Chiasamen; Kokosjoghurt; Pflanzenmilch (Mandel oder Kokos); Zimt oder Vanille; Dattelsirup; gefrorene Erdbeeren; gefrorene Mango"},
+ {n:"Karotten-Cupcakes",c:"Süßes",p:"49–50",i:"geraspelte Karotten; Walnüsse; Datteln; Buchweizenflocken; Kokosflocken; Chiasamen; Ingwerpulver; Zimt; Muskatnuss; Cashewnüsse; Kokosöl; Dattelsirup; Limette"},
+ {n:"Mousse au Chocolat",c:"Süßes",p:"51",i:"Seidentofu; dunkle Schokolade (ab 90 % Kakao); Medjool-Datteln; Cashewnüsse; Wasser"},
+ {n:"Erdnussbutter-Kekse",c:"Süßes",p:"52",i:"250 g Erdnussmus; Mandelmehl oder gemahlene Mandeln; Dattelsirup; dunkle Schokolade (optional)"},
+ {n:"Wildbeer-Waffeln mit Kokosnuss-Sahne",c:"Süßes",p:"53",i:"Buchweizenmehl oder glutenfreies Mehl; reife Bananen; Eier; Zimt; Kokosmilch; Dattelsirup; Vanilleschote"},
+ {n:"Lemon Cake",c:"Süßes",p:"54",i:"Mandeln; Buchweizenflocken; Datteln; Honig; griechischer Joghurt oder Sojaquark; Zitrone"}
+];
+const CAT_EMOJI={"Salate":"🥗","Eier":"🍳","Fleisch":"🥩","Fisch & Meer":"🐟","Pasta & Nudeln":"🍝","Herzhaft":"🥘","Gemüse":"🥦","Suppe":"🍲","Süßes":"🍫","Getränke":"🥤","Basis":"🫙"};
+const CATS=["Salate","Eier","Fleisch","Fisch & Meer","Pasta & Nudeln","Herzhaft","Gemüse","Suppe","Süßes","Getränke","Basis"];
+const DEVICES=["Herd","Backofen","Airfryer","Thermomix","ohne Gerät"];
+const PROT=[
+ {n:"Eier",per:13,egg:true},{n:"Lachs",per:20},{n:"Sardinen",per:25},{n:"Rinderhack",per:20},
+ {n:"Rinderfilet / Steak",per:22},{n:"Geflügel",per:22},{n:"Hüttenkäse",per:11},{n:"Ziegenjoghurt",per:5},
+ {n:"Rohmilchkäse",per:25},{n:"Parmesan (Parmigiano Reggiano)",per:30},{n:"Austern",per:9},{n:"Walnüsse",per:15},
+ {n:"Macadamia",per:8},{n:"Kürbiskerne",per:30},{n:"Chiasamen",per:17},{n:"Kollagenpeptide",per:90}
+];
+let PROT_MIN=130,PROT_MAX=150; let KCAL_TARGET=2700;
+function setTargetsFromWeight(kg){ if(!kg||kg<30||kg>250)return; const f=(saved.settings&&saved.settings.focus)||'aufbau'; let pk,kk; if(f==='aufbau'){pk=2.1;kk=39;} else if(f==='schlank'){pk=2.0;kk=34;} else if(f==='abnehmen'){pk=2.2;kk=29;} else {pk=1.7;kk=34;} saved.settings.weight=kg; saved.settings.pmin=Math.round(kg*(pk-0.2)); saved.settings.pmax=Math.round(kg*(pk+0.1)); saved.settings.kcal=Math.round(kg*kk/50)*50; PROT_MIN=saved.settings.pmin; PROT_MAX=saved.settings.pmax; KCAL_TARGET=saved.settings.kcal; }
+function applyTargets(){ const s=saved.settings||{}; PROT_MIN=s.pmin||130; PROT_MAX=s.pmax||150; KCAL_TARGET=s.kcal||2700; }
+function kcalForItem(name,val,isEgg){ if(typeof FOOD==='undefined')return 0; const f=FOOD.find(x=>x.keys.some(k=>name.toLowerCase().includes(k))); if(!f)return 0; const g=isEgg?val*(f.g||60):val; return Math.round(g*f.kcal/100); }
+const ALLOWED=[
+ {n:"Eier (Weidehaltung)",note:"Eigelb möglichst roh lassen; keine Mais-gefütterten Tiere",keys:["ei","eier"]},
+ {n:"Lachs (wild)",note:"gute Omega-3-Quelle",keys:["lachs"]},
+ {n:"Sardinen",note:"1–3× pro Woche",keys:["sardine"]},
+ {n:"Rinderhack",note:"",keys:["hack","rinderhack"]},{n:"Rinderfilet / Steak",note:"",keys:["filet","steak","rind"]},
+ {n:"Rinderleber / Geflügelleber",note:"Eisen, Vitamin A, B12 – Basis für Aufbau",keys:["leber"]},
+ {n:"Geflügel / Hähnchen",note:"",keys:["geflügel","hähnchen","huhn","poulet"]},{n:"Austern",note:"",keys:["auster"]},
+ {n:"Hüttenkäse",note:"",keys:["hüttenkäse"]},{n:"Rohmilchkäse",note:"~25 g Protein/100 g",keys:["rohmilchkäse"]},
+ {n:"Parmesan",note:"Protein-Snack, ~30 g/100 g",keys:["parmesan","parmigiano"]},
+ {n:"Ziegenjoghurt",note:"",keys:["ziegenjoghurt"]},{n:"Joghurt / griechischer Joghurt",note:"",keys:["joghurt"]},
+ {n:"Kefir",note:"probiotisch, gut für den Darm",keys:["kefir"]},{n:"Rohmilch",note:"probiotisch",keys:["rohmilch","milch"]},
+ {n:"Weidebutter / Rohmilchbutter",note:"",keys:["butter","weidebutter"]},{n:"Ghee / Fassbutter",note:"",keys:["ghee","fassbutter"]},
+ {n:"Kokosöl (nativ)",note:"zum Braten geeignet",keys:["kokosöl","kokos"]},{n:"Olivenöl (nativ extra)",note:"",keys:["olivenöl","olive"]},
+ {n:"Avocadoöl",note:"",keys:["avocadoöl"]},{n:"Schmalz",note:"",keys:["schmalz"]},
+ {n:"Kartoffeln",note:"",keys:["kartoffel"]},{n:"Süßkartoffeln",note:"nach dem Kochen kalt werden lassen → resistente Stärke",keys:["süßkartoffel"]},
+ {n:"Karotten / Möhren",note:"roher Karottensalat empfohlen",keys:["karotte","möhre"]},{n:"Gurken",note:"",keys:["gurke"]},
+ {n:"Sellerie / Selleriesaft",note:"",keys:["sellerie"]},{n:"Rote Beete / Rote-Bete-Saft",note:"",keys:["rote bete","rote beete"]},
+ {n:"Sauerkraut (nicht pasteurisiert)",note:"probiotisch",keys:["sauerkraut"]},
+ {n:"Avocado",note:"",keys:["avocado"]},{n:"Datteln",note:"mit Butter & Meersalz als Snack",keys:["datteln","dattel"]},
+ {n:"Rohhonig / Manuka-Honig",note:"Süße statt Zucker",keys:["honig","manuka"]},{n:"Dattelsirup",note:"Süße statt Zucker",keys:["dattelsirup"]},
+ {n:"Äpfel / jedes Obst",note:"Apfel am besten mit ~2 Walnüssen",keys:["apfel","äpfel","obst"]},
+ {n:"Wilde Heidelbeeren (Bio) / Beeren",note:"unbedingt Bio",keys:["beeren","heidelbeer","blaubeer","himbeer","erdbeer"]},
+ {n:"Granatapfel",note:"",keys:["granatapfel"]},{n:"Ananas",note:"gut vor dem Schlafen",keys:["ananas"]},{n:"Banane",note:"",keys:["banane"]},
+ {n:"Goji-Beeren",note:"",keys:["goji"]},{n:"Papaya (+ Kerne)",note:"",keys:["papaya"]},
+ {n:"Walnüsse",note:"",keys:["walnuss","walnüss"]},{n:"Macadamia",note:"rohe Gottesnahrung",keys:["macadamia"]},{n:"Mandeln / Mandelmus",note:"",keys:["mandel"]},
+ {n:"Kürbiskerne",note:"",keys:["kürbiskern"]},{n:"Chiasamen",note:"",keys:["chia"]},{n:"Kollagenpeptide",note:"Darm, Aminosäuren, gegen Hautalterung",keys:["kollagen"]},
+ {n:"Spirulina",note:"entgiftend",keys:["spirulina"]},{n:"Chlorella",note:"entgiftend, Schwermetalle",keys:["chlorella"]},
+ {n:"Knoblauch",note:"",keys:["knoblauch"]},{n:"Ingwer",note:"",keys:["ingwer"]},{n:"Kurkuma",note:"",keys:["kurkuma"]},{n:"Oregano",note:"",keys:["oregano"]},
+ {n:"Koriander",note:"bindet Schwermetalle",keys:["koriander"]},{n:"Cayennepfeffer",note:"",keys:["cayenne"]},
+ {n:"Steinsalz / keltisches Salz",note:"statt raffiniertem Salz",keys:["steinsalz","keltisches salz","ursalz","meersalz"]},
+ {n:"Apfelessig (naturtrüb)",note:"morgens mit Wasser, Limette, Cayenne",keys:["apfelessig"]},
+ {n:"Natron (Lebensmittelqualität)",note:"½ TL morgens in Wasser – basisch",keys:["natron"]},
+ {n:"Schwarzkümmelöl (thymochinhaltig)",note:"morgens",keys:["schwarzkümmel"]},
+ {n:"Sauerteig (mit Butter)",note:"",keys:["sauerteig"]},{n:"Kokoswasser / Kokoscreme",note:"",keys:["kokoswasser","kokoscreme"]},
+ {n:"Grüner / Hibiskus- / Baldrian-Tee (lose)",note:"lose, keine Plastikbeutel",keys:["grüner tee","hibiskus","baldrian","tee"]},
+ {n:"95 % Schokolade (nicht Lindt)",note:"hochprozentig, als Snack",keys:["schokolade","kakao"]}
+];
+const AVOID=[
+ {n:"Samenöle / billige Pflanzenöle",reason:"„Samenöle vergiften dich“ – kein billiges Öl zum Braten, lieber Kokosöl, Ghee/Butter oder native Öle",keys:["samenöl","sonnenblumenöl","sonnenblume","rapsöl","sojaöl","distelöl","maiskeimöl","pflanzenöl","sunflower","margarine"]},
+ {n:"Leitungswasser",reason:"kein Leitungswasser – lieber lokales Bergquellwasser / gefiltert",keys:["leitungswasser","leitung"]},
+ {n:"Industriezucker / raffinierter Zucker",reason:"weglassen – stattdessen Honig oder Dattelsirup",keys:["zucker","industriezucker","haushaltszucker","weißer zucker","saccharose"]},
+ {n:"Gluten / Weizen",reason:"weglassen (ca. 2 Wochen durchhalten, dann ist die Sucht weg)",keys:["gluten","weizen","weizenmehl","weißmehl"]},
+ {n:"Alkohol",reason:"im 90-Tage-Detox weglassen",keys:["alkohol","bier","wein","schnaps"]},
+ {n:"Lebensmittel aus Dosen",reason:"Schwermetalle – keine Dosen-Lebensmittel",keys:["dose","dosen","konserve"]},
+ {n:"Vegane Fleischalternativen",reason:"hochverarbeiteter Schrott – nicht kaufen",keys:["fleischalternative","fleischersatz","veganes fleisch","beyond","sojaschnetzel"]},
+ {n:"Fertige Proteinriegel",reason:"hochverarbeiteter Schrott – nicht kaufen",keys:["proteinriegel","eiweißriegel","riegel","protein bar"]},
+ {n:"Proteinpulver (fertig)",reason:"in deinem Profil nicht vorgesehen – Protein lieber über echtes Essen",keys:["proteinpulver","whey","eiweißpulver","shake"]},
+ {n:"Lindt Schokolade",reason:"laut Tests hohe Schwermetallmengen – lieber 95 % einer anderen Marke",keys:["lindt"]},
+ {n:"Kernlose Trauben",reason:"keine Kerne = keine OPC, kein echter Nutzen",keys:["kernlose trauben","kernlos"]},
+ {n:"Plastikteebeutel",reason:"geben Mikroplastik ab – lose Tee kaufen (Ausnahme: Yogi Tee)",keys:["teebeutel","plastikbeutel"]},
+ {n:"Verarbeitete Lebensmittel / unbekannte Zutatenlisten",reason:"„was die Omi nicht kennt“, nicht essen",keys:["fertiggericht","verarbeitet","fastfood","fast food","tiefkühlpizza","chips fertig"]},
+ {n:"Raffiniertes Salz",reason:"lieber Steinsalz / keltisches Salz mit Mineralien",keys:["raffiniertes salz","jodsalz","tafelsalz"]},
+ {n:"Konventioneller Kaffee",reason:"viele Pestizide – wenn, dann auf hohe Qualität achten",keys:["kaffee"]}
+];
+const PRINCIPLES=["Kokosöl ziehen","Nach Farben essen: grün entgiftet, rot fürs Herz, orange für die Augen","Pflanzliches entgiftet, tierisches baut auf","Zitronenwasser am Morgen (warm)","Roher Karottensalat ist top","Eier zum Frühstück (Eigelb roh lassen)","Rohhonig reichlich essen","Lokales Essen schützt gegen heimische Krankheiten","Kein Leitungswasser – lokales Bergquellwasser bevorzugen","Schwermetalle ausleiten durch Spirulina, Chlorella, Koriander, wilde Blaubeeren, Ingwer","Sport simpel halten – Liegestütz, viele Schritte","Keine Lebensmittel mit Zutatenliste, die die Omi nicht kennt","Kollagenpeptide für Darm, Aminosäuren, gegen Hautalterung","Kaffee hat viele Pestizide – auf Qualität achten","Samenöle vergiften dich","Datteln mit Butter, Meersalz und hochprozentiger Schokolade als Snack","Eis aus gefrorenen Beeren machen","Sonne tanken, Sonnencreme kritisch hinterfragen","Erden – barfuß laufen","In den Wald gehen","Blaulichtfilter-Brille, Handy öfter weglegen","Schwarzkümmelöl (auf Thymochinon achten)","Basics: Magnesium, Vitamin D3 + K2","Achtsam sein","Der Ernährungspyramide aus dem Buch folgen","Fasten ist Boss – intermittierendes Fasten täglich","Rohe „Gottesnahrung“: Macadamia, rohe Karotten, Eier","Magnesiumsulfat-Bad bei Erkältung (500 g)","Hydroxylapatit-Zahnpasta","MSM als natürliches Schmerzmittel & für Haare (+ Rosmarinöl)","Papaya essen + Papayakerne","Düfte schaden den Hormonen (Parfüm, Kerzen …)","Darmgesundheit heilt – probiotisch essen (Kefir, Rohmilch, Sauerkraut)","Gluten und Zucker weglassen (2 Wochen durchhalten)","Glaube an das, was dir guttut","Waschmittel-Alternativen finden","Edelstahlpfanne kaufen","Keine Plastikkleidung – Baumwolle & Leinen","Musik mit hohen Frequenzen (528, 432, 852, 963, 174 Hz)","Auf Symptome des Körpers achten","Nicht rauchen – „Ich bin Nichtraucher.“","Losen Tee kaufen – keine Plastikbeutel (Ausnahme Yogi)","Lindt meiden (Schwermetalle) – lieber 95 %","Kernlose Trauben haben keinen echten Nutzen (keine OPC)","Vegane Fleischalternativen & Proteinriegel = verarbeiteter Schrott","½ TL Natron morgens in Wasser – basisch","Apfelessig morgens: Wasser + Limette + Cayenne + Salz","Tief durchatmen – täglich bewusst atmen","Selbstliebe – gut auf sich achten","Leber, Fleisch und Eier als Basis für Aufbau und Eisen"];
+const PRINCIPLES2=["Ananas vor dem Schlafen","Schwarzkümmelöl morgens (thymochinhaltig)","Supershot morgens: Kurkuma, Ingwer, Cayenne, Salz, Zitrone","Olivenöl nativ extra","Rohmilchbutter","Sauerkraut","Manuka-Honig","Grüner Tee (lose)","Goldene Milch abends: Milch, Kurkuma, Ashwagandha, schwarzer Pfeffer","Knoblauch-Honig (Knoblauch, Ingwer, Honig)","Oregano","Austern","Selleriesaft","Kokosnuss","Wilde Heidelbeeren (Bio)","Sauerteig mit Butter","Sardinen 1–3× wöchentlich","Pre-Workout: Datteln, Butter, Salz (oder Honig, Salz)","Granatapfel","Kürbiskerne","Eier aus echter Weidehaltung","Hibiskus-Tee (lose)","Baldrian-Tee (lose, abends)","Rohmilch (probiotisch)","Leber (Rind/Geflügel) – Eisen, Vitamin A, B12","Astaxanthin – starkes Antioxidans (Supplement)"];
+const NNG=[
+ {h:"Grundidee",t:"Kein starrer Plan, sondern ein Prinzip – du stellst dir deinen Wochenplan selbst zusammen. Kein Kalorienzählen, kein Eiweiß-Tracking – auf das Körpergefühl hören. Angelehnt an ketogen/paleo, oft nur 1–2 Mahlzeiten am Tag."},
+ {h:"Das Makro-Prinzip („Block“)",t:"Eiweiß : Kohlenhydrate : Fett = 0,8 : 1 : 0,3 (auf 8 g Eiweiß ca. 10 g KH und 3 g Fett). Jedes Gericht ist nach diesem Block aufgebaut. Beispiel: einen Apfel immer mit ca. 2 Walnüssen, damit der Blutzucker nicht hochschießt."},
+ {h:"Tagesverlauf",t:"Je später am Tag, desto weniger Kohlenhydrate – dafür mehr Fett und Eiweiß. Die spätere/zweite Mahlzeit ist Low Carb, High Protein, High Fat (die Leber nimmt abends gesunde Fette besser auf)."},
+ {h:"Fasten & Mahlzeiten",t:"Intervallfasten, mind. 12-Stunden-Essfenster; für Männer optimal 16/8. Empfohlenes Fenster 12–20 Uhr. 1 Mahlzeit (OMAD) → abnehmen · 2 Mahlzeiten → Körperfett niedrig + Muskeln · 3 Mahlzeiten → maximaler Muskelaufbau. Harte Trainingstage: früher/mehr essen; Recovery: eher OMAD."},
+ {h:"Detox-Start (erste 90 Tage)",t:"Industriezucker, alle Glutenarten und Alkohol weglassen. Eine Leberentgiftung machen und in den 90 Tagen mind. 2× heilfasten."},
+ {h:"9 Praxis-Regeln",t:"1) 3–5 L gutes Wasser/Tag · 2) so grün wie möglich (5–7 Handflächen Obst & Gemüse), kein raffinierter Zucker – stattdessen Honig/Dattelsirup · 3) Bio-/Demeter oder lokaler Bauer · 4) Hanfprotein & Weizengras; im Winter D3+K2 mit Magnesiumcitrat · 5) Heidelberger-7-Kräutertee + Zistrosentee · 6) kein billiges Öl – Kokosöl, Ghee/Butter, native Öle bei niedriger Hitze · 7) mind. 12-Stunden-Essfenster (Männer 16/8) · 8) Spirulina & Chlorella · 9) keine Snacks ohne genügend Eiweiß."},
+ {h:"Snacks",t:"Nach einer Hauptmahlzeit etwas aus der „Sweets“-Kategorie oder simpel: Nüsse + Obst, oder griechischer Joghurt mit Honig."},
+ {h:"Schluss-Gedanke",t:"Kein Kalorienzählen, damit man auf den Körper statt auf Zahlen achtet. Laut Heft lassen sich mit sauberer, konstanter Ernährung „60–70 % aller Krankheiten“ vermeiden. Ein schlechter Tag ist kein Grund, den Körper mit schlechtem Essen zu „vergiften“."}
+];
+const TAGE={
+ training:[{t:"Mahlzeit 1 — 11–12 Uhr (Pre-Workout)",d:"Kohlenhydrate + Protein. Beispiel: Datteln + Butter + Salz + Eier"},{t:"Mahlzeit 2 — 14–15 Uhr (Post-Workout)",d:"Protein + Fett. Beispiel: Fleisch/Fisch + Kartoffeln oder Süßkartoffeln"},{t:"Mahlzeit 3 — 18–20 Uhr",d:"High Protein, Low Carb, High Fat. Beispiel: Eier + Avocado + Käse"}],
+ ruhe:[{t:"Mahlzeit 1 — 12–13 Uhr",d:"Protein + moderate Kohlenhydrate"},{t:"Mahlzeit 2 — 15–16 Uhr",d:"Protein + Fett"},{t:"Mahlzeit 3 — 18–20 Uhr",d:"High Protein, Low Carb, High Fat"},{t:"Optional",d:"OMAD, wenn kein Hunger"}],
+ tipp:"Süßkartoffeln nach dem Kochen kalt werden lassen → bildet resistente Stärke → der Blutzucker steigt langsamer."
+};
+const VORRAT={immer:["Eier (10er Pack)","Rinderhack","Kartoffeln / Süßkartoffeln","Hüttenkäse","Datteln","Butter / Weidebutter","Kokosöl","Olivenöl","Knoblauch, Ingwer","Salz, Pfeffer, Kurkuma, Oregano"],frisch:["Lachs oder Sardinen","Geflügel","Avocados","frisches Gemüse (Karotten, Gurken, Süßkartoffeln)"]};
+const TOP_SEED=[{name:"Rührei mit Hüttenkäse",protein:"~40 g",zeit:"10 min",geraet:"Herd"},{name:"Rinderhack-Pfanne",protein:"~45 g",zeit:"20 min",geraet:"Herd"}];
+
+/* SPEICHER — localStorage: funktioniert auf einer normalen Webseite für alle, ohne Pro/Login */
+const mem={}; let storageOK=false;
+const Store={
+  async probe(){ try{ localStorage.setItem('__nng_probe__','1'); localStorage.removeItem('__nng_probe__'); storageOK=true; }catch(e){ storageOK=false; } },
+  async get(k,f){ if(mem[k]!==undefined)return mem[k]; try{ const r=localStorage.getItem('nng_'+k); const v=(r!==null)?JSON.parse(r):f; mem[k]=v; return v; }catch(e){ mem[k]=f; return f; } },
+  async set(k,v){ mem[k]=v; try{ localStorage.setItem('nng_'+k,JSON.stringify(v)); flash(); return true; }catch(e){ flash('Speichern gerade nicht möglich'); return false; } }
+};
+let saved={wochenplan:{},checkins:[],top:[],fav:[],einkauf:[],protein:[],customRec:[],settings:{name:'',pmin:130,pmax:150,focus:'aufbau',dark:false}};
+async function loadAll(){ await Store.probe();
+  saved.wochenplan=await Store.get('wochenplan',{}); saved.checkins=await Store.get('checkins',[]);
+  saved.top=await Store.get('top',TOP_SEED.slice()); saved.fav=await Store.get('fav',[]);
+  saved.einkauf=await Store.get('einkauf',[]); saved.protein=await Store.get('protein',[]); saved.customRec=await Store.get('customRec',[]); { const _today=new Date().toDateString(); const _pd=await Store.get('proteinDate',_today); if(_pd!==_today){ saved.protein=[]; await Store.set('protein',[]); } await Store.set('proteinDate',_today); }
+  saved.settings=await Store.get('settings',{name:'',pmin:130,pmax:150,focus:'aufbau',dark:false}); if(!saved.settings.focus)saved.settings.focus='aufbau'; PROT_MIN=saved.settings.pmin||130; PROT_MAX=saved.settings.pmax||150; if(saved.settings.dark)document.body.dataset.theme='dark'; applyTargets(); }
+let flashT;
+function flash(msg){ const f=document.getElementById('flash'); f.textContent=msg||'Gespeichert ✓'; f.classList.add('show'); clearTimeout(flashT); flashT=setTimeout(()=>f.classList.remove('show'),1600); }
+
+/* HELFER */
+function allRecipes(){ return RECIPES.concat(saved.customRec.map(r=>({...r,custom:true}))); }
+function recId(r){ return r.custom?'c_'+r.n:r.n; }
+function devTips(r){ const s=(r.n+' '+r.i).toLowerCase(); const d=[];
+  if(/pfanne|braten|anbrat|gebraten|steak|hack|gulasch|bolognese|curry|menemen|rührei|omelett|tortilla|spieße|scampi|gambas|garnelen|shrimp|spaghetti|nudeln|pasta|suppe|hirse|brat/.test(s)) d.push('Herd');
+  if(/auflauf|backen|gebacken|ofen|quiche|muffin|cupcake|lasagne|kuchen|cake|brot|gefüllt|röllchen|boote|falafel|bites|blumenkohl-steak|crêpes/.test(s)) d.push('Backofen');
+  if(/chips|pommes|knusprig|falafel|bites|nuggets/.test(s)) d.push('Airfryer');
+  if(/püree|stampf|mash|pesto|creme|smoothie|mousse|pudding|soße|sauce|mayo|torte|dip|gnocchi/.test(s)) d.push('Thermomix');
+  if(!d.length) d.push('ohne Gerät'); return [...new Set(d)]; }
+const STRONG=/(h[äa]hnchen|geflügel|huhn|\brind|hack|steak|filet|lamm|enten|fisch|lachs|sardine|dorade|garnel|gambas|scampi|shrimp|\beier\b|\bei\b|feta|parmesan|hüttenkäse|ziegenkäse|ziegenfrischkäse|rohmilchkäse|\bkäse|quark|joghurt|tofu|kichererbse|\blinsen|bohnen|walnüss|mandel|kürbiskern|chiasamen|hanfsamen|sucuk|erdnuss|nüsse)/i;
+function isProteinRich(r){ return STRONG.test((r.n+' '+r.i).toLowerCase()); }
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+const INGS=[
+ {g:"Protein",items:[{l:"Eier",k:["ei"]},{l:"Rinderhack / Hackfleisch",k:["hack"]},{l:"Steak / Rinderfilet",k:["steak","filet","rumpsteak","entrecôte","rinderbrust"]},{l:"Gulasch",k:["gulasch"]},{l:"Hähnchen / Geflügel",k:["hähnchen","geflügel"]},{l:"Lamm",k:["lamm"]},{l:"Ente",k:["enten"]},{l:"Lachs",k:["lachs"]},{l:"Sardinen",k:["sardine"]},{l:"Dorade",k:["dorade"]},{l:"Garnelen / Gambas / Scampi",k:["garnel","gambas","scampi","shrimp"]},{l:"Feta",k:["feta"]},{l:"Ziegenkäse",k:["ziegenkäse","ziegenfrischkäse"]},{l:"Parmesan",k:["parmesan"]},{l:"Hüttenkäse",k:["hüttenkäse"]},{l:"Joghurt",k:["joghurt"]},{l:"Tofu",k:["tofu"]},{l:"Kichererbsen",k:["kichererbse"]},{l:"Linsen",k:["linsen"]},{l:"Bohnen",k:["bohnen"]}]},
+ {g:"Gemüse",items:[{l:"Zwiebel",k:["zwiebel"]},{l:"Knoblauch",k:["knoblauch"]},{l:"Tomaten",k:["tomate"]},{l:"Paprika",k:["paprika"]},{l:"Zucchini",k:["zucchini"]},{l:"Aubergine",k:["aubergine"]},{l:"Spinat",k:["spinat"]},{l:"Avocado",k:["avocado"]},{l:"Pilze / Champignons",k:["pilz","champignon"]},{l:"Brokkoli",k:["brokkoli"]},{l:"Blumenkohl",k:["blumenkohl"]},{l:"Karotten / Möhren",k:["karotte","möhre"]},{l:"Gurke",k:["gurke"]},{l:"Rote Beete",k:["rote bete","rote beete"]},{l:"Kürbis",k:["kürbis"]},{l:"Mangold",k:["mangold"]}]},
+ {g:"Kohlenhydrate",items:[{l:"Kartoffeln",k:["kartoffel"]},{l:"Süßkartoffeln",k:["süßkartoffel"]},{l:"Quinoa",k:["quinoa"]},{l:"Reis / Wildreis",k:["reis"]},{l:"Buchweizen",k:["buchweizen"]},{l:"Glutenfreie Nudeln",k:["nudeln","spaghetti","lasagne"]},{l:"Hirse",k:["hirse"]},{l:"Bulgur",k:["bulgur"]}]},
+ {g:"Obst & Süße",items:[{l:"Äpfel",k:["apfel","äpfel"]},{l:"Banane",k:["banane"]},{l:"Beeren",k:["beeren","erdbeer","heidelbeer","himbeer","blaubeer"]},{l:"Mango",k:["mango"]},{l:"Datteln",k:["datteln","dattel"]},{l:"Honig",k:["honig"]}]},
+ {g:"Sonstiges",items:[{l:"Nüsse (Walnuss, Cashew, Mandel)",k:["walnuss","cashew","mandel","paranüss","pekan","nüsse"]},{l:"Chiasamen",k:["chiasamen"]},{l:"Kokosmilch",k:["kokosmilch","kokosjoghurt"]},{l:"Sahne",k:["sahne"]}]}
+];
+let cookSel=new Set();
+/* ===== NEUE APP-LOGIK ===== */
+const FOCUS=[
+ {id:'aufbau',e:'💪',l:'Muskelaufbau',meals:'3 Mahlzeiten (12–20 Uhr)',d:'Maximaler Muskelaufbau – laut NNG 3 Mahlzeiten.'},
+ {id:'schlank',e:'🏃',l:'Muskeln & schlank',meals:'2 Mahlzeiten',d:'Körperfett niedrig halten und Muskeln aufbauen.'},
+ {id:'abnehmen',e:'⚖️',l:'Abnehmen',meals:'1 Mahlzeit (OMAD)',d:'Eher zum Abnehmen – laut NNG OMAD.'},
+ {id:'gesund',e:'🌿',l:'Einfach gesund essen',meals:'nach Hunger (12–20 Uhr)',d:'Sauber & ausgewogen, ohne festes Protein-Tracking.'}
+];
+function focusObj(){ return FOCUS.find(f=>f.id===(saved.settings.focus||'aufbau'))||FOCUS[0]; }
+function dayIndex(){ return Math.floor(Date.now()/86400000); }
+function tipOfDay(){ return PRINCIPLES[dayIndex()%PRINCIPLES.length]; }
+function recipeOfDay(){ return RECIPES[dayIndex()%RECIPES.length]; }
+function proteinToday(){ return saved.protein.reduce((s,x)=>s+x.prot,0); }
+function todayDayName(){ return ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'][new Date().getDay()]; }
+
+/* ROUTER + NAVI */
+let view='home';
+let wkMode='ausgewogen';
+const app=()=>document.getElementById('app');
+const TABS=[{id:'home',e:'🏠',l:'Heute'},{id:'finder',e:'🍳',l:'Rezepte'},{id:'protein',e:'💪',l:'Protein'},{id:'woche',e:'🗓️',l:'Plan'},{id:'more',e:'☰',l:'Mehr'}];
+const TABOF={home:'home',finder:'finder',protein:'protein',woche:'woche',more:'more',cook:'more',tag:'more',checkin:'more',top:'more',einkauf:'more',check:'more',prinzip:'more',nng:'more',settings:'more',help:'more'};
+function renderTabbar(){ const cur=TABOF[view]||'home'; document.getElementById('tabbar').innerHTML=TABS.map(t=>'<button class="tab '+(cur===t.id?'on':'')+'" data-go="'+t.id+'"><span class="ti">'+t.e+'</span>'+t.l+'</button>').join(''); }
+function go(v){ view=v; render(); renderTabbar(); window.scrollTo(0,0);
+  const hb=document.querySelector('.homebtn'); const sub=(TABOF[v]==='more'&&v!=='more');
+  if(sub){ hb.classList.add('show'); hb.setAttribute('data-go','more'); hb.textContent='← Zurück'; } else { hb.classList.remove('show'); hb.setAttribute('data-go','home'); hb.textContent='← Start'; } }
+document.addEventListener('click',e=>{ const g=e.target.closest('[data-go]'); if(g){ go(g.getAttribute('data-go')); } });
+function render(){ try{ return renderView(); }catch(e){ try{ app().innerHTML='<div class="sec"><div class="card"><b>Hoppla – dieser Bereich konnte gerade nicht geladen werden.</b><div class="small muted" style="margin-top:6px">'+esc((e&&e.message)||String(e))+'</div><button class="btn full" data-go="home" style="margin-top:10px">Zur Startseite</button></div></div>'; }catch(_){} } }
+function renderView(){ const v=view;
+  if(v==='home')return renderDash(); if(v==='more')return renderMore(); if(v==='finder')return renderFinder();
+  if(v==='cook')return renderCook(); if(v==='protein')return renderProtein(); if(v==='tag')return renderTag();
+  if(v==='woche')return renderWoche(); if(v==='checkin')return renderCheckin(); if(v==='top')return renderTop();
+  if(v==='einkauf')return renderEinkauf(); if(v==='check')return renderCheck(); if(v==='prinzip')return renderPrinzip();
+  if(v==='nng')return renderNNG(); if(v==='settings')return renderSettings(); if(v==='help')return renderHelp(); }
+
+/* Wiederverwendbare Rezeptkarte */
+const STEPS = {
+"Karotten-Apfel-Salat":["Karotten schälen und fein raspeln.","Äpfel waschen und fein raspeln.","Limetten auspressen.","Karotten und Äpfel in eine Schüssel geben.","Limettensaft, Apfelessig und Olivenöl dazugeben.","Mit Ursalz und Pfeffer abschmecken.","Frisch gehackten Koriander untermischen."],
+"Kartoffelstampf":["Kartoffeln schälen, in gleichmäßige Stücke schneiden und mit Wasser bedeckt aufsetzen.","Ca. 20 Minuten weich kochen.","Wasser abgießen, Kartoffeln zurück in den Topf geben.","Butter, Salz, Pfeffer, Muskatnuss, Zimt und Kümmel dazugeben.","Alles zu einer glatten Masse stampfen.","Als Beilage zu Gulasch, Spinat und Eiern oder Fisch servieren."],
+"Mangoldsalat mit gebratenen Pilzen":["Mangold waschen und in Stücke schneiden.","Pilze in Scheiben schneiden und mit Knoblauch anbraten.","Mangold mit den Pilzen, Balsamico-Essig und Walnussöl vermengen.","Mit frischem Thymian garnieren und servieren."],
+"Ofengemüse":["Paprika, Zucchini, Aubergine und Kartoffeln in runde Scheiben schneiden.","Auf einem Backblech bei 180°C Ober-/Unterhitze 25–30 Minuten garen.","In den letzten 5 Minuten passierte Tomaten erwärmen.","Knoblauch klein schneiden, zur Sauce geben und würzen (Salz, Pfeffer, Oregano).","Gemüse in eine Auflaufform geben und mit der Tomatensauce übergießen.","Passt zu Steak, Eiern oder Salat."],
+"Orientalischer Salat":["Gurke, Tomaten und Zwiebel in kleine Würfel schneiden.","Aus Olivenöl, Granatapfelessig (oder Zitronensaft), Salz und Pfeffer eine Marinade rühren.","Petersilie fein hacken und dazugeben.","Gemüse in die Marinade geben und gut vermengen.","Sofort servieren oder kurz durchziehen lassen."],
+"Tortilla de España":["Gemüse würfeln, mit Gewürzen und Butter marinieren und bei 200°C ca. 20–25 Minuten knusprig backen.","Eier verquirlen und mit Knoblauch, Petersilie, Salz, Pfeffer und Gewürzen würzen.","Gebackenes Gemüse leicht abkühlen lassen und mit der Eimasse vermengen.","In einer tellergroßen Pfanne in Kokosöl bei mittlerer Hitze braten.","Wenn das Ei fast gestockt ist, mithilfe eines Tellers wenden und die andere Seite knusprig braten.","Auf einem Teller servieren."],
+"Clean Eating Mayo":["Zitronensaft, Apfelessig, gemahlene Senfkörner, Rohhonig und Ursalz verrühren.","Unter ständigem Rühren langsam Olivenöl und geschmolzenes Kokosöl einarbeiten.","Kräftig schlagen oder mixen, bis eine cremige Mayo entsteht.","Abschmecken und bei Bedarf mit Salz, Zitronensaft oder Honig verfeinern.","Luftdicht im Kühlschrank aufbewahren."],
+"Eiersalat mit Avocado":["Eier 10 Minuten hart kochen, abkühlen, schälen und würfeln.","Avocado halbieren, entkernen und würfeln.","Eier und Avocado in eine Schüssel geben.","Frühlingszwiebeln fein hacken und dazugeben.","Mit Zitronensaft, Olivenöl, Kräutern, Salz und Pfeffer abschmecken und vermengen."],
+"Spinat-Feta-Quiche ohne Teig":["Spinat in einer Pfanne zusammenfallen lassen.","Zwiebel hacken und anbraten.","Eier, Sahne, Muskatnuss und Feta verrühren.","Spinat und Zwiebel untermischen und in eine Auflaufform geben.","Bei 180°C 25–30 Minuten backen, bis die Quiche fest ist."],
+"Zucchini-Röllchen mit Walnuss-Feta-Füllung":["Zucchini längs in dünne Scheiben schneiden und leicht grillen oder anbraten.","Feta zerbröseln und mit gehackten Walnüssen, Knoblauch und Basilikum vermengen.","Zucchinischeiben mit der Mischung füllen und aufrollen.","10 Minuten bei 180°C backen."],
+"Kartoffelchips":["Kartoffeln schälen oder in dünne Scheiben schneiden (alternativ Schalen verwenden).","Mit Gewürzen und etwas geschmolzenem Kokosöl marinieren.","Auf einem Blech bei 180°C ca. 15 Minuten knusprig backen, dabei gelegentlich wenden.","Etwas abkühlen lassen, damit sie knuspriger werden.","Mit einem Dip wie Fetacreme, Guacamole oder Knoblauchsauce genießen."],
+"Dattel-Schnittlauch-Creme":["Datteln entsteinen und in kleine Streifen schneiden.","Schnittlauch fein hacken.","Datteln und Schnittlauch mit der Ziegencreme vermengen.","Am besten über Nacht im Kühlschrank durchziehen lassen.","Als Dip oder Brotaufstrich genießen."],
+"Menemen mit cleanem Sucuk":["Zwiebel, Paprika und Knoblauch fein hacken, Tomaten würfeln.","1 EL Olivenöl erhitzen und die Sucuk-Scheiben knusprig anbraten, dann herausnehmen.","Im Fett Zwiebeln und Knoblauch glasig dünsten, Paprika kurz mitbraten.","Tomaten zugeben und 5–7 Minuten köcheln, bis sie weich sind.","Sucuk zurück in die Pfanne geben.","Eier direkt auf das Gemüse aufschlagen und leicht verrühren, bis sie zu stocken beginnen.","Mit Salz, Pfeffer und Paprikapulver würzen.","Mit Petersilie garnieren und aus der Pfanne servieren."],
+"Quinoa-Gemüse-Pfanne":["Quinoa nach Packungsanweisung kochen.","Gemüse in Stücke schneiden, in etwas Öl knackig braten und würzen.","Gekochten Quinoa untermengen, optional 2–3 EL Gemüsebrühe zugeben.","Nach Belieben mit Avocado, gebratenem Ei oder Käse ergänzen.","Alternativ Gemüse roh würfeln und mit Quinoa als Salat mit Öl-Zitronen-Dressing anrichten."],
+"Spinat-Ei-Muffins":["Spinat in Olivenöl kurz anbraten, bis er zusammenfällt; Zwiebel fein hacken und dazugeben.","Eier und Milch verquirlen, mit Salz und Pfeffer würzen.","Spinat und Parmesan unterheben.","Masse in Muffinförmchen füllen und bei 180°C ca. 20 Minuten backen."],
+"Wassermelonen-Salat":["Wassermelone und Gurken in mundgerechte Würfel schneiden, Ziegenkäse zerbröckeln.","Petersilie und Koriander fein hacken, Limetten auspressen.","Wassermelone, Gurken, Ziegenkäse, Petersilie und Koriander vermischen.","Limettensaft darübergeben, nach Belieben einen Schuss Rohhonig zugeben und vermengen.","Sofort genießen oder kurz kühlen."],
+"Süßkartoffel-Falafel":["Süßkartoffeln schälen, in Stücke schneiden und weich kochen.","Kichererbsen abtropfen lassen und mit den Süßkartoffeln zu einem Püree verarbeiten.","Knoblauch, Kreuzkümmel, Paprika und gehackte Petersilie untermengen.","Kleine Bällchen formen.","In Olivenöl goldbraun braten oder bei 200°C 20–25 Minuten backen.","Warm mit Joghurt-Dip oder als Beilage genießen."],
+"Süßkartoffel-Mash mit Pilzen":["Süßkartoffeln kochen und zu Brei stampfen, mit Butter, Muskat, Salz und Pfeffer abschmecken.","Zwiebeln und Knoblauch hacken und anbraten, Pilze zugeben und würzen, Kräuter unterrühren.","Salat, Avocados und rote Beete in Stücke schneiden und mit Olivenöl und Zitronensaft marinieren.","Mash anrichten, Pilze darübergeben und Salat dazu servieren."],
+"Rote-Linsen-Suppe":["Rote Linsen mit Natron einweichen und gut abspülen, bis das Wasser klar ist.","Zwiebeln und Knoblauch klein schneiden, restliches Gemüse (Möhren, Paprika, Tomaten) würfeln.","Zwiebeln und Knoblauch in Öl glasig braten, Tomatenmark und Gewürze kurz anrösten.","Gemüse zugeben, mit der doppelten Menge Kokosmilch aufgießen und eine Tasse Linsen einrühren.","Aufkochen und köcheln, bis Linsen und Gemüse weich sind.","Mit Kräutern und optional etwas Joghurt servieren."],
+"Sardinensalat mit Pommes":["Kartoffeln in Streifen schneiden, mit Olivenöl, Muskat, Salz und Paprika würzen und goldbraun backen.","Avocados zu Guacamole verarbeiten, Gurken und Tomaten fein würfeln und untermengen.","Mit Zitronensaft und optional Ziegenjoghurt abschmecken, würzen und die Sardinen einrühren.","Sardinensalat mit den Pommes servieren."],
+"Mango-Curry mit Geflügel":["Geflügel in Stücke schneiden und mit Curry, Cayennepfeffer, Paprika, Salz, Pfeffer, Limettensaft und Butter marinieren.","Möhren, Paprika, Zwiebeln, Lauchzwiebeln und Knoblauch in gleich große Stücke schneiden.","Butter erhitzen und das Fleisch scharf rundherum anbraten.","Hitze reduzieren, Gemüse, Mango und Datteln zugeben, mit Kokosmilch ablöschen und ca. 1,5 Stunden köcheln.","Koriander und Petersilie unterrühren und abschmecken.","Heiß servieren, z. B. mit Süßkartoffeln, Quinoa oder Hirse."],
+"Lucky Gut Burger":["Süßkartoffel in ca. 1,5 cm dicke Scheiben schneiden, mit etwas Natron waschen und bei 180°C ca. 20 Minuten backen.","Zwiebel, Knoblauch und Kräuter fein hacken.","Rinderhack mit einem Ei, Salz, Pfeffer, Paprika, Muskat, Kurkuma, Kümmel sowie Zwiebeln, Knoblauch und Kräutern vermengen und Kugeln formen.","In Ghee oder Butter von beiden Seiten knusprig zu Patties braten.","Für die Sauce Knoblauch, 1 Eigelb, 2 EL Dijon-Senf, Salz, Pfeffer und Oregano zu einer Aioli pürieren.","Patties auf die Süßkartoffelscheiben setzen, mit Sauce bestreichen, belegen und mit Salat servieren."],
+"Bolognese mit glutenfreien Nudeln":["Gemüse klein schneiden, Zwiebeln und Knoblauch fein hacken.","Zwiebeln, Knoblauch und optional Chili glasig anschwitzen, Gewürze und Tomatenmark kurz anrösten.","Rinderhack zugeben und krümelig anbraten.","Restliches Gemüse unterrühren, mit Tomatenpassata ablöschen und ca. 40 Minuten köcheln.","Glutenfreie Nudeln nach Packung kochen.","Bolognese über die Nudeln geben und nach Belieben mit Kräutern bestreuen."],
+"Wraps mit Auberginen-Creme & würzigem Blumenkohl":["Flohsamenschalen in Wasser quellen lassen.","Je zur Hälfte Buchweizen- und Roggenmehl mit Olivenöl und Gewürzen mischen, die Flohsamenschalen unterkneten und ausrollen; in Wrap-Formen schneiden.","Auberginen bei 200°C 15–20 Minuten weich braten und das Fruchtfleisch herauslösen.","Auberginenfleisch mit 2–3 Medjool-Datteln, Tahin, Gewürzen, Kräutern, Olivenöl und Cashews glatt mixen.","Blumenkohl in Röschen teilen, kurz vorkochen und in Olivenöl mit Chili, Kreuzkümmel, Curry und Koriander knusprig anbraten.","Wrapteig kurz erhitzen, mit Creme bestreichen, Blumenkohl darauflegen, aufrollen und servieren."],
+"Wildreispfanne mit gefüllter Aubergine":["Wildreis gründlich waschen und nach Packung garen.","Auberginen längs halbieren, bei 200°C 15–20 Minuten weich dünsten, das Innere auskratzen und beiseitestellen.","Zwiebeln und Knoblauch fein hacken und in Fassbutter weich anbraten, Hackfleisch würzig anbraten.","Auberginenfleisch und Tomatenmark untermischen und mit Kräutern abschmecken.","Mischung in die Auberginenhälften füllen und bei 200°C weitere 15 Minuten backen.","Mit dem Wildreis anrichten und servieren."],
+"Rinderbrust mit Cranberry-Chili-Sauce":["Rinderbrust scharf anbraten, dann bei niedriger Hitze schmoren.","Cranberries, Chili, Zwiebel und Kreuzkümmel anbraten.","Mit Honig und Apfelessig ablöschen und köcheln, bis die Sauce dick wird.","Rinderbrust mit der Sauce übergießen und servieren."],
+"Pasta Scampi Spinaci":["Buchweizennudeln in Salzwasser al dente kochen, abgießen und beiseitestellen.","Zwiebel und Knoblauch in feine Streifen schneiden, Cherrytomaten halbieren, Blattspinat waschen.","In Butter die Scampis kurz scharf anbraten, bis sie rosa sind.","Zwiebeln und Knoblauch zugeben und kurz mitrösten, dann Cherrytomaten ein paar Minuten mitbraten.","Mit Sahne ablöschen, würzen und den Spinat zusammenfallen lassen.","1–2 EL Pesto einrühren, die Nudeln zugeben und gut vermengen."],
+"Kürbis-Linsen-Auflauf":["Grüne oder braune Linsen nach Packung weich kochen.","Hokkaido-Kürbis schälen, würfeln, mit Olivenöl, Salz, Pfeffer und Kreuzkümmel würzen und bei 180°C 20–25 Minuten rösten.","Zwiebeln und Knoblauch fein hacken und in Olivenöl weich anbraten.","Linsen, Kürbis und Zwiebel-Knoblauch-Mischung in einer Auflaufform vermengen.","Mit Thymian und zerbröseltem Feta bestreuen und bei 180°C 15–20 Minuten backen."],
+"Rinderfilet mit Balsamico-Zwiebeln":["Rinderfilet würzen und in Olivenöl bis zur gewünschten Garstufe anbraten.","Rote Zwiebeln mit Balsamico-Essig und Honig karamellisieren und mit Salz und Pfeffer abschmecken.","Filet mit der Balsamico-Zwiebelsoße übergießen und servieren."],
+"Süßkartoffel-Gnocchi in Pesto":["Süßkartoffeln weich kochen, schälen und zerstampfen.","Glutenfreies Mehl bzw. Roggenmehl und Buchweizenmehl unterkneten, mit Olivenöl, Salz, Muskat, Oregano und Thymian würzen.","Teig zu kleinen Gnocchi formen und in Salzwasser garen, bis sie aufsteigen, dann abseihen.","Für das Pesto Basilikum, Petersilie und Koriander waschen, Cashews und Pinienkerne ohne Öl leicht anrösten.","Alle Pesto-Zutaten mit Knoblauch und Olivenöl glatt mixen und mit Salz und Pfeffer abschmecken.","Gnocchi mit dem Pesto vermengen und sofort servieren."],
+"Rindersteak mit Rote-Bete-Relish":["Rindersteaks nach Wunsch braten oder grillen.","Gekochte Rote Bete würfeln und mit Apfelessig, Senf und Honig vermengen.","Steaks mit dem Relish und frischem Schnittlauch servieren."],
+"Glutenfreie Lasagne":["Für die Bolognese rote Zwiebeln und Knoblauch fein hacken und in Olivenöl weich anbraten.","Hackfleisch durchgaren, Tomatenmark und Passata einrühren und mit Salz, Pfeffer, Oregano, Basilikum und Thymian abschmecken; dicklich einköcheln.","Für den Dip Ziegenjoghurt mit Knoblauch, Petersilie und Koriander verrühren.","Abwechselnd Bolognese, glutenfreie Lasagneblätter und Joghurt-Dip schichten.","Mit einer Schicht Bolognese abschließen und Ziegenkäse darüberstreuen.","Bei 200°C ca. 35 Minuten backen, bis der Käse goldbraun ist."],
+"Buchweizen-Spaghetti mit Gambas":["Buchweizen-Spaghetti in Salzwasser al dente kochen, abgießen und beiseitestellen.","Knoblauch fein hacken, Tomaten würfeln, Zucchini in dünne Scheiben schneiden.","In Fassbutter den Knoblauch kurz anbraten, Gambas zugeben und braten, bis sie rosa sind.","Tomaten und Zucchini mitbraten, bis das Gemüse weich ist, mit Salz, Pfeffer und Chili würzen.","Spaghetti zugeben, Kräuter und einen Schuss Olivenöl untermengen und kurz erwärmen.","Sofort servieren."],
+"Brokkoli-Nudeln mit Tomaten-Salsa":["Brokkoli weich kochen, abtropfen lassen und fein hacken oder pürieren.","Je zur Hälfte Buchweizen- und glutenfreies Mehl unterkneten, mit Olivenöl, Ursalz, Pfeffer, Muskat und Oregano würzen.","Teig ausrollen, in kleine Stücke schneiden und in Salzwasser kochen, bis sie aufsteigen.","Für die Salsa Zwiebeln, Knoblauch, Karotten/Pastinaken und Paprika grob hacken.","Zwiebeln und Knoblauch anbraten, Gemüse kurz mitbraten, Tomatenmark, Passata und Gewürze zugeben und weich köcheln.","Alles pürieren, Petersilie und Koriander untermischen und mit den Nudeln vermengt servieren."],
+"Gulasch":["Paprika, Tomate und Zwiebeln grob schneiden, Knoblauch schälen und andrücken.","Rindergulasch in Butter von allen Seiten scharf anbraten.","Gemüse und Gewürze (Salz, Pfeffer, Muskat, Kümmel, Paprika süß & scharf) zugeben und kurz anrösten.","Mit Wasser ablöschen, bis alles bedeckt ist.","Bei mittlerer Hitze ca. 3 Stunden köcheln, bis das Fleisch zart ist.","Passt zu Salat, Kartoffelstampf oder Buchweizennudeln."],
+"Lammfilet mit Fenchel-Pflaumen-Salsa":["Lammfilet mit Salz und Pfeffer würzen und in Olivenöl anbraten.","Fenchel und Zwiebel in feine Scheiben schneiden, Pflaumen klein hacken.","Fenchel, Zwiebel und Pflaumen mit Balsamico-Essig und etwas Wasser weich anbraten.","Lammfilet in Scheiben schneiden, mit der Salsa servieren und mit Thymian garnieren."],
+"Nur Noch Gesund Eistee":["Losen Tee aufkochen und abkühlen lassen.","Mit Zitronensaft und Honig abschmecken.","In den Kühlschrank stellen, bis er kalt ist.","Mit gefrorenen Beeren und Obst nach Wahl servieren."],
+"Super Roh Avocado Torte":["Mandeln, Datteln, Paranüsse, Pekanüsse, Kokosfett und Kokosflocken zu einer klebrigen Masse mixen und in eine Springform drücken.","Avocados, Zitronen- und Limettensaft, Rohhonig, geschmolzenes Kokosfett und Rosenwasser glatt mixen und auf den Boden verteilen.","Mindestens 2 Stunden im Kühlschrank fest werden lassen.","Vor dem Servieren mit Zitronen- und Limettenabrieb garnieren."],
+"Apfel-Smoothie":["Äpfel schälen und in Stücke schneiden.","Mit griechischem Joghurt, Zimt und Honig in einen Mixer geben.","Wasser oder Pflanzenmilch nach gewünschter Konsistenz zugeben.","Cremig pürieren und sofort genießen."],
+"Obstsalat":["Obst waschen, schälen und würfeln.","1 EL Honig mit dem Saft einer Zitrone verrühren.","Petersilie fein hacken und zugeben.","Obst untermengen, bis es gleichmäßig bedeckt ist.","Am besten 1 Stunde durchziehen lassen oder direkt genießen."],
+"Avocado-Ei-Boote":["Avocado halbieren und den Kern entfernen.","In jede Avocadohälfte ein Ei geben.","Mit Salz und Pfeffer würzen und im Ofen backen, bis das Ei gestockt ist.","Mit frischen Kräutern garnieren."],
+"Bunter Gemüsesalat mit Hähnchen":["Hähnchenbrust grillen oder braten und in Streifen schneiden.","Überwiegend grünes Gemüse würfeln und mit dem Hähnchen vermengen.","Mit Olivenöl, Zitronensaft, Salz und Pfeffer marinieren."],
+"Gefüllte Paprika mit Rinderhack":["Paprika halbieren und entkernen.","Rinderhack mit Zwiebeln, Knoblauch und Tomaten vermengen und würzen.","In die Paprikahälften füllen und im Ofen backen.","Optional Hummus dazu reichen."],
+"Spinatomelett mit Feta":["Eier verquirlen und mit gewaschenem Spinat vermengen.","In einer Pfanne mit Olivenöl zu einem Omelett braten.","Feta darüber bröckeln und würzen."],
+"Gefüllte Avocado mit Garnelen":["Avocado halbieren und den Kern entfernen.","Garnelen mit Knoblauch, Zitrone und Petersilie marinieren.","In die Avocadohälften füllen, mit Olivenöl beträufeln und würzen."],
+"Hähnchensalat mit Nüssen und Beeren":["Hähnchenbrust grillen oder braten und in Streifen schneiden.","Salat mit Beeren und Nüssen vermengen und mit dem Hähnchen belegen.","Mit Olivenöl, Balsamico-Essig, Salz und Pfeffer beträufeln."],
+"Gebratene Eier mit Gemüse":["Gemüse in einer Pfanne mit Kokosöl anbraten.","Eier darüber aufschlagen und braten, bis das Eiweiß gestockt ist.","Mit Salz, Pfeffer und Gewürzen nach Belieben würzen."],
+"Kokos-Chia-Pudding mit Beeren":["Chiasamen mit Kokosmilch, Vanilleextrakt und Honig vermengen.","Über Nacht im Kühlschrank quellen lassen.","Mit frischen Beeren garnieren und servieren."],
+"Gebratene Rumpsteaks mit Süßkartoffelpüree":["Rumpsteaks mit Salz, Pfeffer und gehackten Kräutern würzen.","Süßkartoffelwürfel weich kochen, abgießen und pürieren, mit Salz und Pfeffer abschmecken.","Backofen auf 200°C vorheizen.","Steaks bei mittelhoher Hitze in Ghee anbraten.","Ca. 20–25 Minuten fertig garen, bis sie goldbraun sind.","Mit dem Süßkartoffelpüree servieren."],
+"Lammrücken / Koteletts mit Grillgemüse":["Lammrücken bzw. Koteletts mit Ursalz, Pfeffer und Oregano würzen.","Gemüse in Scheiben schneiden und mit Ghee und Ursalz 15 Minuten dünsten oder kurz knackig anbraten.","Zwiebeln karamellisieren und mit dem Fleisch bis zur gewünschten Garstufe braten."],
+"Rindergulasch mit Paprika, Tomaten & Süßkartoffeln":["Rindergulasch würzen und in Olivenöl portionsweise scharf anbraten, dann herausnehmen.","Zwiebel und Knoblauch im Topf glasig dünsten.","Süßkartoffelwürfel kurz anbraten, Paprikapulver zugeben und kurz anrösten.","Fleisch zurückgeben, Paprikastreifen und Tomatenwürfel untermengen.","Zugedeckt 45–60 Minuten köcheln, bei Bedarf etwas Wasser zugeben.","Mit Petersilie oder Koriander garnieren und heiß servieren."],
+"Gefüllte Zucchiniboote mit Hackfleisch & Feta":["Zucchini längs halbieren und aushöhlen, das Innere würfeln.","Zwiebel und Knoblauch in Olivenöl glasig dünsten, Hackfleisch braun anbraten.","Gewürfelte Zucchini kurz mitbraten, stückige Tomaten zugeben und mit Salz und Pfeffer würzen.","Die Mischung in die Zucchiniboote füllen.","In einer Auflaufform bei 180°C 20–25 Minuten backen.","Vor dem Servieren mit Feta und Basilikum bestreuen."],
+"Glutenfreie Avocadonudeln mit Dorade":["Glutenfreie Nudeln al dente kochen, abgießen und beiseitestellen.","Doradenfilets trocken tupfen, würzen und in Olivenöl je Seite 3–4 Minuten braten, dann warm halten.","Im selben Öl gehackten Knoblauch kurz anschwitzen.","Avocadofruchtfleisch zugeben und zu einer cremigen Sauce zerdrücken.","Zitronensaft einrühren und mit Salz und Pfeffer abschmecken.","Nudeln untermengen und mit den Doradenfilets anrichten."],
+"Ente Gut, Alles Gut (Entenbrust mit Erdnusssauce)":["Entenbrust trocken tupfen, die Haut rautenförmig einschneiden und würzen.","Mit der Hautseite nach unten langsam knusprig braten, dann wenden, kurz anbraten und ruhen lassen.","Im selben Fett Zwiebeln karamellisieren und die Gewürze (Papayapfeffer, Ursalz, Kreuzkümmel, Ingwer, Kurkuma, Knoblauch, Curry, Cayennepfeffer, Paprika, Dill) zugeben.","Gewähltes Gemüse (Sauerkraut, Rotkohl, Rosenkohl oder Blumenkohl) zugeben und kurz anbraten.","Für die Sauce Kokosmilch und 2–3 TL Erdnussmus einrühren, erwärmen und optional mit Dattelsirup süßen.","Entenbrust in Scheiben schneiden, über das Gemüse legen und servieren."],
+"Spinat-Wraps mit Hackfleischgemüsefüllung":["Spinat waschen, grob hacken, anbraten, ausdrücken und abkühlen lassen.","Eier verquirlen, Mandelmehl unterrühren, Spinat untermengen und würzen.","In einer gefetteten Pfanne die Hälfte der Masse zu einem dünnen Wrap ausstreichen und beidseitig goldbraun backen.","Im selben Öl Zwiebel und Knoblauch glasig dünsten, Hackfleisch durchgaren.","Paprika und Zucchini mitbraten, bis das Gemüse weich ist, nach Belieben würzen.","Füllung auf die Wraps geben, aufrollen und servieren."],
+"Fleischbällchen in scharfer Tomatensauce mit Buchweizenbrot":["Für das Brot Ofen auf 200°C vorheizen; Buchweizen- und glutenfreies Mehl mit Backpulver, Wasser, einem Schuss Olivenöl und Gewürzen zu einem Teig kneten und abgedeckt ruhen lassen.","Hack mit Gewürzen, einem Ei, Zwiebeln, Knoblauch und Kräutern vermengen und Bällchen formen.","In Ghee rundherum goldbraun und durch anbraten, dann herausnehmen.","Im Sud Zwiebeln karamellisieren, Knoblauch und frische Tomaten zugeben, kurz köcheln und Passata einrühren, kräftig würzen.","Das Brot im Ofen backen.","Zum Schluss rote Bohnen und die Hackbällchen in die Sauce geben und abschmecken."],
+"Rindfleisch-Burrito-Bowl":["Rindfleisch würzen und durchbraten.","Gekochten Quinoa, schwarze Bohnen, Paprika und Zwiebeln vermengen.","Rindfleischstreifen darauflegen.","Mit Guacamole und saurer Sahne garnieren.","Mit Korianderblättern bestreuen und servieren."],
+"Steak 'n' Shrimps":["Gemüse vorbereiten: Brokkoli in Röschen, Brechbohnen putzen, Paprika und Tomaten in Streifen, Avocado in Scheiben.","Steak auf Raumtemperatur bringen und würzen, Garnelen waschen und abtropfen lassen.","Fleisch in etwas Öl nach gewünschtem Garzustand braten und ruhen lassen.","Im selben Fett karamellisierte Zwiebeln und Knoblauch anbraten.","Gemüse zugeben und knackig garen, Garnelen kurz mitbraten, bis sie durch sind.","Fleisch und Garnelen mit Gemüse und Avocado anrichten."],
+"Kichererbsen-Bites auf Rucola-Salat":["Rucola waschen, Spitzpaprika in Streifen und Ziegenkäse in Stücke schneiden.","Aus Limettensaft, Honig, Salz und Pfeffer ein Dressing rühren, über Rucola und Paprika geben und Ziegenkäse unterheben.","Kichererbsenmehl mit Salz, Backpulver und Gewürzen (Curry, Paprika, Chili, Kreuzkümmel, Pfeffer, Kurkuma) mischen und mit Wasser zu einem Teig verrühren.","Gekochte Kichererbsen grob hacken und mit roter Zwiebel, Knoblauch und Koriander untermengen.","Kleine Bällchen formen und in heißem Ghee goldbraun frittieren.","Auf dem Rucola-Salat servieren."],
+"Grüne Nudeln à la Tofu":["Glutenfreie Nudeln nach Packung kochen, abgießen und beiseitestellen.","Zwiebel und Knoblauch in Olivenöl glasig anbraten.","Spinat zugeben und zusammenfallen lassen, würzen.","Spinat-Zwiebel-Mischung mit Seidentofu, Cashews und Hanfsamen zu einer cremigen Sauce pürieren.","Sauce über die Nudeln geben und vermengen.","Nach Belieben mit Hanfsamen oder Kräutern garnieren."],
+"Dreierlei Currynudeln":["Zucchini und Karotte in dünne Streifen schneiden, Paprika und Zwiebel in dünne Scheiben.","Glutenfreie Nudeln al dente kochen, abgießen und beiseitestellen.","Optional Kokosmilch erhitzen und mit Salz abschmecken.","Saft einer halben Limette über Gemüse und Nudeln träufeln, Basilikum und Koriander darüberstreuen.","Für die gelbe Currysoße Zucchini, Medjool-Datteln, Knoblauch, Koriander, Limettensaft, Jalapeño und Currypulver glatt mixen.","Soße über Nudeln und Gemüse geben, vermischen und servieren."],
+"Kartoffelauflauf mit Champignonhack":["Zwiebeln und Champignons mit etwas Wasser andünsten.","Kartoffeln und Paprikapulver zugeben und vermischen, Tomaten und Gewürze unterrühren.","1 Tasse Wasser zugeben und 5 Minuten schmoren.","In eine Auflaufform füllen und bei 180°C ca. 30 Minuten backen, bis die Kartoffeln weich sind.","Für die Soße Pflanzenmilch erwärmen, Kartoffelstärke mit etwas Pflanzenmilch glatt rühren, einrühren und eindicken, Schnittlauch unterrühren und mit Salz abschmecken.","Soße über den Auflauf gießen und weitere 10 Minuten überbacken."],
+"Tofu- und Gemüse-Spieße mit Bulgur":["Bulgur nach Packung kochen und warm halten.","Tofu würfeln und Gemüse (Zucchini, Champignons, Paprika) in mundgerechte Stücke schneiden.","Abwechselnd Tofu und Gemüse auf Spieße stecken.","In einer Grillpfanne mit Sesamöl ca. 8–10 Minuten braten und dabei wenden, bis Gemüse zart und Tofu goldbraun ist.","Während des Bratens nach Belieben würzen.","Heiß mit dem Bulgur servieren."],
+"Gebackene Falafel mit Salat & Minze-Tahin-Soße":["Backofen auf 200°C vorheizen und ein Blech mit Backpapier auslegen.","Kichererbsen, Zwiebeln, Knoblauch, Petersilie, Koriander, Salz und Kreuzkümmel zu einer groben Paste verarbeiten.","Kleine Bällchen formen und 25–30 Minuten goldbraun backen.","Salat waschen und zupfen, Gurke, Tomate, Rotkohl und Karotte würfeln bzw. raspeln.","Für die Soße alle Zutaten glatt pürieren.","Falafel mit Salat servieren und die Minze-Tahin-Soße darüberträufeln."],
+"Buchweizen-Crêpes mit Gemüsefüllung":["Buchweizenmehl, Leinsamenmehl, Pflanzenmilch, Olivenöl, Salz und optional Kräuter zu einem glatten Teig verrühren und 10 Minuten ruhen lassen.","In einer gefetteten Pfanne dünne Crêpes von beiden Seiten goldbraun backen.","Für die Füllung Olivenöl erhitzen, Zwiebel und Knoblauch anbraten.","Zucchini, Paprika und Champignons zugeben und braten, bis das Gemüse weich ist, würzen.","Crêpes mit der Füllung füllen und mit Kräutern garnieren."],
+"Blumenkohl-Steaks":["Aus der Mitte des Blumenkohls ca. 2 cm dicke Scheiben schneiden (Rest einfrieren).","Aus Öl und Gewürzen eine Marinade herstellen.","Blumenkohlscheiben damit bepinseln und auf ein mit Backpapier ausgelegtes Blech legen.","Bei 200°C (180°C Umluft) ca. 20 Minuten backen."],
+"Brathirse mit Gemüse":["Hirse in leicht gesalzenem Wasser ca. 10 Minuten garen, abgießen und beiseitestellen.","Zwiebel fein hacken, Knoblauch pressen, Tomaten, Paprika, Zucchini und Blumenkohl klein schneiden.","Zwiebel und Knoblauch in etwas Öl glasig anbraten.","Nacheinander das Gemüse zugeben und anbraten, bis es leicht gebräunt ist.","Gekochte Hirse untermengen und mit Salz, Pfeffer, Kurkuma, Curry, Kreuzkümmel und Chiliflocken würzen.","Heiß servieren."],
+"Erdbeer-Kokos-Chia-Pudding":["Chiasamen, Kokosjoghurt, Pflanzenmilch, Zimt oder Vanille und Dattelsirup zu einer gleichmäßigen Mischung verrühren.","Über Nacht oder mindestens 4–6 Stunden im Kühlschrank quellen lassen.","Gefrorene Erdbeeren und Mango mit einem Schuss Wasser zu einem Fruchtpüree mixen.","Pudding in Gläser füllen und das Fruchtpüree darübergeben.","Sofort servieren."],
+"Karotten-Cupcakes":["Alle Zutaten der Masse zu einem Teig kneten, kleine Bällchen formen und ca. 30 Minuten in den Tiefkühler stellen, bis sie fest sind.","Für die knackige Schicht eingeweichte Cashews mit geschmolzenem Kokosöl, Dattelsirup, Limettensaft und etwas Wasser cremig mixen.","Die gefrorenen Bällchen einzeln in die Cashew-Masse tauchen und umhüllen.","Erneut ca. 30 Minuten in den Tiefkühler stellen, bis die Schicht fest ist.","Aus dem Tiefkühler nehmen und servieren."],
+"Mousse au Chocolat":["Dunkle Schokolade im Wasserbad langsam schmelzen, ohne dass Wasser hineingelangt.","Seidentofu, entsteinte Medjool-Datteln und Cashews in einen Mixer geben.","Geschmolzene Schokolade zugeben und glatt mixen, bei Bedarf etwas Wasser für die Konsistenz.","In Dessertgläser füllen und 25–30 Minuten ins Eisfach stellen.","Nach Belieben mit Beeren oder Nüssen garnieren und servieren."],
+"Erdnussbutter-Kekse":["Backofen auf 180°C vorheizen.","Erdnussmus, Mandelmehl bzw. gemahlene Mandeln und Dattelsirup zu einer Teigmasse vermengen.","Kleine Bällchen formen, auf ein Blech legen und leicht flach drücken.","Ca. 15–20 Minuten goldbraun backen.","Optional die abgekühlten Kekse mit dunkler flüssiger Schokolade garnieren."],
+"Wildbeer-Waffeln mit Kokosnuss-Sahne":["Buchweizen- bzw. glutenfreies Mehl mit zermatschten Bananen, Eiern und einer Prise Zimt zu einem glatten Teig verrühren.","Waffeleisen vorheizen, leicht einfetten und goldbraune Waffeln backen.","Für die Sahne Kokosmilch aus der Dose mit Dattelsirup und Vanillemark in einer gekühlten Schüssel steif schlagen.","Waffeln mit der Kokosnuss-Sahne servieren und nach Belieben mit Beeren garnieren."],
+"Lemon Cake":["Mandeln, Buchweizenflocken, Datteln und Honig zu einer klebrigen Masse mixen und als Boden in eine Form drücken.","Für das Topping griechischen Joghurt (oder Sojaquark) mit Zitronenabrieb, Zitronensaft und Honig verrühren.","Gleichmäßig über den Boden streichen.","Einige Stunden oder über Nacht in den Tiefkühler stellen, bis das Topping fest ist.","Gekühlt in Stücke schneiden und servieren."]
+};
+/* FRAG & CHECK: grobe Preise/Kalorien (€, Richtwerte), Detox-Ausgleich, Antwort-Engine + KI */
+const DETOX=["Spirulina","Chlorella","Koriander","wilde Heidelbeeren","Ingwer"];
+const NUTRI=[
+ {keys:["ei ","eier","ei,"],name:"Eier",eur:"~3 € / 10 St.",kcal:"~155 kcal/100 g"},
+ {keys:["lachs"],name:"Lachs",eur:"~12 €/kg",kcal:"~200 kcal/100 g"},
+ {keys:["sardine"],name:"Sardinen",eur:"~2–3 € / Portion",kcal:"~210 kcal/100 g"},
+ {keys:["rinderhack","hackfleisch","hack "],name:"Rinderhack",eur:"~8 €/kg",kcal:"~250 kcal/100 g"},
+ {keys:["rinderfilet","steak","entrecote","rumpsteak"],name:"Rinderfilet / Steak",eur:"~30 €/kg",kcal:"~150 kcal/100 g"},
+ {keys:["hähnchen","haehnchen","geflügel","geflugel","hühner","poulet"],name:"Hähnchen",eur:"~10 €/kg",kcal:"~110 kcal/100 g"},
+ {keys:["hüttenkäse","huettenkaese","cottage"],name:"Hüttenkäse",eur:"~1,50 € / 200 g",kcal:"~98 kcal/100 g"},
+ {keys:["feta"],name:"Feta",eur:"~2 € / 200 g",kcal:"~265 kcal/100 g"},
+ {keys:["parmesan","parmigiano"],name:"Parmesan",eur:"~3 € / 100 g",kcal:"~390 kcal/100 g"},
+ {keys:["ziegenkäse","ziegenkaese","ziegenfrisch","ziegencreme"],name:"Ziegenkäse",eur:"~3 € / Stück",kcal:"~290 kcal/100 g"},
+ {keys:["ziegenjoghurt"],name:"Ziegenjoghurt",eur:"~2 € / 500 g",kcal:"~60 kcal/100 g"},
+ {keys:["butter","fassbutter","ghee"],name:"Butter / Ghee",eur:"~2,50 € / 250 g",kcal:"~745 kcal/100 g"},
+ {keys:["kokosöl","kokosoel","kokosfett"],name:"Kokosöl",eur:"~6 € / Glas",kcal:"~900 kcal/100 g"},
+ {keys:["olivenöl","olivenoel"],name:"Olivenöl",eur:"~8 € / Flasche",kcal:"~885 kcal/100 g"},
+ {keys:["avocado"],name:"Avocado",eur:"~1 € / Stück",kcal:"~160 kcal/100 g"},
+ {keys:["kartoffel"],name:"Kartoffeln",eur:"~2 €/kg",kcal:"~77 kcal/100 g"},
+ {keys:["süßkartoffel","suesskartoffel","süsskartoffel"],name:"Süßkartoffeln",eur:"~3 €/kg",kcal:"~86 kcal/100 g"},
+ {keys:["quinoa"],name:"Quinoa",eur:"~5 €/kg",kcal:"~120 kcal/100 g (gekocht)"},
+ {keys:["reis","wildreis","hirse","bulgur"],name:"Reis / Hirse / Bulgur",eur:"~2–4 €/kg",kcal:"~120 kcal/100 g (gekocht)"},
+ {keys:["linsen"],name:"Linsen",eur:"~3 €/kg",kcal:"~115 kcal/100 g (gekocht)"},
+ {keys:["kichererbse"],name:"Kichererbsen",eur:"~1 € / Dose",kcal:"~120 kcal/100 g (gekocht)"},
+ {keys:["dattel"],name:"Datteln",eur:"~4 € / Packung",kcal:"~280 kcal/100 g"},
+ {keys:["honig"],name:"Honig",eur:"~6 € / Glas",kcal:"~304 kcal/100 g"},
+ {keys:["walnuss","walnüsse","walnuesse"],name:"Walnüsse",eur:"~3 € / 200 g",kcal:"~654 kcal/100 g"},
+ {keys:["mandel"],name:"Mandeln",eur:"~3 € / 200 g",kcal:"~575 kcal/100 g"},
+ {keys:["cashew"],name:"Cashews",eur:"~4 € / 200 g",kcal:"~553 kcal/100 g"},
+ {keys:["kürbiskern","kuerbiskern"],name:"Kürbiskerne",eur:"~3 € / 200 g",kcal:"~559 kcal/100 g"},
+ {keys:["chiasamen","chia"],name:"Chiasamen",eur:"~4 € / Packung",kcal:"~486 kcal/100 g"},
+ {keys:["banane"],name:"Banane",eur:"~0,30 € / Stück",kcal:"~89 kcal/100 g"},
+ {keys:["apfel","äpfel","aepfel"],name:"Apfel",eur:"~0,40 € / Stück",kcal:"~52 kcal/100 g"},
+ {keys:["beere","heidelbeer","erdbeer","himbeer","blaubeer"],name:"Beeren",eur:"~3 € / Packung",kcal:"~45 kcal/100 g"},
+ {keys:["brokkoli"],name:"Brokkoli",eur:"~1,50 € / Stück",kcal:"~34 kcal/100 g"},
+ {keys:["zucchini"],name:"Zucchini",eur:"~0,80 € / Stück",kcal:"~17 kcal/100 g"},
+ {keys:["paprika"],name:"Paprika",eur:"~0,80 € / Stück",kcal:"~31 kcal/100 g"},
+ {keys:["tomate"],name:"Tomaten",eur:"~3 €/kg",kcal:"~18 kcal/100 g"},
+ {keys:["zwiebel"],name:"Zwiebeln",eur:"~1,50 €/kg",kcal:"~40 kcal/100 g"},
+ {keys:["spinat"],name:"Spinat",eur:"~2 € / Packung",kcal:"~23 kcal/100 g"},
+ {keys:["schokolade","schoki"],name:"Dunkle Schokolade (90 %)",eur:"~2 € / Tafel",kcal:"~600 kcal/100 g"}
+];
+function buildSystemPrompt(){
+  return "Du bist der Ernaehrungs-Begleiter in einer App nach dem NNG-Prinzip (Nur Noch Gesund). Antworte kurz, praktisch und auf Deutsch. Stuetze dich AUSSCHLIESSLICH auf die folgenden Prinzipien und Listen dieser Person; erfinde nichts dazu. Wenn etwas nicht abgedeckt ist, sag das ehrlich. Gib keine medizinischen Diagnosen oder Heilversprechen. Halte dich kurz (max. ein paar Saetze). "
+   + "NNG-Prinzipien: " + PRINCIPLES.join("; ") + ". "
+   + "Weitere Punkte: " + PRINCIPLES2.join("; ") + ". "
+   + "Eher vermeiden: " + AVOID.map(function(a){return a.n+" ("+a.reason+")";}).join("; ") + ". "
+   + "Empfohlen: " + ALLOWED.map(function(a){return a.n;}).join(", ") + ".";
+}
+async function askAI(q){
+  const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:buildSystemPrompt(),messages:[{role:"user",content:q}]})});
+  if(!res.ok) throw new Error("http "+res.status);
+  const data=await res.json();
+  const text=(data.content||[]).filter(function(b){return b.type==="text";}).map(function(b){return b.text;}).join("\n").trim();
+  if(!text) throw new Error("leer");
+  return text;
+}
+function answerQuery(q){
+  const lc=q.toLowerCase(); let html="";
+  const bad=AVOID.find(a=>matchItem(lc,a)); const good=ALLOWED.find(a=>matchItem(lc,a));
+  if(bad){ html+='<div class="card resultcard bad"><span class="tag-bad">🚫 nicht das Beste</span><h3 style="margin:8px 0 4px">'+esc(bad.n)+'</h3><p style="margin:0">'+esc(bad.reason)+'</p></div>'; }
+  else if(good){ html+='<div class="card resultcard good"><span class="tag-good">✅ passt</span><h3 style="margin:8px 0 4px">'+esc(good.n)+'</h3>'+(good.note?'<p style="margin:0">'+esc(good.note)+'</p>':'')+'</div>'; }
+  const proc=(typeof PROCMAP!=='undefined')?PROCMAP.filter(p=>p.keys.some(k=>lc.includes(k))):[];
+  if(proc.length){ html+='<div class="card resultcard"><span class="tag-good" style="background:#6f8a3a">🌿 worauf achten</span><ul style="margin:8px 0 0;padding-left:20px">'+proc.map(p=>'<li>'+esc(p.t)+'</li>').join('')+'</ul></div>'; }
+  const n=NUTRI.find(x=>x.keys.some(k=>lc.includes(k)));
+  if(n){ html+='<div class="card resultcard"><b>'+esc(n.name)+' – grobe Schätzung</b><div class="small" style="margin-top:4px">💶 '+esc(n.eur)+' · 🔥 '+esc(n.kcal)+'</div><div class="small muted" style="margin-top:4px">Richtwerte (von mir geschätzt, nicht aus deinen Unterlagen) – je nach Laden/Land anders.</div></div>'; }
+  if(/dose|dosen|konserve|schwermetall|aluminium|thunfisch/.test(lc)){ html+='<div class="card resultcard"><span class="tag-good">🛡️ Ausgleichen (aus deinen Prinzipien)</span><div style="margin-top:8px">Nach Dosen-Essen helfen laut deiner Liste: <b>'+DETOX.join(', ')+'</b>.</div></div>'; }
+  const words=lc.split(/[^a-zäöüß]+/).filter(w=>w.length>3);
+  const pr=PRINCIPLES.concat(PRINCIPLES2).filter(p=>{ const pl=p.toLowerCase(); return words.some(w=>pl.includes(w)); }).slice(0,2);
+  if(pr.length){ html+='<div class="card resultcard"><span class="muted small">Passende Prinzipien</span><ul style="margin:6px 0 0;padding-left:20px">'+pr.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul></div>'; }
+  if(!html){ html='<div class="card resultcard unk"><b>Das steht nicht in deinen Unterlagen.</b><div class="small muted" style="margin-top:4px">Ich rate nicht. Tippe oben „🤖 Ausführlich mit KI“ oder schick im Projekt-Chat ein Foto des Produkts.</div></div>'; }
+  return html;
+}
+/* NAEHRWERT-SCHAETZER (grob): Eiweiss + kcal pro 100 g, typ. Stueckgewicht g, fett-default def */
+const FOOD=[
+ {keys:["eier","ei "],p:13,kcal:155,g:60},
+ {keys:["lachs"],p:20,kcal:200},
+ {keys:["sardine"],p:25,kcal:210},
+ {keys:["rinderhack","hackfleisch","hack"],p:20,kcal:250},
+ {keys:["rinderfilet","filet","steak","rumpsteak","entrecote","rinderbrust","gulasch","rindfleisch","rinder"],p:22,kcal:185,g:200},
+ {keys:["hähnchen","haehnchen","geflügel","geflugel","hühner","poulet"],p:21,kcal:120,g:150},
+ {keys:["ente"],p:19,kcal:200,g:300},
+ {keys:["lamm","kotelett","koteletts"],p:20,kcal:230,g:200},
+ {keys:["dorade","fisch"],p:20,kcal:120,g:150},
+ {keys:["gambas","garnelen","scampi","shrimp"],p:20,kcal:99,g:150},
+ {keys:["hüttenkäse","huettenkaese","cottage"],p:11,kcal:98},
+ {keys:["feta"],p:14,kcal:265},
+ {keys:["parmesan","parmigiano"],p:30,kcal:390},
+ {keys:["ziegenkäse","ziegenkaese","ziegenfrisch","ziegencreme"],p:18,kcal:290},
+ {keys:["griechischer joghurt"],p:6,kcal:90},
+ {keys:["ziegenjoghurt","joghurt","quark","skyr","sojaquark","kokosjoghurt"],p:5,kcal:70},
+ {keys:["seidentofu","tofu"],p:8,kcal:80},
+ {keys:["butter","ghee","fassbutter"],p:1,kcal:745,def:15},
+ {keys:["kokosöl","kokosoel","kokosfett"],p:0,kcal:890,def:10},
+ {keys:["olivenöl","olivenoel","walnussöl","sesamöl","avocadoöl","öl","oel"],p:0,kcal:885,def:10},
+ {keys:["kokosmilch"],p:2,kcal:200},
+ {keys:["sahne"],p:2,kcal:290},
+ {keys:["milch","hafermilch","mandelmilch","pflanzenmilch"],p:3,kcal:55},
+ {keys:["avocado"],p:2,kcal:160,g:150},
+ {keys:["süßkartoffel","suesskartoffel","süsskartoffel"],p:2,kcal:86},
+ {keys:["kartoffel"],p:2,kcal:77},
+ {keys:["quinoa"],p:4,kcal:120},
+ {keys:["wildreis","reis"],p:3,kcal:130},
+ {keys:["hirse"],p:4,kcal:120},
+ {keys:["bulgur"],p:4,kcal:120},
+ {keys:["linsen"],p:9,kcal:115},
+ {keys:["kichererbse"],p:8,kcal:120},
+ {keys:["bohnen"],p:7,kcal:100},
+ {keys:["buchweizen","roggenmehl","glutenfreie nudeln","glutenfreies mehl","nudeln","spaghetti","lasagne","gnocchi","bulgur","mehl"],p:10,kcal:350},
+ {keys:["dattel","medjool"],p:2,kcal:280},
+ {keys:["honig","dattelsirup"],p:0,kcal:305},
+ {keys:["walnuss","walnüsse","walnuesse"],p:15,kcal:654},
+ {keys:["mandel"],p:21,kcal:575},
+ {keys:["cashew"],p:18,kcal:553},
+ {keys:["paranüsse","pekan","pinienkerne","nuss","nüsse","nuesse"],p:15,kcal:650},
+ {keys:["kürbiskern","kuerbiskern"],p:30,kcal:559},
+ {keys:["chiasamen","chia"],p:17,kcal:486},
+ {keys:["hanfsamen","hanf"],p:31,kcal:553},
+ {keys:["erdnussmus","erdnuss"],p:25,kcal:600},
+ {keys:["banane"],p:1,kcal:89,g:120},
+ {keys:["apfel","äpfel","aepfel"],p:0,kcal:52,g:150},
+ {keys:["mango"],p:1,kcal:60},
+ {keys:["wassermelone"],p:1,kcal:30},
+ {keys:["beere","heidelbeer","erdbeer","himbeer","blaubeer","cranberr","goji"],p:1,kcal:45},
+ {keys:["gurke"],p:1,kcal:15,g:300},
+ {keys:["brokkoli"],p:3,kcal:34,g:400},
+ {keys:["blumenkohl"],p:2,kcal:25,g:600},
+ {keys:["zucchini"],p:1,kcal:17,g:300},
+ {keys:["aubergine"],p:1,kcal:25,g:250},
+ {keys:["paprika"],p:1,kcal:31,g:150},
+ {keys:["tomate","passata","tomatenmark"],p:1,kcal:20,g:100},
+ {keys:["zwiebel","lauchzwiebel","frühlingszwiebel"],p:1,kcal:40,g:110},
+ {keys:["karotte","möhre","moehre","karotten"],p:1,kcal:41,g:80},
+ {keys:["fenchel"],p:1,kcal:31,g:300},
+ {keys:["kürbis","hokkaido"],p:1,kcal:40,g:300},
+ {keys:["knoblauch"],p:6,kcal:149,g:5},
+ {keys:["spinat","mangold","rucola","feldsalat","salat"],p:2,kcal:23,g:100},
+ {keys:["champignon","pilz"],p:3,kcal:22,g:100},
+ {keys:["schokolade","schoki","kakao"],p:8,kcal:600},
+ {keys:["sucuk","wurst","speck","schinken","salami"],p:18,kcal:350}
+];
+function gramsOf(ing,f){ const lc=ing.toLowerCase();
+  let m=lc.match(/(\d+(?:[.,]\d+)?)\s*kg\b/); if(m) return parseFloat(m[1].replace(',','.'))*1000;
+  m=lc.match(/(\d+(?:[.,]\d+)?)\s*(?:g|gramm|ml)\b/); if(m) return parseFloat(m[1].replace(',','.'));
+  m=lc.match(/(\d+(?:[.,]\d+)?)\s*(?:el|essl)/); if(m) return parseFloat(m[1].replace(',','.'))*15;
+  m=lc.match(/(\d+(?:[.,]\d+)?)\s*(?:tl|teel)/); if(m) return parseFloat(m[1].replace(',','.'))*5;
+  m=lc.match(/(\d+(?:[.,]\d+)?)\s*tasse/); if(m) return parseFloat(m[1].replace(',','.'))*150;
+  if(f.g){ const c=lc.match(/(\d+)/); return (c?parseInt(c[1]):1)*f.g; }
+  return (f.def!=null)?f.def:80;
+}
+function estimateRecipe(r){ if(!r||!r.i) return null; let P=0,K=0,known=0;
+  r.i.split(';').forEach(function(ing){ const lc=ing.toLowerCase(); const f=FOOD.find(x=>x.keys.some(k=>lc.includes(k))); if(!f)return; known++; const g=gramsOf(ing,f); P+=g*f.p/100; K+=g*f.kcal/100; });
+  if(!known) return null; return {p:Math.round(P), kcal:Math.round(K/10)*10}; }
+function priceTier(r){ const lc=(r&&r.i||'').toLowerCase();
+  const hi=["filet","steak","rumpsteak","entrecote","rinderbrust","lamm","lachs","dorade","gambas","scampi","garnelen","shrimp","ente","parmesan"];
+  const mid=["hack","rinder","geflügel","hähnchen","haehnchen","feta","käse","kaese","nuss","cashew","walnuss","quinoa","fisch","sardine","sucuk"];
+  if(hi.some(k=>lc.includes(k))) return "€€€";
+  if(mid.some(k=>lc.includes(k))) return "€€";
+  return "€"; }
+function recCard(r,open){ const id=recId(r),fav=saved.fav.includes(id);
+  const devs=devTips(r).map(d=>'<span class="pill dev">'+d+'</span>').join('');
+  const ings=r.i.split(';').map(x=>'<li data-ing="'+esc(x.trim())+'">'+esc(x.trim())+'</li>').join('');
+  const warns=recipeWarnings(r).map(a=>'<div class="warnline">🚫 <b>'+esc(a.n)+':</b> '+esc(a.reason)+'</div>').join('');
+  const tips=productTips(r).map(t=>'<div class="tipline">🌿 '+esc(t)+'</div>').join('');
+  const warnBox=(warns||tips)?'<div class="warnbox">'+(warns?'<div class="wb-h">Achtung – auf deiner Vermeiden-Liste</div>'+warns:'')+(tips?'<div class="wb-h" style="color:#6f8a3a">Tipp aus deinen Prinzipien</div>'+tips:'')+'</div>':'';
+  const portions='<div class="portsel" data-port="1">Portionen: '+[1,2,3,4].map(n=>'<button class="pbtn'+(n===1?' on':'')+'" data-p="'+n+'">'+n+'×</button>').join('')+'</div>';
+  const st=(typeof STEPS!=='undefined'&&STEPS[r.n])?STEPS[r.n]:(r.steps||[]);
+  const zub=st.length?'<div class="zub"><b>Zubereitung</b><ol>'+st.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol></div>':'';
+  const est=(typeof estimateRecipe!=='undefined')?estimateRecipe(r):null; const tier=(typeof priceTier!=='undefined')?priceTier(r):''; const nutriPills=(est?'<span class="pill nut">≈ '+est.p+' g Eiweiß</span><span class="pill nut">≈ '+est.kcal+' kcal</span>':'')+(tier?'<span class="pill nut">'+tier+'</span>':'');
+  return '<div class="rec '+(open?'open':'')+'"><div class="head" data-toggle><span class="emo">'+(CAT_EMOJI[r.c]||'🍽️')+'</span><span class="ttl">'+esc(r.n)+(r.custom?' <span class="pill">eigenes</span>':'')+'</span><button class="fav '+(fav?'on':'')+'" data-favbtn="'+esc(id)+'">'+(fav?'★':'☆')+'</button></div><div class="meta"><div class="chips"><span class="pill cat">'+esc(r.c)+'</span>'+nutriPills+(isProteinRich(r)?'<span class="pill prot">💪 proteinreich</span>':'')+devs+'</div></div><div class="body">'+warnBox+'<b>Zutaten</b>'+portions+'<ul class="inglist">'+ings+'</ul>'+(est?'<div class="small muted" style="margin:6px 0 0">Eiweiß &amp; kcal ≈ fürs ganze Rezept · grobe Schätzung</div>':'')+zub+(r.custom?'<button class="btn ghost sm" data-delrec="'+esc(id)+'" style="margin-top:10px">Löschen</button>':'')+'</div></div>'; }
+function bindRecCards(scope){ scope.querySelectorAll('.rec').forEach(card=>{ const t=card.querySelector('[data-toggle]'); if(t)t.addEventListener('click',()=>card.classList.toggle('open')); });
+  scope.querySelectorAll('[data-favbtn]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const id=b.getAttribute('data-favbtn'); if(saved.fav.includes(id))saved.fav=saved.fav.filter(x=>x!==id); else saved.fav.push(id); Store.set('fav',saved.fav); const on=saved.fav.includes(id); b.textContent=on?'★':'☆'; b.classList.toggle('on',on); }));
+  scope.querySelectorAll('[data-delrec]').forEach(b=>b.addEventListener('click',()=>{ saved.customRec=saved.customRec.filter(r=>'c_'+r.n!==b.getAttribute('data-delrec')); Store.set('customRec',saved.customRec); render(); }));
+  scope.querySelectorAll('.portsel').forEach(ps=>{ ps.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const f=parseInt(b.getAttribute('data-p')); ps.setAttribute('data-port',f); ps.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x===b)); const card=ps.closest('.rec'); card.querySelectorAll('.inglist li').forEach(li=>{ li.textContent=scaleIng(li.getAttribute('data-ing'),f); }); })); }); }
+
+/* HEUTE-SEITE */
+function renderDash(){
+  const s=saved.settings,f=focusObj(),dayName=todayDayName(),wd=saved.wochenplan[dayName],isTrain=wd&&wd.type==='Trainingstag';
+  const total=proteinToday(),pct=Math.min(100,Math.round(total/PROT_MAX*100)),rod=recipeOfDay(); const kcToday=saved.protein.reduce((s,x)=>s+(x.kcal||0),0);
+  let today;
+  if(wd&&wd.type){ const meals=[wd.rec1||wd.m1,wd.rec2||wd.m2,wd.rec3||wd.m3].filter(Boolean);
+    today='<div class="today '+(isTrain?'':'ruhe')+'"><div class="lab">Heute · '+dayName+'</div><h3>'+(isTrain?'🏋️ Trainingstag':'🛌 Ruhetag')+'</h3>'+(meals.length?'<p>'+meals.map(esc).join(' · ')+'</p>':'<p>Noch nichts geplant – tippe unten auf „Plan“.</p>')+'</div>'; }
+  else { today='<div class="today '+(isTrain?'':'ruhe')+'"><div class="lab">Heute · '+dayName+'</div><h3>'+f.e+' '+f.l+'</h3><p>'+esc(f.meals)+'. Lege im „Plan“ fest, ob heute Trainings- oder Ruhetag ist.</p></div>'; }
+  let h='<div class="sec"><div class="dash-greet">Hallo'+(s.name?', '+esc(s.name):'')+'! 👋</div><p class="dash-sub">'+esc(new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'}))+'</p>';
+  h+=today;
+  if(typeof checkinDue==='function'&&checkinDue())h+='<div class="remind" data-go="checkin">🔔 <b>Wöchentlicher Check-in fällig</b><div class="small" style="margin-top:2px">Trag dein aktuelles Gewicht ein – dein Protein-Ziel passt sich an. Tippen zum Eintragen.</div></div>';
+  h+='<div class="today" data-go="protein" style="cursor:pointer;background:var(--card);color:var(--ink);border:1px solid var(--line)"><div class="ring-wrap"><div class="ring '+(total>=PROT_MIN?'good':'')+'" style="--p:'+pct+'"><div class="inner" style="background:'+(total>=PROT_MIN?'var(--leaf)':'var(--terra)')+'"><b>'+total+'g</b><span>von '+PROT_MIN+'</span></div></div><div style="flex:1"><div style="font-family:Fraunces,serif;font-weight:600;font-size:1.2rem">Protein heute</div><div class="muted small">'+(total>=PROT_MIN?'🎯 Ziel erreicht!':'noch '+(PROT_MIN-total)+' g — tippe „Protein“')+'</div></div></div></div>';
+  h+='<div class="kcaldash" data-go="protein">🔥 Kalorien heute: <b>≈ '+kcToday+'</b> / ~'+KCAL_TARGET+' kcal'+(f.id==='aufbau'?' · Aufbau = leichter Überschuss':'')+'</div>';h+='<div class="qrow"><button class="qbtn" data-go="cook"><span class="qe">🧺</span>Was kochen?</button><button class="qbtn" data-go="finder"><span class="qe">🍳</span>Rezepte</button><button class="qbtn" data-go="check"><span class="qe">🔎</span>Check</button></div>';
+  h+='<div class="tipcard"><div class="lab">Tipp des Tages</div><div style="margin-top:4px;font-weight:700">'+esc(tipOfDay())+'</div></div>';
+  h+='<div class="grouphd">🍽️ Rezept des Tages</div>'+recCard(rod,false)+'</div>';
+  app().innerHTML=h; bindRecCards(app());
+}
+/* MEHR-MENÜ */
+function renderMore(){
+  const items=[{go:'cook',e:'🧺',t:'Was kann ich kochen?'},{go:'tag',e:'🕛',t:'Tagesplan & Struktur'},{go:'checkin',e:'✅',t:'Wöchentlicher Check-in'},{go:'top',e:'⭐',t:'Meine Favoriten'},{go:'einkauf',e:'🛒',t:'Einkauf & Vorräte'},{go:'check',e:'🔎',t:'Frag & Check'},{go:'prinzip',e:'📜',t:'Meine Prinzipien'},{go:'nng',e:'📖',t:'NNG-Prinzip erklärt'},{go:'settings',e:'⚙️',t:'Einstellungen'},{go:'help',e:'❓',t:'Hilfe & Erklärung'}];
+  app().innerHTML='<div class="sec"><h2>Mehr</h2><p class="lead">Alle weiteren Bereiche.</p>'+items.map(i=>'<button class="pickrow" data-go="'+i.go+'"><span><span style="font-size:1.3rem;margin-right:8px">'+i.e+'</span>'+i.t+'</span><span style="color:var(--ink-soft)">›</span></button>').join('')+'</div>';
+}
+/* REZEPT-FINDER */
+let fCat='all',fDev='all',fQ='',fFav=false;
+function renderFinder(){
+  let h='<div class="sec"><h2>Rezept-Finder</h2><p class="lead">Tippe ein Rezept an, um Zutaten & Zubereitung zu sehen.</p>'+
+    '<div class="search"><span class="ico">🔎</span><input type="text" id="rq" placeholder="Suche nach Name oder Zutat …" value="'+esc(fQ)+'"></div>'+
+    '<div class="filterbar" id="catbar"><button class="fbtn '+(fFav?'on':'')+'" data-fav>★ Favoriten</button><button class="fbtn '+(fCat==='all'?'on':'')+'" data-cat="all">Alle</button>';
+  CATS.forEach(c=>h+='<button class="fbtn '+(fCat===c?'on':'')+'" data-cat="'+c+'">'+CAT_EMOJI[c]+' '+c+'</button>');
+  h+='</div><div class="filterbar" id="devbar"><button class="fbtn '+(fDev==='all'?'on':'')+'" data-dev="all">Alle Geräte</button>';
+  DEVICES.forEach(d=>h+='<button class="fbtn '+(fDev===d?'on':'')+'" data-dev="'+d+'">'+d+'</button>');
+  h+='</div><div class="note">Die Geräte sind automatisch nach Gericht-Typ vorgeschlagen. Tippe ein Rezept an, um Zutaten und Zubereitung zu sehen.</div><div id="reclist"></div><button class="btn ghost full" id="addrec" style="margin-top:6px">➕ Eigenes Rezept hinzufügen</button></div>';
+  app().innerHTML=h;
+  document.getElementById('rq').addEventListener('input',e=>{ fQ=e.target.value; drawRecs(); });
+  document.getElementById('catbar').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; if(b.hasAttribute('data-fav')){fFav=!fFav;}else{fCat=b.getAttribute('data-cat');} renderFinder(); });
+  document.getElementById('devbar').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; fDev=b.getAttribute('data-dev'); renderFinder(); });
+  document.getElementById('addrec').addEventListener('click',openAddRecipe);
+  drawRecs();
+}
+function drawRecs(){ const box=document.getElementById('reclist'); if(!box)return; const q=fQ.trim().toLowerCase();
+  let list=allRecipes().filter(r=>{ if(fFav&&!saved.fav.includes(recId(r)))return false; if(fCat!=='all'&&r.c!==fCat)return false; if(fDev!=='all'&&!devTips(r).includes(fDev))return false; if(q&&!(r.n.toLowerCase().includes(q)||r.i.toLowerCase().includes(q)))return false; return true; });
+  if(!list.length){ box.innerHTML='<div class="card center muted">Keine Rezepte gefunden. Filter anpassen oder Suche leeren.</div>'; return; }
+  box.innerHTML=list.map(r=>recCard(r,false)).join(''); bindRecCards(box);
+}
+function openAddRecipe(){ const name=prompt('Name des Rezepts:'); if(!name)return; const ing=prompt('Zutaten (mit Semikolon ; trennen):')||''; let cat=prompt('Kategorie ('+CATS.join(', ')+'):','Herzhaft')||'Herzhaft'; const zub=prompt('Zubereitung (Schritte mit Semikolon ; trennen, optional):')||''; const steps=zub.split(';').map(s=>s.trim()).filter(Boolean); saved.customRec.push({n:name,i:ing,c:CATS.includes(cat)?cat:'Herzhaft',p:'eigenes',steps:steps}); Store.set('customRec',saved.customRec); drawRecs(); }
+
+/* REZEPT-AUSWAHL (Overlay, für den Wochenplan) */
+function openPicker(onPick){
+  const ov=document.getElementById('overlay');
+  ov.innerHTML='<div class="sheet"><h3>Rezept wählen</h3><div class="search"><span class="ico">🔎</span><input type="text" id="pk_q" placeholder="Suche …"></div><div id="pk_list"></div><button class="btn ghost full" id="pk_close" style="margin-top:8px">Abbrechen</button></div>';
+  ov.classList.add('show');
+  const close=()=>{ ov.classList.remove('show'); ov.innerHTML=''; };
+  const draw=()=>{ const q=(document.getElementById('pk_q').value||'').toLowerCase().trim(); const list=allRecipes().filter(r=>!q||r.n.toLowerCase().includes(q)||r.i.toLowerCase().includes(q)).slice(0,60);
+    document.getElementById('pk_list').innerHTML=list.map(r=>'<div class="pickrow" data-pick="'+esc(r.n)+'"><span>'+(CAT_EMOJI[r.c]||'🍽️')+' '+esc(r.n)+'</span></div>').join('');
+    document.getElementById('pk_list').querySelectorAll('[data-pick]').forEach(b=>b.addEventListener('click',()=>{ onPick(b.getAttribute('data-pick')); close(); })); };
+  document.getElementById('pk_q').addEventListener('input',draw);
+  document.getElementById('pk_close').addEventListener('click',close);
+  ov.addEventListener('click',e=>{ if(e.target===ov)close(); });
+  draw();
+}
+
+/* WAS KANN ICH KOCHEN */
+function renderCook(){
+  let h='<div class="sec"><h2>Was kann ich kochen?</h2><p class="lead">Kreuze an, was du zu Hause hast – die App zeigt passende Rezepte.</p>';
+  INGS.forEach(grp=>{ h+='<div class="grouphd">'+grp.g+'</div><div class="checkgrid">'; grp.items.forEach(it=>{ const on=cookSel.has(it.l); h+='<label class="chk '+(on?'on':'')+'"><input type="checkbox" data-ing="'+esc(it.l)+'" '+(on?'checked':'')+'><span>'+esc(it.l)+'</span></label>'; }); h+='</div>'; });
+  h+='<div class="row" style="margin:14px 0"><button class="btn olive grow" id="findcook">🍳 Rezepte zeigen</button><button class="btn ghost" id="clrcook">Leeren</button></div><div id="cookres"></div></div>';
+  app().innerHTML=h;
+  app().querySelectorAll('[data-ing]').forEach(c=>c.addEventListener('change',()=>{ const l=c.getAttribute('data-ing'); if(c.checked)cookSel.add(l); else cookSel.delete(l); c.closest('.chk').classList.toggle('on',c.checked); }));
+  document.getElementById('findcook').addEventListener('click',drawCook);
+  document.getElementById('clrcook').addEventListener('click',()=>{ cookSel.clear(); renderCook(); });
+  if(cookSel.size)drawCook();
+}
+function drawCook(){
+  const keys=[]; INGS.forEach(g=>g.items.forEach(it=>{ if(cookSel.has(it.l))keys.push(it.k); }));
+  const box=document.getElementById('cookres');
+  if(!keys.length){ box.innerHTML='<div class="note">Wähle oben mindestens eine Zutat aus.</div>'; return; }
+  const scored=allRecipes().map(r=>{ const t=r.i.toLowerCase(); let m=0; keys.forEach(ks=>{ if(ks.some(k=>t.includes(k)))m++; }); return {r,m}; }).filter(x=>x.m>0).sort((a,b)=>b.m-a.m||a.r.n.localeCompare(b.r.n));
+  if(!scored.length){ box.innerHTML='<div class="card center muted">Mit dieser Auswahl finde ich kein passendes Rezept. Probier andere/mehr Zutaten.</div>'; return; }
+  box.innerHTML='<div class="grouphd">'+scored.length+' passende Rezepte</div>'+scored.slice(0,30).map(({r,m})=>recCard(r,false)).join(''); bindRecCards(box);
+}
+/* PROTEIN-RECHNER */
+function renderProtein(){
+  const opts=PROT.map((p,i)=>'<option value="'+i+'">'+esc(p.n)+' ('+p.per+' g/100 g)</option>').join('');
+  let h='<div class="sec"><h2>Protein-Rechner</h2><p class="lead">Tagesziel <b>'+PROT_MIN+'–'+PROT_MAX+' g</b> · <a href="#" id="pgoal">anpassen</a></p>'+
+   '<div class="card"><label class="fld">Zutat</label><select id="pi">'+opts+'</select><div class="row" style="margin-top:10px"><div class="grow"><label class="fld" id="plbl">Menge in Gramm</label><input type="number" id="pg" inputmode="numeric" placeholder="z. B. 200" min="0"></div><button class="btn" id="padd" style="align-self:flex-end">Hinzufügen</button></div><div class="note" id="phint">Eier: gib die Stückzahl ein (1 Ei ≈ 6,5 g Protein).</div></div>'+
+   '<div class="card"><div class="row" style="justify-content:space-between;align-items:flex-end"><div><div class="bignum" id="ptotal">0<small> g</small></div><div class="muted small" id="pstat"></div></div><button class="btn ghost sm" id="pexample">Beispiel-Kombi</button></div><div class="meter" style="margin:14px 0 6px"><div class="fill" id="pfill"></div></div><div class="muted small" style="display:flex;justify-content:space-between"><span>0</span><span>'+PROT_MIN+'</span><span>'+PROT_MAX+'+</span></div><div class="kcalrow" id="pkcal"></div><div id="plist" style="margin-top:8px"></div><button class="btn ghost full" id="pclear" style="margin-top:10px">Tag zurücksetzen</button></div></div>';
+  app().innerHTML=h;
+  const pgl=document.getElementById('pgoal'); if(pgl)pgl.addEventListener('click',e=>{ e.preventDefault(); go('settings'); });
+  const sel=document.getElementById('pi'),lbl=document.getElementById('plbl'),hint=document.getElementById('phint');
+  function syncLbl(){ const p=PROT[+sel.value]; const egg=p&&p.egg; lbl.textContent=egg?'Anzahl (Stück)':'Menge in Gramm'; hint.style.display=egg?'block':'none'; }
+  sel.addEventListener('change',syncLbl); syncLbl();
+  document.getElementById('padd').addEventListener('click',()=>{ const p=PROT[+sel.value]; const val=parseFloat(document.getElementById('pg').value); if(!val||val<=0)return; const prot=p.egg?Math.round(val*6.5):Math.round(val*p.per/100); const kcal=kcalForItem(p.n,val,p.egg); saved.protein.push({n:p.n,amount:p.egg?val+' Stück':val+' g',prot,kcal}); Store.set('protein',saved.protein); document.getElementById('pg').value=''; drawProt(); });
+  document.getElementById('pclear').addEventListener('click',()=>{ saved.protein=[]; Store.set('protein',saved.protein); drawProt(); });
+  document.getElementById('pexample').addEventListener('click',()=>{ saved.protein=[{n:'Eier',amount:'4 Stück',prot:26,kcal:310},{n:'Rinderhack',amount:'200 g',prot:40,kcal:500},{n:'Lachs',amount:'150 g',prot:30,kcal:300},{n:'Hüttenkäse',amount:'200 g',prot:22,kcal:196},{n:'Kürbiskerne',amount:'25 g',prot:8,kcal:140}]; Store.set('protein',saved.protein); drawProt(); });
+  drawProt();
+}
+function drawProt(){ const total=saved.protein.reduce((s,x)=>s+x.prot,0); const tEl=document.getElementById('ptotal'); if(!tEl)return;
+  tEl.innerHTML=total+'<small> g</small>';
+  const fill=document.getElementById('pfill'); fill.style.width=Math.min(100,total/PROT_MAX*100)+'%'; fill.classList.toggle('good',total>=PROT_MIN);
+  const stat=document.getElementById('pstat');
+  if(total>=PROT_MIN&&total<=PROT_MAX)stat.textContent='🎯 im Zielbereich!'; else if(total>PROT_MAX)stat.textContent='über '+PROT_MAX+' g – stark (ggf. etwas viel)'; else stat.textContent='noch '+(PROT_MIN-total)+' g bis zum Ziel';
+  const list=document.getElementById('plist');
+  list.innerHTML=saved.protein.length?saved.protein.map((x,i)=>'<div class="listrow"><b>'+x.prot+' g</b><span class="muted">'+esc(x.n)+' · '+esc(x.amount)+'</span><button class="x" data-pdel="'+i+'">✕</button></div>').join(''):'<div class="muted small">Noch nichts hinzugefügt.</div>';
+  list.querySelectorAll('[data-pdel]').forEach(b=>b.addEventListener('click',()=>{ saved.protein.splice(+b.getAttribute('data-pdel'),1); Store.set('protein',saved.protein); drawProt(); }));
+  const kc=saved.protein.reduce((s,x)=>s+(x.kcal||0),0); const ke=document.getElementById('pkcal'); if(ke)ke.innerHTML='🔥 ≈ '+kc+' kcal heute · Ziel ~'+KCAL_TARGET+' kcal'+(kc>=KCAL_TARGET?' 🎯':'');
+}
+
+/* TAGESPLAN */
+function renderTag(){
+  const block=arr=>arr.map(x=>'<div class="card"><h3>'+esc(x.t)+'</h3><p style="margin:0">'+esc(x.d)+'</p></div>').join('');
+  app().innerHTML='<div class="sec"><h2>Tagesplan & Struktur</h2><p class="lead">Aus deiner Mahlzeitenstruktur – Essfenster 12–20 Uhr.</p><div class="grouphd">🏋️ Trainingstag (Training 13–14 Uhr)</div>'+block(TAGE.training)+'<div class="grouphd">🛌 Ruhetag</div>'+block(TAGE.ruhe)+'<div class="note">💡 '+esc(TAGE.tipp)+'</div></div>';
+}
+
+/* WOCHENPLAN */
+const DAYS=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
+function checkinDue(){ if(!saved.checkins||!saved.checkins.length) return true; const ts=saved.checkins.map(c=>c.ts||0).reduce((m,b)=>Math.max(m,b),0); return (Date.now()-ts)>7*86400000; }
+function mealsForFocus(f){ return f==='abnehmen'?1:(f==='schlank'?2:3); }
+function buildDay(focus,target,pool,used,meals){
+  let lo,hi; if(focus==='aufbau'){lo=target;hi=target*1.15;} else if(focus==='abnehmen'){lo=target*0.85;hi=target;} else {lo=target*0.90;hi=target*1.10;}
+  const mid=(lo+hi)/2; let three=[],sumK=0;
+  for(let slot=0;slot<meals;slot++){ const slotsLeft=meals-slot; const ideal=Math.max(150,(mid-sumK)/slotsLeft);
+    let cands=pool.filter(function(x){return !used[x.r.n] && three.indexOf(x)<0;});
+    if(!cands.length) cands=pool.filter(function(x){return three.indexOf(x)<0;});
+    if(!cands.length) break;
+    cands.sort(function(a,b){return Math.abs(a.kcal-ideal)-Math.abs(b.kcal-ideal);});
+    const top=cands.slice(0,Math.min(cands.length,6));
+    const pick=top[Math.floor(Math.random()*top.length)];
+    three.push(pick); used[pick.r.n]=true; sumK+=pick.kcal; }
+  let guard=0;
+  while(three.reduce(function(s,x){return s+x.p;},0)<PROT_MIN && guard<12){ guard++;
+    three.sort(function(a,b){return a.p-b.p;}); const weak=three[0]; const curK=three.reduce(function(s,x){return s+x.kcal;},0);
+    const c=pool.filter(function(x){return !used[x.r.n] && three.indexOf(x)<0 && x.p>weak.p && (curK-weak.kcal+x.kcal)<=hi;}).sort(function(a,b){return (b.p-a.p)||(Math.abs(a.kcal-weak.kcal)-Math.abs(b.kcal-weak.kcal));});
+    if(!c.length) break; const rep=c[0];
+    used[weak.r.n]=false; three.shift(); used[rep.r.n]=true; three.push(rep); }
+  return three;
+}
+function generateWeek(){
+  const focus=saved.settings.focus||'aufbau'; const cheap=(wkMode==='guenstig'); const meals=mealsForFocus(focus);
+  let pool=allRecipes().map(function(r){ const e=estimateRecipe(r); return e?{r:r,p:e.p,kcal:e.kcal,tier:priceTier(r)}:null; }).filter(Boolean);
+  if(pool.length<6){ flash('Zu wenige Rezepte mit Nährwerten'); return; }
+  if(cheap){ const cp=pool.filter(function(x){return x.tier!=='€€€';}); if(cp.length>=24) pool=cp; }
+  const used={};
+  const carby=function(x){ return /(kartoffel|süßkartoffel|suesskartoffel|reis|nudel|pasta|spaghetti|gnocchi|lasagne|quinoa|hirse|bulgur|brot|mehl|banane|dattel|honig|waffel|cake|smoothie|obst|pudding)/.test((x.r.i+' '+x.r.n).toLowerCase()); };
+  DAYS.forEach(function(d,di){ const o=saved.wochenplan[d]||{};
+    if(!o.type) o.type=(di===0||di===2||di===4)?'Trainingstag':'Ruhetag';
+    let three=buildDay(focus, KCAL_TARGET, pool, used, meals);
+    three.sort(function(a,b){return (carby(b)?1:0)-(carby(a)?1:0);});
+    o.rec1=three[0]?three[0].r.n:''; o.rec2=three[1]?three[1].r.n:''; o.rec3=three[2]?three[2].r.n:'';
+    if(meals<3) delete o.rec3; if(meals<2) delete o.rec2;
+    saved.wochenplan[d]=o; });
+  Store.set('wochenplan',saved.wochenplan); renderWoche(); flash('Woche erstellt ✓ ('+focusObj().l+')');
+}
+function rerollSlot(day,i){
+  const o=saved.wochenplan[day]||{}; const cheap=(wkMode==='guenstig');
+  const others=[1,2,3].filter(function(k){return String(k)!==String(i);}).map(function(k){return o['rec'+k];}).filter(Boolean);
+  const cur=o['rec'+i]?allRecipes().find(function(x){return x.n===o['rec'+i];}):null; const curE=cur?estimateRecipe(cur):null; const aimK=curE?curE.kcal:(KCAL_TARGET/3);
+  let pool=allRecipes().map(function(r){ const e=estimateRecipe(r); return e?{r:r,p:e.p,kcal:e.kcal,tier:priceTier(r)}:null; }).filter(Boolean).filter(function(x){ return others.indexOf(x.r.n)<0 && x.r.n!==o['rec'+i]; });
+  if(cheap){ const cp=pool.filter(function(x){return x.tier!=='€€€';}); if(cp.length>=10) pool=cp; }
+  if(!pool.length){ flash('Keine Alternative gefunden'); return; }
+  pool.sort(function(a,b){ return Math.abs(a.kcal-aimK)-Math.abs(b.kcal-aimK); });
+  const top=pool.slice(0,Math.min(pool.length,8)); const pick=top[Math.floor(Math.random()*top.length)];
+  o['rec'+i]=pick.r.n; saved.wochenplan[day]=o; Store.set('wochenplan',saved.wochenplan); renderWoche();
+}
+function renderWoche(){
+  const focus=saved.settings.focus||'aufbau';
+  let h='<div class="sec"><h2>Wochenplan</h2><p class="lead">Automatisch erstellen oder selbst wählen – wird gespeichert.</p>';
+  h+='<div class="card"><h3>🎲 Woche automatisch erstellen</h3><p class="muted small" style="margin:0 0 8px">Füllt alle 7 Tage passend zu deinem Fokus (<b>'+esc(focusObj().l)+'</b>)'+(focus==='aufbau'?' – mit Protein-Deckung pro Tag':'')+'. Fokus änderst du in den Einstellungen. Mahlzeiten/Tag nach Fokus: Aufbau 3 · schlank 2 · Abnehmen 1 (OMAD).</p><div class="seg" id="wk_mode"><button data-mode="ausgewogen" class="'+(wkMode==='ausgewogen'?'on':'')+'">Ausgewogen</button><button data-mode="guenstig" class="'+(wkMode==='guenstig'?'on':'')+'">💶 Günstig</button></div><button class="btn full" id="wk_gen" style="margin-top:10px">🎲 Woche generieren</button><div class="note">Danach kannst du einzelne Mahlzeiten antippen und tauschen.</div></div>';
+  let wkP=0,wkK=0,wkD=0; DAYS.forEach(function(dd){ const oo=saved.wochenplan[dd]||{}; let p2=0,k2=0,a2=false; [1,2,3].forEach(function(i){ const rn=oo['rec'+i]; if(rn){ const r=allRecipes().find(function(x){return x.n===rn;}); const e=r?estimateRecipe(r):null; if(e){p2+=e.p;k2+=e.kcal;a2=true;} } }); if(a2){wkP+=p2;wkK+=k2;wkD++;} });
+  if(wkD){ h+='<div class="card"><h3>📊 Ø pro Tag (geplant)</h3><div class="daysum" style="font-size:1rem">≈ '+Math.round(wkP/wkD)+' g Eiweiß · ≈ '+(Math.round(wkK/wkD/10)*10)+' kcal</div><p class="muted small" style="margin:4px 0 0">Schnitt über '+wkD+' geplante Tage · Ziel ~'+PROT_MIN+' g Protein · ~'+KCAL_TARGET+' kcal.</p></div>'; }
+  DAYS.forEach(function(d){ const o=saved.wochenplan[d]||{};
+    h+='<div class="card" data-day="'+d+'"><h3>'+d+'</h3><div class="daypick"><button data-type="Trainingstag" class="'+(o.type==='Trainingstag'?'on':'')+'">🏋️ Trainingstag</button><button data-type="Ruhetag" class="'+(o.type==='Ruhetag'?'on':'')+'">🛌 Ruhetag</button></div>';
+    [1,2,3].forEach(function(i){ const rec=o['rec'+i],txt=o['m'+i]||'';
+      h+='<label class="fld">Mahlzeit '+i+' <span class="muted" style="font-weight:600;font-size:.78rem">· '+['Kohlenhydrate + Protein','Protein + Fett','Low Carb, High Protein/Fett'][i-1]+'</span></label>'+(rec?'<div><span class="slotchip">🍽️ '+esc(rec)+' <button data-rmrec="'+i+'">✕</button></span></div>':'')+'<div class="row"><input type="text" class="grow" data-f="m'+i+'" value="'+esc(txt)+'" placeholder="frei eintragen …"><button class="btn ghost sm" data-pick="'+i+'">+ Rezept</button><button class="btn ghost sm" data-reroll="'+i+'" title="Zuf\u00e4llig tauschen">🎲</button></div>'; });
+    let dp=0,dk=0,any=false; [1,2,3].forEach(function(i){ const rn=o['rec'+i]; if(rn){ const r=allRecipes().find(function(x){return x.n===rn;}); const e=r?estimateRecipe(r):null; if(e){ dp+=e.p; dk+=e.kcal; any=true; } } });
+    if(any){ const pOk=dp>=PROT_MIN; let kn; if(focus==='aufbau') kn=(dk>=KCAL_TARGET&&dk<=KCAL_TARGET*1.18)?'✓ leicht über Ziel':(dk<KCAL_TARGET?'etwas unter Ziel':'über Ziel'); else if(focus==='abnehmen') kn=(dk<=KCAL_TARGET&&dk>=KCAL_TARGET*0.82)?'✓ leicht unter Ziel':(dk>KCAL_TARGET?'über Ziel':'niedrig'); else kn=(Math.abs(dk-KCAL_TARGET)<=KCAL_TARGET*0.12)?'✓ im Zielbereich':(dk>KCAL_TARGET?'über Ziel':'unter Ziel'); h+='<div class="daysum">💪 ≈ '+dp+' g Eiweiß'+(focus==='aufbau'?(pOk?' 🎯':' · noch '+(PROT_MIN-dp)+' g'):'')+' · 🔥 ≈ '+dk+' kcal (Ziel ~'+KCAL_TARGET+' · '+kn+')</div>'; }
+    h+='<label class="fld">Protein gesamt (optional)</label><input type="text" data-f="prot" value="'+esc(o.prot||'')+'" placeholder="~ g"></div>'; });
+  h+='<button class="btn olive full" id="wk_shop" style="margin:6px 0 4px">🛒 Einkaufsliste aus dieser Woche erzeugen</button><div class="note">Sammelt die Zutaten aller gewählten Rezepte in deine Einkaufsliste. Mengen ggf. nach Personenzahl anpassen.</div></div>';
+  app().innerHTML=h;
+  const mode=document.getElementById('wk_mode'); if(mode){ mode.querySelectorAll('[data-mode]').forEach(function(b){ b.addEventListener('click',function(){ wkMode=b.getAttribute('data-mode'); renderWoche(); }); }); }
+  const gen=document.getElementById('wk_gen'); if(gen) gen.addEventListener('click',generateWeek);
+  app().querySelectorAll('[data-day]').forEach(function(card){ const d=card.getAttribute('data-day');
+    const ensure=function(){ saved.wochenplan[d]=saved.wochenplan[d]||{}; return saved.wochenplan[d]; };
+    const save=function(){ const o=ensure(); card.querySelectorAll('[data-f]').forEach(function(inp){o[inp.getAttribute('data-f')]=inp.value;}); Store.set('wochenplan',saved.wochenplan); };
+    card.querySelectorAll('[data-f]').forEach(function(inp){inp.addEventListener('change',save);});
+    card.querySelectorAll('[data-type]').forEach(function(b){ b.addEventListener('click',function(){ const o=ensure(); o.type=b.getAttribute('data-type'); card.querySelectorAll('[data-type]').forEach(function(x){x.classList.remove('on');}); b.classList.add('on'); Store.set('wochenplan',saved.wochenplan); }); });
+    card.querySelectorAll('[data-pick]').forEach(function(b){ b.addEventListener('click',function(){ const i=b.getAttribute('data-pick'); openPicker(function(name){ const o=ensure(); o['rec'+i]=name; Store.set('wochenplan',saved.wochenplan); renderWoche(); }); }); });
+    card.querySelectorAll('[data-rmrec]').forEach(function(b){ b.addEventListener('click',function(){ const i=b.getAttribute('data-rmrec'); const o=ensure(); delete o['rec'+i]; Store.set('wochenplan',saved.wochenplan); renderWoche(); }); });
+    card.querySelectorAll('[data-reroll]').forEach(function(b){ b.addEventListener('click',function(){ rerollSlot(d, b.getAttribute('data-reroll')); }); });
+  });
+  document.getElementById('wk_shop').addEventListener('click',genShoppingFromWeek);
+}
+function genShoppingFromWeek(){
+  const have=new Set(saved.einkauf.map(x=>x.t.toLowerCase().trim())); let added=0;
+  DAYS.forEach(d=>{ const o=saved.wochenplan[d]; if(!o)return; [1,2,3].forEach(i=>{ const rn=o['rec'+i]; if(!rn)return; const r=allRecipes().find(x=>x.n===rn); if(!r)return; r.i.split(';').forEach(ing=>{ const t=ing.trim(); const key=t.toLowerCase(); if(t&&!have.has(key)){ have.add(key); saved.einkauf.push({t:t,done:false}); added++; } }); }); });
+  Store.set('einkauf',saved.einkauf);
+  if(added){ flash(added+' Zutaten hinzugefügt'); go('einkauf'); } else { flash('Keine neuen Zutaten (oder keine Rezepte gewählt)'); }
+}
+
+/* CHECK-IN + GEWICHTSKURVE */
+function renderCheckin(){
+  const today=new Date().toLocaleDateString('de-DE');
+  app().innerHTML='<div class="sec"><h2>Wöchentlicher Check-in</h2><p class="lead">Notiere kurz, wie die Woche lief.</p><div class="card"><label class="fld">Datum</label><input type="text" id="ci_date" value="'+today+'"><label class="fld">Gewicht</label><input type="text" id="ci_w" placeholder="z. B. 75 kg"><label class="fld">Energie im Training</label><input type="text" id="ci_e" placeholder="z. B. gut / mittel"><label class="fld">Schlaf</label><input type="text" id="ci_s" placeholder="z. B. 7–8 h"><label class="fld">Was lief gut?</label><textarea id="ci_g"></textarea><label class="fld">Was nächste Woche ändern?</label><textarea id="ci_c"></textarea><button class="btn full" id="ci_save" style="margin-top:12px">Check-in speichern</button></div><div id="ci_chart"></div><div class="grouphd">Verlauf</div><div id="ci_hist"></div></div>';
+  document.getElementById('ci_save').addEventListener('click',()=>{ saved.checkins.unshift({date:document.getElementById('ci_date').value,w:document.getElementById('ci_w').value,e:document.getElementById('ci_e').value,s:document.getElementById('ci_s').value,g:document.getElementById('ci_g').value,c:document.getElementById('ci_c').value,ts:Date.now()}); Store.set('checkins',saved.checkins); const wm=(document.getElementById('ci_w').value||'').replace(',','.').match(/[\d.]+/); if(wm){ setTargetsFromWeight(parseFloat(wm[0])); Store.set('settings',saved.settings); flash('Gespeichert ✓ · Ziele aktualisiert'); } renderCheckin(); });
+  drawHist();
+}
+function weightChart(){
+  const pts=saved.checkins.slice().reverse().map(c=>{ const m=(c.w||'').replace(',','.').match(/[\d.]+/); return m?parseFloat(m[0]):null; }).filter(v=>v!=null);
+  if(pts.length<2)return '';
+  const last=pts.slice(-8),min=Math.min(...last),max=Math.max(...last),range=(max-min)||1;
+  const bars=last.map(v=>'<div class="bar" style="height:'+(20+Math.round((v-min)/range*80))+'%"><span>'+v+'</span></div>').join('');
+  const lbls=last.map((v,i)=>'<div class="barlbl">'+(i+1)+'</div>').join('');
+  return '<div class="card"><h3>📉 Gewichtsverlauf</h3><div class="chart">'+bars+'</div><div class="barlbls">'+lbls+'</div></div>';
+}
+function drawHist(){ const ch=document.getElementById('ci_chart'); if(ch)ch.innerHTML=weightChart();
+  const box=document.getElementById('ci_hist'); if(!box)return;
+  if(!saved.checkins.length){ box.innerHTML='<div class="muted small">Noch keine Einträge.</div>'; return; }
+  box.innerHTML=saved.checkins.map((c,i)=>'<div class="card"><div class="row" style="justify-content:space-between"><b>'+esc(c.date)+'</b><button class="x" data-cidel="'+i+'">✕</button></div><div class="small" style="margin-top:6px">'+(c.w?'<div>⚖️ '+esc(c.w)+'</div>':'')+(c.e?'<div>⚡ Energie: '+esc(c.e)+'</div>':'')+(c.s?'<div>😴 Schlaf: '+esc(c.s)+'</div>':'')+(c.g?'<div style="margin-top:4px">✅ '+esc(c.g)+'</div>':'')+(c.c?'<div>🔁 '+esc(c.c)+'</div>':'')+'</div></div>').join('');
+  box.querySelectorAll('[data-cidel]').forEach(b=>b.addEventListener('click',()=>{ saved.checkins.splice(+b.getAttribute('data-cidel'),1); Store.set('checkins',saved.checkins); renderCheckin(); }));
+}
+/* FAVORITEN */
+function renderTop(){
+  const favRecs=allRecipes().filter(r=>saved.fav.includes(recId(r)));
+  let h='<div class="sec"><h2>Meine Favoriten</h2><p class="lead">Gemerkte Rezepte und deine schnellen Top-Gerichte.</p><div class="grouphd">★ Gemerkte Rezepte ('+favRecs.length+')</div><div id="favbox">';
+  h+= favRecs.length?favRecs.map(r=>recCard(r,false)).join(''):'<div class="muted small">Noch nichts gemerkt – im Rezept-Finder auf ☆ tippen.</div>';
+  h+='</div><div class="grouphd">⚡ Schnelle Top-Gerichte</div><div id="toplist"></div><div class="card"><b>Neues Schnellgericht</b><label class="fld">Name</label><input type="text" id="t_n" placeholder="z. B. Thunfisch-Bowl"><div class="row"><div class="grow"><label class="fld">Protein</label><input type="text" id="t_p" placeholder="~ g"></div><div class="grow"><label class="fld">Zeit</label><input type="text" id="t_z" placeholder="min"></div></div><label class="fld">Gerät</label><input type="text" id="t_g" placeholder="Herd / Airfryer …"><button class="btn full" id="t_add" style="margin-top:12px">Hinzufügen</button></div></div>';
+  app().innerHTML=h; bindRecCards(document.getElementById('favbox'));
+  document.getElementById('t_add').addEventListener('click',()=>{ const n=document.getElementById('t_n').value.trim(); if(!n)return; saved.top.push({name:n,protein:document.getElementById('t_p').value,zeit:document.getElementById('t_z').value,geraet:document.getElementById('t_g').value}); Store.set('top',saved.top); renderTop(); });
+  drawTop();
+}
+function drawTop(){ const box=document.getElementById('toplist'); if(!box)return;
+  box.innerHTML=saved.top.length?saved.top.map((t,i)=>'<div class="card"><div class="row" style="justify-content:space-between"><b style="font-family:Fraunces,serif">'+esc(t.name)+'</b><button class="x" data-tdel="'+i+'">✕</button></div><div class="chips" style="margin-top:6px">'+(t.protein?'<span class="pill prot">💪 '+esc(t.protein)+'</span>':'')+(t.zeit?'<span class="pill">⏱️ '+esc(t.zeit)+'</span>':'')+(t.geraet?'<span class="pill dev">'+esc(t.geraet)+'</span>':'')+'</div></div>').join(''):'<div class="muted small">Noch keine Schnellgerichte.</div>';
+  box.querySelectorAll('[data-tdel]').forEach(b=>b.addEventListener('click',()=>{ saved.top.splice(+b.getAttribute('data-tdel'),1); Store.set('top',saved.top); drawTop(); }));
+}
+
+/* EINKAUF & VORRÄTE */
+function renderEinkauf(){
+  app().innerHTML='<div class="sec"><h2>Einkauf & Vorräte</h2><p class="lead">Deine Basis plus eine eigene, abhakbare Liste.</p><div class="card"><h3>🫙 Immer zu Hause</h3><ul class="plist">'+VORRAT.immer.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="card"><h3>🧊 Wöchentlich frisch</h3><ul class="plist">'+VORRAT.frisch.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="grouphd">🛒 Meine Einkaufsliste</div><div class="card"><div class="row"><input type="text" id="ek_in" class="grow" placeholder="Artikel hinzufügen …"><button class="btn" id="ek_add">+</button></div><div id="ek_list" style="margin-top:10px"></div><button class="btn ghost full" id="ek_clear" style="margin-top:10px">Erledigte entfernen</button></div></div>';
+  const add=()=>{ const v=document.getElementById('ek_in').value.trim(); if(!v)return; saved.einkauf.push({t:v,done:false}); Store.set('einkauf',saved.einkauf); document.getElementById('ek_in').value=''; drawEk(); };
+  document.getElementById('ek_add').addEventListener('click',add);
+  document.getElementById('ek_in').addEventListener('keydown',e=>{ if(e.key==='Enter')add(); });
+  document.getElementById('ek_clear').addEventListener('click',()=>{ saved.einkauf=saved.einkauf.filter(x=>!x.done); Store.set('einkauf',saved.einkauf); drawEk(); });
+  drawEk();
+}
+function drawEk(){ const box=document.getElementById('ek_list'); if(!box)return;
+  box.innerHTML=saved.einkauf.length?saved.einkauf.map((x,i)=>'<label class="chk '+(x.done?'on':'')+'" style="margin-bottom:8px"><input type="checkbox" data-ek="'+i+'" '+(x.done?'checked':'')+'><span style="'+(x.done?'text-decoration:line-through;opacity:.6':'')+'">'+esc(x.t)+'</span></label>').join(''):'<div class="muted small">Liste ist leer.</div>';
+  box.querySelectorAll('[data-ek]').forEach(c=>c.addEventListener('change',()=>{ saved.einkauf[+c.getAttribute('data-ek')].done=c.checked; Store.set('einkauf',saved.einkauf); drawEk(); }));
+}
+
+/* LEBENSMITTEL-CHECK */
+function matchItem(q,item){ const n=item.n.toLowerCase(); if(n.includes(q))return true; if(item.keys&&item.keys.some(k=>k.includes(q)||q.includes(k)))return true; return q.split(/\s+/).some(w=>w.length>=4&&n.includes(w)); }
+function renderCheck(){
+  app().innerHTML='<div class="sec"><h2>Frag &amp; Check</h2><p class="lead">Tippe ein Lebensmittel oder eine Frage ein. Die Antwort kommt aus deinen eigenen Unterlagen – optional ausführlicher per KI.</p>'
+   +'<div class="search"><span class="ico">🔎</span><input type="text" id="ck_q" placeholder="z. B. Wraps, Lachs, Dose, was nach Dose essen? …"></div>'
+   +'<div class="row" style="margin:8px 0"><button class="btn olive grow" id="ck_ai">🤖 Ausführlich mit KI</button><button class="btn ghost grow" id="ck_dose">🧅 Dose gegessen?</button></div>'
+   +'<div id="ck_res"></div><div id="ck_aires"></div>'
+   +'<div class="note">Die KI-Antwort braucht, dass du bei Claude eingeloggt bist. Ohne Login antwortet die App weiter aus deinen Daten – das geht immer und für alle.</div>'
+   +'<div class="grouphd">✅ Empfohlen / erlaubt</div><div class="chips" id="ck_good"></div><div class="grouphd">🚫 Eher vermeiden</div><div id="ck_bad"></div></div>';
+  document.getElementById('ck_good').innerHTML=ALLOWED.map(function(a){ const f=(typeof FOOD!=='undefined')?FOOD.find(x=>x.keys.some(k=>a.n.toLowerCase().includes(k))):null; return '<span class="pill cat">'+esc(a.n)+(f?' · ~'+f.kcal+' kcal':'')+'</span>'; }).join('');
+  document.getElementById('ck_bad').innerHTML=AVOID.map(a=>'<div class="card resultcard bad"><b>'+esc(a.n)+'</b><div class="small muted" style="margin-top:4px">'+esc(a.reason)+'</div></div>').join('');
+  const inp=document.getElementById('ck_q'); const res=document.getElementById('ck_res'); const air=document.getElementById('ck_aires');
+  const draw=()=>{ const q=inp.value.trim(); air.innerHTML=''; if(q.length<2){ res.innerHTML=''; return; } res.innerHTML=answerQuery(q); };
+  inp.addEventListener('input',draw);
+  document.getElementById('ck_dose').addEventListener('click',()=>{ inp.value='Dose'; draw(); inp.focus(); });
+  document.getElementById('ck_ai').addEventListener('click',async()=>{ const q=inp.value.trim(); if(q.length<2){ flash('Erst etwas eingeben'); return; } air.innerHTML='<div class="card"><span class="muted small">🤖 KI denkt nach …</span></div>';
+    try{ const t=await askAI(q); air.innerHTML='<div class="card resultcard good"><span class="tag-good">🤖 KI-Antwort (auf Basis deiner Prinzipien)</span><div style="margin-top:8px;white-space:pre-wrap;line-height:1.5">'+esc(t)+'</div></div>'; }
+    catch(e){ air.innerHTML='<div class="note">KI gerade nicht verfügbar (z. B. ohne Login). Antwort aus deinen Daten:</div>'+answerQuery(q); } });
+}
+
+/* PRINZIPIEN */
+function renderPrinzip(){
+  app().innerHTML='<div class="sec"><h2>Meine Prinzipien</h2><p class="lead">Deine Lebens- & Ernährungsregeln – durchsuchbar.</p><div class="search"><span class="ico">🔎</span><input type="text" id="pr_q" placeholder="Suche, z. B. Fasten, Wasser, Tee …"></div><div class="grouphd">Lebensregeln</div><div id="pr1"></div><div class="grouphd">Lebensmittel & Zeitpunkt</div><div id="pr2"></div></div>';
+  const draw=()=>{ const q=(document.getElementById('pr_q').value||'').trim().toLowerCase(); const f=a=>!q||a.toLowerCase().includes(q);
+    const l1=PRINCIPLES.filter(f),l2=PRINCIPLES2.filter(f);
+    document.getElementById('pr1').innerHTML=l1.length?'<div class="card"><ul class="plist" style="margin:0;padding-left:20px">'+l1.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>':'<div class="muted small">Nichts gefunden.</div>';
+    document.getElementById('pr2').innerHTML=l2.length?'<div class="card"><ul class="plist" style="margin:0;padding-left:20px">'+l2.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div>':'<div class="muted small">Nichts gefunden.</div>'; };
+  document.getElementById('pr_q').addEventListener('input',draw); draw();
+}
+/* NNG ERKLÄRT */
+function renderNNG(){ app().innerHTML='<div class="sec"><h2>NNG-Prinzip erklärt</h2><p class="lead">Das System in Kurzform – aus deiner Zusammenfassung.</p>'+NNG.map(s=>'<div class="card"><h3>'+esc(s.h)+'</h3><p style="margin:0">'+esc(s.t)+'</p></div>').join('')+'</div>'; }
+
+/* EINSTELLUNGEN */
+function renderSettings(){
+  const s=saved.settings;
+  let h='<div class="sec"><h2>Einstellungen</h2><p class="lead">Macht die App zu deiner – jede Person stellt ihr Eigenes ein.</p>';
+  h+='<div class="card"><label class="fld">Dein Name (für die Begrüßung)</label><input type="text" id="se_name" value="'+esc(s.name||'')+'" placeholder="z. B. Max"></div>';
+  h+='<div class="card"><h3>🎯 Dein Fokus</h3><p class="muted small" style="margin:0 0 10px">Wähle, worum es bei dir geht – die App passt Tipps und die Mahlzeiten-Empfehlung an (nach deinem NNG-Prinzip).</p>';
+  FOCUS.forEach(f=>{ h+='<label class="opt '+(s.focus===f.id?'on':'')+'"><div class="row" style="gap:10px;flex-wrap:nowrap;align-items:flex-start"><input type="radio" name="foc" value="'+f.id+'" '+(s.focus===f.id?'checked':'')+' style="width:20px;height:20px;accent-color:var(--terra);margin-top:3px;flex:none"><div><div class="ol">'+f.e+' '+f.l+'</div><div class="od">'+esc(f.d)+' · '+esc(f.meals)+'</div></div></div></label>'; });
+  h+='</div>';
+  h+='<div class="card"><h3>💪 Mein Proteinziel pro Tag</h3><div class="row"><div class="grow"><label class="fld">von (g)</label><input type="number" id="se_min" inputmode="numeric" value="'+(s.pmin||130)+'"></div><div class="grow"><label class="fld">bis (g)</label><input type="number" id="se_max" inputmode="numeric" value="'+(s.pmax||150)+'"></div></div><div class="note">Standard ist dein Profilwert (130–150 g). Jede Person stellt hier ihren eigenen Bereich ein.</div><label class="fld">Optional: Richtwert aus dem Gewicht</label><div class="row"><input type="number" id="se_kg" class="grow" inputmode="numeric" placeholder="Gewicht in kg" value="'+(s.weight||'')+'"><button class="btn ghost" id="se_calc">Berechnen</button></div><div class="note">Faustregel für Muskelaufbau: 1,6–2,2 g pro kg. <b>Hinweis:</b> grobe Orientierung, <u>nicht</u> aus deinen Unterlagen – das NNG-Prinzip sagt eigentlich „nicht tracken, auf das Körpergefühl hören“.</div></div>';
+  h+='<div class="card"><div class="switch"><div><div style="font-family:Fraunces,serif;font-weight:600;font-size:1.1rem">🌙 Dunkelmodus</div><div class="muted small">Augenschonend am Abend</div></div><button class="tog '+(s.dark?'on':'')+'" id="se_dark" aria-label="Dunkelmodus"></button></div></div>';
+  h+='<div class="card"><h3>🔥 Kalorien-Ziel pro Tag</h3><div class="bignum" style="font-size:1.5rem">~'+KCAL_TARGET+' kcal</div><p class="muted small" style="margin:6px 0 0">Grobe Orientierung aus Gewicht + Fokus. Steigt automatisch, wenn du im Check-in mehr Gewicht einträgst – für Muskelaufbau mit leichtem Überschuss. Kein Zwang: hör auch auf deinen Körper.</p></div>';h+='<div class="card"><h3>🔐 Daten sichern (für alle – ohne Pro)</h3><p class="muted small" style="margin:0 0 10px">Sichere Plan, Favoriten & Einstellungen als Code (z. B. in deinen Notizen) und stelle sie später oder auf einem anderen Gerät wieder her. So behält auch jede Person ohne Pro-Account ihre Daten.</p><div class="row"><button class="btn ghost grow" id="se_export">⬇️ Backup-Code</button><button class="btn ghost grow" id="se_import">⬆️ Backup laden</button></div></div>';
+  h+='<button class="btn full" id="se_save">Speichern</button></div>';
+  app().innerHTML=h;
+  document.getElementById('se_dark').addEventListener('click',function(){ this.classList.toggle('on'); document.body.dataset.theme=this.classList.contains('on')?'dark':''; });
+  document.getElementById('se_export').addEventListener('click',()=>{ const data=JSON.stringify(collectData()); const ov=document.getElementById('overlay'); ov.innerHTML='<div class="sheet"><h3>Backup-Code</h3><p class="muted small">Markiere den Code, kopiere ihn und speichere ihn (z. B. in deinen Notizen). Damit stellst du deine Daten später oder auf einem anderen Gerät wieder her.</p><textarea id="bk_out" style="height:140px" readonly></textarea><button class="btn full" id="bk_copy" style="margin-top:8px">Kopieren</button><button class="btn ghost full" id="bk_close" style="margin-top:6px">Schließen</button></div>'; ov.classList.add('show'); const ta=document.getElementById('bk_out'); ta.value=data; ta.select(); document.getElementById('bk_copy').addEventListener('click',()=>{ ta.select(); try{ navigator.clipboard.writeText(ta.value); }catch(e){ try{ document.execCommand('copy'); }catch(_){} } flash('Kopiert ✓'); }); document.getElementById('bk_close').addEventListener('click',()=>{ ov.classList.remove('show'); ov.innerHTML=''; }); });
+  document.getElementById('se_import').addEventListener('click',()=>{ const ov=document.getElementById('overlay'); ov.innerHTML='<div class="sheet"><h3>Backup laden</h3><p class="muted small">Füge hier deinen Backup-Code ein und tippe auf „Laden“. Deine bisherigen Daten werden dabei ersetzt.</p><textarea id="bk_in" style="height:140px" placeholder="Code hier einfügen …"></textarea><button class="btn full" id="bk_load" style="margin-top:8px">Laden</button><button class="btn ghost full" id="bk_cancel" style="margin-top:6px">Abbrechen</button></div>'; ov.classList.add('show'); document.getElementById('bk_load').addEventListener('click',()=>{ try{ const d=JSON.parse(document.getElementById('bk_in').value); Object.keys(d).forEach(k=>{ saved[k]=d[k]; Store.set(k,d[k]); }); if(saved.settings){ PROT_MIN=saved.settings.pmin||130; PROT_MAX=saved.settings.pmax||150; document.body.dataset.theme=saved.settings.dark?'dark':''; } ov.classList.remove('show'); ov.innerHTML=''; flash('Backup geladen ✓'); go('home'); }catch(e){ alert('Code konnte nicht gelesen werden – bitte prüfen.'); } }); document.getElementById('bk_cancel').addEventListener('click',()=>{ ov.classList.remove('show'); ov.innerHTML=''; }); });
+  document.getElementById('se_calc').addEventListener('click',()=>{ const kg=parseFloat(document.getElementById('se_kg').value); if(!kg)return; const foc=(document.querySelector('input[name=foc]:checked')||{}).value; if(foc)saved.settings.focus=foc; setTargetsFromWeight(kg); document.getElementById('se_min').value=saved.settings.pmin; document.getElementById('se_max').value=saved.settings.pmax; flash('Aus '+kg+' kg: '+saved.settings.pmin+'–'+saved.settings.pmax+' g · ~'+saved.settings.kcal+' kcal'); });
+  document.getElementById('se_save').addEventListener('click',()=>{ let mn=parseInt(document.getElementById('se_min').value)||130,mx=parseInt(document.getElementById('se_max').value)||150; if(mx<mn){const t=mn;mn=mx;mx=t;} const foc=(document.querySelector('input[name=foc]:checked')||{}).value||'aufbau'; const dark=document.getElementById('se_dark').classList.contains('on'); const kg=parseFloat(document.getElementById('se_kg').value)||0; saved.settings={name:document.getElementById('se_name').value.trim(),pmin:mn,pmax:mx,focus:foc,dark:dark,weight:kg||saved.settings.weight||0,kcal:saved.settings.kcal||2700}; if(saved.settings.weight){ setTargetsFromWeight(saved.settings.weight); } else { applyTargets(); } document.body.dataset.theme=dark?'dark':''; Store.set('settings',saved.settings); go('home'); });
+}
+
+/* HILFE & ERKLÄRUNG */
+function renderHelp(){
+  const sec=(t,b)=>'<div class="card"><h3>'+t+'</h3><p style="margin:0">'+b+'</p></div>';
+  let h='<div class="sec"><h2>Hilfe & Erklärung</h2><p class="lead">So funktioniert deine App – Schritt für Schritt.</p>';
+  h+=sec('📦 Was ist das?','Dein persönliches Küchenbuch. Alle Inhalte – Rezepte, Lebensmittel, Prinzipien, Proteinwerte – stammen aus deinen eigenen Projekt-Dateien. Es wird nichts erfunden oder dazugedichtet.');
+  h+=sec('🧭 Die Leiste unten','Über die feste Leiste am unteren Rand wechselst du zwischen fünf Bereichen: Heute, Rezepte, Protein, Plan und Mehr. Über „Mehr“ erreichst du alle weiteren Seiten.');
+  h+=sec('🏠 Heute','Begrüßung mit deinem Namen, ob heute Trainings- oder Ruhetag ist (aus deinem Plan), dein heutiger Protein-Stand als Ring, ein Tipp des Tages und ein Rezept des Tages.');
+  h+=sec('🍳 Rezepte','73 Rezepte aus deinen Unterlagen – mit vollständiger Zubereitung direkt im Rezept. Du kannst suchen, nach Kategorie oder Gerät filtern, mit dem Stern (☆) merken und die Portionen (1×–4×) hochrechnen. Eigene Rezepte mit eigener Zubereitung kannst du hinzufügen. Eiweiß, Kalorien und Preis (€/€€/€€€) je Rezept sind grobe Schätzungen.');
+  h+=sec('💪 Protein','Wähle eine Zutat und die Menge – die App rechnet zusammen, wie nah du an deinem Tagesziel bist. Eier gibst du als Stück ein. Dein Ziel änderst du über „anpassen“ oder in den Einstellungen.');
+  h+=sec('🗓️ Plan','Lege pro Tag fest, ob Trainings- oder Ruhetag, und trage drei Mahlzeiten ein – entweder ein Rezept auswählen oder frei schreiben. Mit einem Tippen erzeugst du daraus eine Einkaufsliste mit allen Zutaten der gewählten Rezepte.');
+  h+=sec('🔎 Lebensmittel-Check','Tippe ein Lebensmittel ein. Steht es nicht in deinen Unterlagen, sagt die App das ehrlich, statt zu raten. Den Foto-Check eines Produkts macht weiterhin der Chat im Projekt.');
+  h+=sec('✅ Check-in & Kurve','Notiere wöchentlich Gewicht, Energie, Schlaf und Notizen. Aus dem Gewicht entsteht automatisch eine kleine Verlaufs-Kurve.');
+  h+=sec('🎯 Für verschiedene Personen','In den Einstellungen wählt jede Person ihren Fokus: Muskelaufbau, Muskeln und schlank, Abnehmen oder einfach gesund essen. Das richtet sich nach der Mahlzeiten-Logik aus deinem NNG-Prinzip (3, 2 oder 1 Mahlzeit) und passt Tipps und Empfehlung an. Das Proteinziel stellt jeder selbst ein – oder per Richtwert aus dem Gewicht.');
+  h+=sec('💾 Speichern, Backup & Teilen','Alles, was du eingibst (Plan, Check-in, Favoriten, eigene Rezepte, Einstellungen), wird automatisch in deinem Browser gespeichert – auf jedem Gerät für sich, kostenlos und ohne Login. Die Daten bleiben auch nach dem Schließen des Browsers erhalten; weg sind sie nur, wenn du die Browserdaten löschst, einen anderen Browser bzw. ein anderes Gerät nutzt oder im Inkognito-Modus bist. Für Gerätewechsel oder zur Sicherheit gibt es „Daten sichern“: einmal als Backup-Code exportieren und auf dem neuen Gerät wieder einfügen.');
+  h+=sec('🔥 Protein &amp; Kalorien decken','Im Protein-Rechner trägst du ein, was du isst – die App zählt Eiweiß und Kalorien für heute und zeigt beides auf der Startseite gegen dein Tagesziel. Der Tages-Log startet jeden Tag automatisch neu.');
+  h+=sec('🎲 Wochenplan-Generator','„Woche generieren“ füllt alle Tage passend zu deinem Fokus: bei Muskelaufbau proteinreich und leicht über dem Kalorienziel, beim Abnehmen leichter. Die Anzahl Mahlzeiten richtet sich nach dem Fokus. Pro Tag siehst du Eiweiß und Kalorien; mit 🎲 tauschst du einzelne Mahlzeiten.');
+  h+=sec('⚖️ Ziele aus deinem Gewicht','Trägst du im Check-in dein Gewicht ein, passen sich Protein- und Kalorienziel automatisch an – steigt dein Gewicht, steigen die Ziele (für Muskelaufbau mit leichtem Überschuss). Grobe Richtwerte, kein Zwang.');
+  h+=sec('🌙 Dunkelmodus','In den Einstellungen kannst du zwischen hell und dunkel umschalten.');
+  h+=sec('⚠️ Ehrliche Grenzen','Alle Rezepte, Zutaten und Zubereitungen kommen aus deinen NNG-Unterlagen – nichts ist erfunden. Eiweiß, Kalorien und Preise (€/€€/€€€) sind grobe Schätzungen fürs ganze Rezept, keine exakten Werte – Orientierung, kein Zwang. Der Foto-Check eines Produkts läuft über den Projekt-Chat, nicht in der App selbst.');
+  h+='</div>'; app().innerHTML=h;
+}
+
+/* START */
+/* WARNUNGEN, PRINZIPIEN-TIPPS, PORTIONEN & BACKUP */
+function recipeWarnings(r){ const t=(r.i||'').toLowerCase(); const out=[]; AVOID.forEach(a=>{ if(a.keys&&a.keys.some(k=>t.includes(k)))out.push(a); }); return out; }
+const PROCMAP=[
+ {keys:['wrap','tortilla','fladen'],t:'Wraps/Fladen am besten selbst machen oder eine Variante ohne Samenöle & Zucker wählen.'},
+ {keys:['nudel','pasta','spaghetti','lasagne','gnocchi'],t:'Bei fertigen Nudeln glutenfreie/Buchweizen-Variante ohne Zusätze wählen.'},
+ {keys:['brühe','bouillon'],t:'Brühe ohne Zucker & unnatürliche Zusätze nehmen (steht so in deinen Rezepten).'},
+ {keys:['sucuk','wurst','speck','schinken','salami'],t:'Wurstwaren ohne zugesetzten Zucker & Samenöle (z. B. Bio).'},
+ {keys:['mayo','ketchup','sauce','soße','dressing'],t:'Fertige Saucen/Dressings: Variante ohne Samenöle & Zucker – oder selbst machen.'},
+ {keys:['schokolade'],t:'Dunkle Schokolade ab ~90 %, wenig Zucker; laut deiner Liste nicht Lindt.'},
+ {keys:['mehl','brot'],t:'Bei Mehl/Brot glutenfrei bzw. Buchweizen bevorzugen – Gluten meidest du laut deinen Prinzipien.'}
+];
+function productTips(r){ const t=(r.i||'').toLowerCase(); const seen=new Set(); const out=[]; PROCMAP.forEach(p=>{ if(p.keys.some(k=>t.includes(k))&&!seen.has(p.t)){ seen.add(p.t); out.push(p.t); } }); return out; }
+const FRAC={'½':0.5,'¼':0.25,'¾':0.75,'⅓':1/3,'⅔':2/3,'⅛':0.125};
+function fmtNum(n){ if(Math.abs(n-Math.round(n))<0.04)return String(Math.round(n)); return (Math.round(n*10)/10).toString().replace('.',','); }
+function scaleIng(text,f){ if(!f||f===1)return text;
+  let t=text.replace(/(\d+)\s*([½¼¾⅓⅔⅛])/g,(m,d,fr)=>String(parseInt(d)+FRAC[fr])).replace(/[½¼¾⅓⅔⅛]/g,m=>String(FRAC[m]));
+  return t.replace(/(\d+(?:[.,]\d+)?)(\s*[–-]\s*)(\d+(?:[.,]\d+)?)|(\d+(?:[.,]\d+)?)/g,(m,a,sep,b,single)=>{
+    if(a&&b)return fmtNum(parseFloat(a.replace(',','.'))*f)+sep+fmtNum(parseFloat(b.replace(',','.'))*f);
+    if(single)return fmtNum(parseFloat(single.replace(',','.'))*f);
+    return m; });
+}
+function collectData(){ return {wochenplan:saved.wochenplan,checkins:saved.checkins,top:saved.top,fav:saved.fav,einkauf:saved.einkauf,protein:saved.protein,customRec:saved.customRec,settings:saved.settings}; }
+(async function(){ await loadAll(); renderTabbar(); go('home'); })();
+</script>
+</body>
+</html>
