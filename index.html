@@ -198,6 +198,9 @@
   .kcaldash{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:.95rem;cursor:pointer}
   .kcalrow{margin:10px 0 0;font-weight:800;color:#c2410c}
   body[data-theme=dark] .kcalrow{color:#f0a060}
+  .slotline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+  .eatbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:800;font-size:.8rem;cursor:pointer}
+  .eatbtn.on{background:#6f8a3a;color:#fff;border-color:#6f8a3a}
 </style>
 </head>
 <body>
@@ -688,10 +691,11 @@ function recCard(r,open){ const id=recId(r),fav=saved.fav.includes(id);
   const st=(typeof STEPS!=='undefined'&&STEPS[r.n])?STEPS[r.n]:(r.steps||[]);
   const zub=st.length?'<div class="zub"><b>Zubereitung</b><ol>'+st.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol></div>':'';
   const est=(typeof estimateRecipe!=='undefined')?estimateRecipe(r):null; const tier=(typeof priceTier!=='undefined')?priceTier(r):''; const nutriPills=(est?'<span class="pill nut">≈ '+est.p+' g Eiweiß</span><span class="pill nut">≈ '+est.kcal+' kcal</span>':'')+(tier?'<span class="pill nut">'+tier+'</span>':'');
-  return '<div class="rec '+(open?'open':'')+'"><div class="head" data-toggle><span class="emo">'+(CAT_EMOJI[r.c]||'🍽️')+'</span><span class="ttl">'+esc(r.n)+(r.custom?' <span class="pill">eigenes</span>':'')+'</span><button class="fav '+(fav?'on':'')+'" data-favbtn="'+esc(id)+'">'+(fav?'★':'☆')+'</button></div><div class="meta"><div class="chips"><span class="pill cat">'+esc(r.c)+'</span>'+nutriPills+(isProteinRich(r)?'<span class="pill prot">💪 proteinreich</span>':'')+devs+'</div></div><div class="body">'+warnBox+'<b>Zutaten</b>'+portions+'<ul class="inglist">'+ings+'</ul>'+(est?'<div class="small muted" style="margin:6px 0 0">Eiweiß &amp; kcal ≈ fürs ganze Rezept · grobe Schätzung</div>':'')+zub+(r.custom?'<button class="btn ghost sm" data-delrec="'+esc(id)+'" style="margin-top:10px">Löschen</button>':'')+'</div></div>'; }
+  return '<div class="rec '+(open?'open':'')+'"><div class="head" data-toggle><span class="emo">'+(CAT_EMOJI[r.c]||'🍽️')+'</span><span class="ttl">'+esc(r.n)+(r.custom?' <span class="pill">eigenes</span>':'')+'</span><button class="fav '+(fav?'on':'')+'" data-favbtn="'+esc(id)+'">'+(fav?'★':'☆')+'</button></div><div class="meta"><div class="chips"><span class="pill cat">'+esc(r.c)+'</span>'+nutriPills+(isProteinRich(r)?'<span class="pill prot">💪 proteinreich</span>':'')+devs+'</div></div><div class="body">'+warnBox+'<b>Zutaten</b>'+portions+'<ul class="inglist">'+ings+'</ul>'+(est?'<div class="small muted" style="margin:6px 0 0">Eiweiß &amp; kcal ≈ fürs ganze Rezept · grobe Schätzung</div>':'')+zub+(est?'<button class="btn olive sm" data-eatrec="'+esc(r.n)+'" style="margin-top:10px;width:100%">✓ Heute gegessen (+'+est.p+' g · +'+est.kcal+' kcal)</button>':'')+(r.custom?'<button class="btn ghost sm" data-delrec="'+esc(id)+'" style="margin-top:10px">Löschen</button>':'')+'</div></div>'; }
 function bindRecCards(scope){ scope.querySelectorAll('.rec').forEach(card=>{ const t=card.querySelector('[data-toggle]'); if(t)t.addEventListener('click',()=>card.classList.toggle('open')); });
   scope.querySelectorAll('[data-favbtn]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const id=b.getAttribute('data-favbtn'); if(saved.fav.includes(id))saved.fav=saved.fav.filter(x=>x!==id); else saved.fav.push(id); Store.set('fav',saved.fav); const on=saved.fav.includes(id); b.textContent=on?'★':'☆'; b.classList.toggle('on',on); }));
   scope.querySelectorAll('[data-delrec]').forEach(b=>b.addEventListener('click',()=>{ saved.customRec=saved.customRec.filter(r=>'c_'+r.n!==b.getAttribute('data-delrec')); Store.set('customRec',saved.customRec); render(); }));
+  scope.querySelectorAll('[data-eatrec]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); logEaten(b.getAttribute('data-eatrec')); }));
   scope.querySelectorAll('.portsel').forEach(ps=>{ ps.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const f=parseInt(b.getAttribute('data-p')); ps.setAttribute('data-port',f); ps.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x===b)); const card=ps.closest('.rec'); card.querySelectorAll('.inglist li').forEach(li=>{ li.textContent=scaleIng(li.getAttribute('data-ing'),f); }); })); }); }
 
 /* HEUTE-SEITE */
@@ -857,6 +861,8 @@ function rerollSlot(day,i){
   const top=pool.slice(0,Math.min(pool.length,8)); const pick=top[Math.floor(Math.random()*top.length)];
   o['rec'+i]=pick.r.n; saved.wochenplan[day]=o; Store.set('wochenplan',saved.wochenplan); renderWoche();
 }
+async function logEaten(name){ const r=allRecipes().find(function(x){return x.n===name;}); const e=r?estimateRecipe(r):null; if(!e){ flash('Keine Nährwerte für dieses Rezept'); return; } saved.protein.push({n:name,amount:'(gekocht)',prot:e.p,kcal:e.kcal}); await Store.set('protein',saved.protein); flash('Zu heute: +'+e.p+' g · +'+e.kcal+' kcal ✓'); }
+async function toggleEaten(day,i){ const o=saved.wochenplan[day]||{}; const rn=o['rec'+i]; if(!rn)return; const pid=day+'#'+i; const idx=saved.protein.findIndex(function(x){return x.pid===pid;}); if(idx>=0){ saved.protein.splice(idx,1); } else { const r=allRecipes().find(function(x){return x.n===rn;}); const e=r?estimateRecipe(r):null; saved.protein.push({n:rn,amount:'(Plan)',prot:e?e.p:0,kcal:e?e.kcal:0,pid:pid}); } await Store.set('protein',saved.protein); renderWoche(); }
 function renderWoche(){
   const focus=saved.settings.focus||'aufbau';
   let h='<div class="sec"><h2>Wochenplan</h2><p class="lead">Automatisch erstellen oder selbst wählen – wird gespeichert.</p>';
@@ -865,8 +871,8 @@ function renderWoche(){
   if(wkD){ h+='<div class="card"><h3>📊 Ø pro Tag (geplant)</h3><div class="daysum" style="font-size:1rem">≈ '+Math.round(wkP/wkD)+' g Eiweiß · ≈ '+(Math.round(wkK/wkD/10)*10)+' kcal</div><p class="muted small" style="margin:4px 0 0">Schnitt über '+wkD+' geplante Tage · Ziel ~'+PROT_MIN+' g Protein · ~'+KCAL_TARGET+' kcal.</p></div>'; }
   DAYS.forEach(function(d){ const o=saved.wochenplan[d]||{};
     h+='<div class="card" data-day="'+d+'"><h3>'+d+'</h3><div class="daypick"><button data-type="Trainingstag" class="'+(o.type==='Trainingstag'?'on':'')+'">🏋️ Trainingstag</button><button data-type="Ruhetag" class="'+(o.type==='Ruhetag'?'on':'')+'">🛌 Ruhetag</button></div>';
-    [1,2,3].forEach(function(i){ const rec=o['rec'+i],txt=o['m'+i]||'';
-      h+='<label class="fld">Mahlzeit '+i+' <span class="muted" style="font-weight:600;font-size:.78rem">· '+['Kohlenhydrate + Protein','Protein + Fett','Low Carb, High Protein/Fett'][i-1]+'</span></label>'+(rec?'<div><span class="slotchip">🍽️ '+esc(rec)+' <button data-rmrec="'+i+'">✕</button></span></div>':'')+'<div class="row"><input type="text" class="grow" data-f="m'+i+'" value="'+esc(txt)+'" placeholder="frei eintragen …"><button class="btn ghost sm" data-pick="'+i+'">+ Rezept</button><button class="btn ghost sm" data-reroll="'+i+'" title="Zuf\u00e4llig tauschen">🎲</button></div>'; });
+    [1,2,3].forEach(function(i){ const rec=o['rec'+i],txt=o['m'+i]||''; const eaten=saved.protein.some(function(x){return x.pid===d+'#'+i;});
+      h+='<label class="fld">Mahlzeit '+i+' <span class="muted" style="font-weight:600;font-size:.78rem">· '+['Kohlenhydrate + Protein','Protein + Fett','Low Carb, High Protein/Fett'][i-1]+'</span></label>'+(rec?'<div class="slotline"><span class="slotchip">🍽️ '+esc(rec)+' <button data-rmrec="'+i+'">✕</button></span><button class="eatbtn'+(eaten?' on':'')+'" data-eat="'+i+'">'+(eaten?'✅ gegessen':'☐ abhaken')+'</button></div>':'')+'<div class="row"><input type="text" class="grow" data-f="m'+i+'" value="'+esc(txt)+'" placeholder="frei eintragen …"><button class="btn ghost sm" data-pick="'+i+'">+ Rezept</button><button class="btn ghost sm" data-reroll="'+i+'" title="Zuf\u00e4llig tauschen">🎲</button></div>'; });
     let dp=0,dk=0,any=false; [1,2,3].forEach(function(i){ const rn=o['rec'+i]; if(rn){ const r=allRecipes().find(function(x){return x.n===rn;}); const e=r?estimateRecipe(r):null; if(e){ dp+=e.p; dk+=e.kcal; any=true; } } });
     if(any){ const pOk=dp>=PROT_MIN; let kn; if(focus==='aufbau') kn=(dk>=KCAL_TARGET&&dk<=KCAL_TARGET*1.18)?'✓ leicht über Ziel':(dk<KCAL_TARGET?'etwas unter Ziel':'über Ziel'); else if(focus==='abnehmen') kn=(dk<=KCAL_TARGET&&dk>=KCAL_TARGET*0.82)?'✓ leicht unter Ziel':(dk>KCAL_TARGET?'über Ziel':'niedrig'); else kn=(Math.abs(dk-KCAL_TARGET)<=KCAL_TARGET*0.12)?'✓ im Zielbereich':(dk>KCAL_TARGET?'über Ziel':'unter Ziel'); h+='<div class="daysum">💪 ≈ '+dp+' g Eiweiß'+(focus==='aufbau'?(pOk?' 🎯':' · noch '+(PROT_MIN-dp)+' g'):'')+' · 🔥 ≈ '+dk+' kcal (Ziel ~'+KCAL_TARGET+' · '+kn+')</div>'; }
     h+='<label class="fld">Protein gesamt (optional)</label><input type="text" data-f="prot" value="'+esc(o.prot||'')+'" placeholder="~ g"></div>'; });
@@ -882,6 +888,7 @@ function renderWoche(){
     card.querySelectorAll('[data-pick]').forEach(function(b){ b.addEventListener('click',function(){ const i=b.getAttribute('data-pick'); openPicker(function(name){ const o=ensure(); o['rec'+i]=name; Store.set('wochenplan',saved.wochenplan); renderWoche(); }); }); });
     card.querySelectorAll('[data-rmrec]').forEach(function(b){ b.addEventListener('click',function(){ const i=b.getAttribute('data-rmrec'); const o=ensure(); delete o['rec'+i]; Store.set('wochenplan',saved.wochenplan); renderWoche(); }); });
     card.querySelectorAll('[data-reroll]').forEach(function(b){ b.addEventListener('click',function(){ rerollSlot(d, b.getAttribute('data-reroll')); }); });
+    card.querySelectorAll('[data-eat]').forEach(function(b){ b.addEventListener('click',function(){ toggleEaten(d, b.getAttribute('data-eat')); }); });
   });
   document.getElementById('wk_shop').addEventListener('click',genShoppingFromWeek);
 }
