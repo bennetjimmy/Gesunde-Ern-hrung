@@ -874,7 +874,7 @@ async function requestNotifPerm(){
 }
 function fireNotif(title,body,tag){
   if(!canNotif()||Notification.permission!=='granted') return;
-  const opts={body:body,tag:tag||'nng',icon:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><text y=%2250%22 font-size=%2260%22>\U0001f955</text></svg>',badge:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><text y=%2228%22 font-size=%2232%22>\U0001f4aa</text></svg>',vibrate:[150,50,150]};
+  const opts={body:body,tag:tag||'nng',icon:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><text y=%2250%22 font-size=%2260%22>🥕</text></svg>',badge:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><text y=%2228%22 font-size=%2232%22>💪</text></svg>',vibrate:[150,50,150]};
   if('serviceWorker' in navigator && navigator.serviceWorker.controller){
     navigator.serviceWorker.controller.postMessage({type:'notify',title:title,options:opts});
   } else { new Notification(title,opts); }
@@ -891,27 +891,27 @@ function scheduleNotifs(){
   const isTDay=(new Date().getDay()===1||new Date().getDay()===3||new Date().getDay()===5);
   const suf=function(t,fn){ const ms=msUntil(t); if(ms>0&&ms<86400000) setTimeout(fn,ms); };
   if(n.morning!==false) suf(n.morningTime||'11:50',function(){
-    fireNotif(isTDay?'\U0001f4aa Trainingstag — Essfenster auf!':'\u2600\ufe0f Essfenster ab jetzt offen',
+    fireNotif(isTDay?'💪 Trainingstag — Essfenster auf!':'\u2600\ufe0f Essfenster ab jetzt offen',
       isTDay?'Pre-Workout: Datteln + Butter + Eier. Viel Kraft heute!':'Mahlzeit 1: Protein + Kohlenhydrate. Guten Hunger!','nng-morning');
   });
   if(n.training!==false&&isTDay) suf(n.trainingTime||'13:30',function(){
-    fireNotif('\U0001f3cb\ufe0f Post-Workout-Zeit!','Jetzt Fleisch oder Fisch + Kartoffeln \u2014 Muskeln wachsen lassen \U0001f4aa','nng-training');
+    fireNotif('🏋\ufe0f Post-Workout-Zeit!','Jetzt Fleisch oder Fisch + Kartoffeln \u2014 Muskeln wachsen lassen 💪','nng-training');
   });
   if(n.evening!==false) suf(n.eveningTime||'19:30',function(){
     const total=(saved.protein||[]).reduce(function(s,x){return s+x.prot;},0);
     const pmax=saved.settings.pmax||150;
     const ok=total>=pmin;
-    fireNotif(ok?'\U0001f3af Proteinziel erreicht!':'\u26a0\ufe0f Protein-Check',
+    fireNotif(ok?'🎯 Proteinziel erreicht!':'\u26a0\ufe0f Protein-Check',
       ok?total+' g heute \u2014 stark! Letzte Mahlzeit: High Fat + Protein.':'Erst '+total+' g von '+pmin+' g \u2014 noch '+(pmin-total)+' g fehlen. Hüttenkäse oder Eier?','nng-evening');
   });
   if(n.water) ['13:00','15:30','18:00'].forEach(function(t){
-    suf(t,function(){ fireNotif('\U0001f4a7 Wasser trinken!','3\u20135 Liter heute \u2014 Muskelaufbau braucht Wasser.','nng-water-'+t); });
+    suf(t,function(){ fireNotif('💧 Wasser trinken!','3\u20135 Liter heute \u2014 Muskelaufbau braucht Wasser.','nng-water-'+t); });
   });
 }
 function renderNotifs(){
   const perm=notifPerm(); const n=saved.notifs||{};
   const badge=perm==='granted'?'<span class="perm-badge ok">\u2705 Erlaubt</span>':
-    perm==='denied'?'<span class="perm-badge no">\U0001f512 Blockiert \u2014 in Browser-Einstellungen freigeben</span>':
+    perm==='denied'?'<span class="perm-badge no">🔒 Blockiert \u2014 in Browser-Einstellungen freigeben</span>':
     '<span class="perm-badge no">\u274c Noch nicht erlaubt</span>';
   function row(key,label,sub,defOn,timeKey){
     const on=(n[key]!==false&&defOn)||(n[key]===true);
@@ -919,22 +919,22 @@ function renderNotifs(){
     h+='<button class="ntoggle'+(on?' on':'')+'" data-ntog="'+key+'"></button></div>';
     return h;
   }
-  let h='<div class="sec"><h2>\U0001f514 Erinnerungen</h2>';
+  let h='<div class="sec"><h2>🔔 Erinnerungen</h2>';
   h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><div class="lbl">Status</div><div class="sub">Benachrichtigungen im Browser</div></div>'+badge+'</div>';
   if(perm!=='granted'){
-    h+='<button class="btn olive full" style="margin-top:8px" id="notif_req">\U0001f514 Benachrichtigungen erlauben</button>';
+    h+='<button class="btn olive full" style="margin-top:8px" id="notif_req">🔔 Benachrichtigungen erlauben</button>';
   }
   h+='<div class="card" style="margin-top:10px">';
   h+=row('morning','\u2600\ufe0f Essfenster-Erinnerung','T\u00e4glich um '+(n.morningTime||'11:50')+' Uhr \u2014 Essfenster \u00f6ffnet gleich',true,'morningTime');
-  h+=row('training','\U0001f3cb\ufe0f Training-Reminder','Trainingstage um '+(n.trainingTime||'13:30')+' \u2014 Post-Workout-Zeit!',true,'trainingTime');
-  h+=row('evening','\U0001f319 Abend-Protein-Check','T\u00e4glich um '+(n.eveningTime||'19:30')+' \u2014 sieht dein Protein-Tracking ein',true,'eveningTime');
-  h+=row('water','\U0001f4a7 Wasser-Erinnerungen','3\u00d7 am Tag (13:00, 15:30, 18:00 Uhr)',false,'');
+  h+=row('training','🏋\ufe0f Training-Reminder','Trainingstage um '+(n.trainingTime||'13:30')+' \u2014 Post-Workout-Zeit!',true,'trainingTime');
+  h+=row('evening','🌙 Abend-Protein-Check','T\u00e4glich um '+(n.eveningTime||'19:30')+' \u2014 sieht dein Protein-Tracking ein',true,'eveningTime');
+  h+=row('water','💧 Wasser-Erinnerungen','3\u00d7 am Tag (13:00, 15:30, 18:00 Uhr)',false,'');
   h+='</div>';
   h+='<div class="row" style="gap:8px;margin-top:10px">';
-  h+='<button class="btn olive grow" id="notif_test">\U0001f514 Test-Benachrichtigung</button>';
+  h+='<button class="btn olive grow" id="notif_test">🔔 Test-Benachrichtigung</button>';
   h+='<button class="btn ghost" id="notif_save">Speichern</button>';
   h+='</div>';
-  h+='<p class="muted small" style="margin-top:8px">\U0001f4f1 Tipp: f\u00fcge die App zum Homescreen hinzu \u2014 dann funktionieren Erinnerungen auch wenn die App zu ist.</p>';
+  h+='<p class="muted small" style="margin-top:8px">📱 Tipp: f\u00fcge die App zum Homescreen hinzu \u2014 dann funktionieren Erinnerungen auch wenn die App zu ist.</p>';
   h+='</div>';
   app().innerHTML=h;
   app().querySelectorAll('[data-ntog]').forEach(function(b){
@@ -953,7 +953,7 @@ function renderNotifs(){
   });
   document.getElementById('notif_test').addEventListener('click',function(){
     if(Notification.permission!=='granted'){flash('Erst Benachrichtigungen erlauben \u2191');return;}
-    fireNotif('\U0001f955 NNG-App Test!','Erinnerungen funktionieren \u2014 alles bereit \U0001f44d','nng-test');
+    fireNotif('🥕 NNG-App Test!','Erinnerungen funktionieren \u2014 alles bereit 👍','nng-test');
     flash('Test-Benachrichtigung gesendet!');
   });
   document.getElementById('notif_save').addEventListener('click',function(){
@@ -1145,7 +1145,7 @@ function renderChatMessages(loading){
     return '<div class="chat-msg '+(m.role==='user'?'u':'a')+'">'+esc(m.content)+'</div>';
   }).join('');
   if(loading) h+='<div class="chat-msg a loading">tippt\u2026</div>';
-  wrap.innerHTML=h||'<div class="muted small" style="text-align:center;padding:20px">Stell mir eine Frage zur NNG-Ernaehrung, Rezepten oder deinem Training \U0001f4aa</div>';
+  wrap.innerHTML=h||'<div class="muted small" style="text-align:center;padding:20px">Stell mir eine Frage zur NNG-Ernaehrung, Rezepten oder deinem Training 💪</div>';
   wrap.scrollTop=wrap.scrollHeight;
   const inp=document.getElementById('chat_in'); const btn=document.getElementById('chat_send');
   if(inp) inp.disabled=loading;
@@ -1160,12 +1160,12 @@ function renderChat(){
     'Wie erreiche ich 150 g Protein?',
     'Welches Rezept ist am guenstigsten?'
   ];
-  let h='<div class="sec"><h2>\U0001f4ac NNG-Assistent</h2><p class="lead">Frag mich alles rund um Ernaehrung, Rezepte und dein Training.</p>';
+  let h='<div class="sec"><h2>💬 NNG-Assistent</h2><p class="lead">Frag mich alles rund um Ernaehrung, Rezepte und dein Training.</p>';
   h+=keyBox;
   h+='<div class="chat-wrap" id="chat_wrap"></div>';
   h+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0">'+chips.map(function(c){return '<span class="chat-chip" data-chip="'+esc(c)+'">'+esc(c)+'</span>';}).join('')+'</div>';
-  h+='<div class="row" style="gap:8px;margin-top:6px"><input type="text" id="chat_in" class="grow" placeholder="Deine Frage\u2026" maxlength="300"><button class="btn olive" id="chat_send">\U0001f4e4</button></div>';
-  h+='<p class="muted small" style="margin-top:6px">\U0001f916 Powered by Claude \u00b7 Antwortet nur auf Deutsch \u00b7 Empfiehlt nur Rezepte aus deiner App</p></div>';
+  h+='<div class="row" style="gap:8px;margin-top:6px"><input type="text" id="chat_in" class="grow" placeholder="Deine Frage\u2026" maxlength="300"><button class="btn olive" id="chat_send">📤</button></div>';
+  h+='<p class="muted small" style="margin-top:6px">🤖 Powered by Gemini \u00b7 Antwortet nur auf Deutsch \u00b7 Empfiehlt nur Rezepte aus deiner App</p></div>';
   app().innerHTML=h;
   renderChatMessages(false);
   function doSend(){const inp=document.getElementById('chat_in'); if(!inp||!inp.value.trim())return; const v=inp.value; inp.value=''; sendChat(v);}
