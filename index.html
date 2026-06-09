@@ -202,6 +202,23 @@
   .eatbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 9px;font-family:inherit;font-weight:800;font-size:.8rem;cursor:pointer}
   .eatbtn.on{background:#6f8a3a;color:#fff;border-color:#6f8a3a}
   .slotx{border:none;background:transparent;color:#b08968;cursor:pointer;font-size:.95rem;padding:2px 6px;font-weight:800}
+.ekcat{margin-bottom:2px}
+.ekcat-hd{display:flex;justify-content:space-between;align-items:baseline;padding:10px 2px 5px;font-weight:800;font-size:.82rem;color:var(--olive);text-transform:uppercase;letter-spacing:.5px;border-top:1px solid var(--line)}
+.ekrow{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.ekrow input[type=checkbox]{width:22px;height:22px;accent-color:var(--olive);flex-shrink:0}
+.ekrow.done span{text-decoration:line-through;opacity:.45}
+.ekrow:last-child{border-bottom:none}
+.meal-now{border-left:4px solid var(--olive);border-radius:14px;padding:12px 14px;background:var(--card);margin-bottom:10px}
+.meal-now.ruhe{border-left-color:var(--terra)}
+.meal-slot-chip{display:inline-block;font-size:.76rem;font-weight:800;background:var(--olive);color:#fff;border-radius:20px;padding:2px 10px;margin-bottom:6px}
+.meal-now.ruhe .meal-slot-chip{background:var(--terra)}
+.meal-rec-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;flex-wrap:wrap}
+.ck-chip{display:inline-flex;align-items:center;gap:5px;background:var(--olive);color:#fff;border-radius:20px;padding:4px 10px 4px 14px;font-size:.82rem;font-weight:700}
+.ck-chip button{background:none;border:none;color:rgba(255,255,255,.8);cursor:pointer;font-size:1rem;padding:0 0 0 2px;line-height:1;transition:color .1s}
+.ck-chip button:hover{color:#fff}
+.cook-match{padding:5px 14px 4px;font-size:.79rem;font-weight:800;border-radius:10px 10px 0 0;margin-bottom:-4px;border:1px solid transparent}
+.cook-match.ok{background:rgba(88,130,80,.12);color:var(--olive);border-color:rgba(88,130,80,.2)}
+.cook-match.warn{background:rgba(178,90,60,.08);color:var(--terra);border-color:rgba(178,90,60,.15)}
 </style>
 </head>
 <body>
@@ -290,6 +307,50 @@ const RECIPES=[
  {n:"Erdnussbutter-Kekse",c:"Süßes",p:"52",i:"250 g Erdnussmus; 125 g Mandelmehl oder gemahlene Mandeln; 115 g Dattelsirup; dunkle flüssige Schokolade (optional)"},
  {n:"Wildbeer-Waffeln mit Kokosnuss-Sahne",c:"Süßes",p:"53",i:"100 g Buchweizenmehl oder glutenfreies Mehl; 2 reife Bananen; 2 Eier; Prise Zimt; 200 ml Kokosmilch; 1 EL Dattelsirup; Mark einer Vanilleschote"},
  {n:"Lemon Cake",c:"Süßes",p:"54",i:"100 g Mandeln; 100 g Buchweizenflocken; 8–10 Datteln; Honig nach Geschmack; 1 Glas griechischer Joghurt oder Sojaquark; Abrieb und Saft einer Zitrone; Honig nach gewünschter Süße"}
+,
+ {n:"Kartoffel-Ei-Pfanne",c:"Herzhaft",p:"",i:"300 g Kartoffeln; ca. 2 Eier; 1 Zwiebel; ca. 1 Paprika; Kokosöl; Salz; Pfeffer; Paprikapulver; Kümmel"},
+ {n:"Rote-Linsen-Kokos-Pfanne",c:"Suppe",p:"",i:"150 g rote Linsen; 200 ml Kokosmilch; ca. 2 Karotten; 1 Zwiebel; 2 Knoblauchzehen; 400 ml Gemüsebrühe; Kurkuma; Kreuzkümmel; Salz"},
+ {n:"Hack-Spinat-Ei-Pfanne",c:"Fleisch",p:"",i:"200 g Rinderhack; ca. 150 g Spinat; ca. 2 Eier; 1 Zwiebel; 2 Tomaten; 2 Knoblauchzehen; Kokosöl; Salz; Pfeffer; Paprikapulver; Kurkuma"},
+ {n:"Hüttenkäse-Rührei mit Gemüse",c:"Eier",p:"",i:"3 Eier; 150 g Hüttenkäse; ca. 1 Paprika; ca. 100 g Spinat; 1 Zwiebel; Kokosöl; Salz; Pfeffer; Oregano"},
+ {n:"Airfryer Hähnchenbrust Gyros-Art",c:"Fleisch",p:"",i:"200 g Hähnchenbrust; 150 g Joghurt; ca. 1 Paprika; ca. 1 Zucchini; Olivenöl; Salz; Pfeffer; Paprikapulver; Oregano; Kreuzkümmel"},
+ {n:"Airfryer Süßkartoffel-Wedges",c:"Herzhaft",p:"",i:"300 g Süßkartoffeln; 150 g Joghurt; Olivenöl; Paprikapulver; Salz; Pfeffer; Kreuzkümmel; Knoblauch"},
+ {n:"Airfryer Kichererbsen-Schüssel",c:"Herzhaft",p:"",i:"400 g Kichererbsen (gekocht); ca. 100 g Spinat; ca. 1 Avocado; 1 Zitrone; Olivenöl; Paprikapulver; Salz; Pfeffer; Kreuzkümmel; Kurkuma"},
+ {n:"Backofen-Linsen-Gemüse-Auflauf",c:"Herzhaft",p:"",i:"150 g grüne Linsen; ca. 2 Karotten; ca. 1 Zucchini; 2 Tomaten; 100 g Feta; 200 ml Gemüsebrühe; Olivenöl; Salz; Pfeffer; Oregano; Thymian; Knoblauch"},
+ {n:"Backofen-Hähnchen-Karotten-Pfanne",c:"Fleisch",p:"",i:"200 g Hähnchenbrust; ca. 2 Karotten; 1 große Süßkartoffel; 1 Zwiebel; Olivenöl; Salz; Pfeffer; Paprikapulver; Oregano; Kurkuma"},
+ {n:"Thermomix Rote-Linsen-Suppe",c:"Suppe",p:"",i:"150 g rote Linsen; ca. 2 Karotten; 1 Zwiebel; 2 Knoblauchzehen; 200 ml Kokosmilch; 500 ml Wasser; Ingwer; Kurkuma; Kreuzkümmel; Salz"},
+ {n:"Thermomix Hähnchen-Gemüse-Eintopf",c:"Fleisch",p:"",i:"200 g Hähnchenbrust; ca. 2 Karotten; ca. 1 Zucchini; 1 Zwiebel; 2 Knoblauchzehen; 500 ml Gemüsebrühe; Salz; Pfeffer; Oregano; Thymian"},
+ {n:"Hüttenkäse-Obst-Nuss-Bowl",c:"Basis",p:"",i:"200 g Hüttenkäse; ca. 1 Apfel; 30 g Walnüsse; 1 EL Chiasamen; 100 g Beeren; Honig; Zimt"}
+,
+ {n:"Ei-Spinat-Wrap",c:"Eier",p:"",i:"2 Eier; 100 g Spinat; 150 g Joghurt; 1 Knoblauchzehe; ½ Zitrone; Salz; Pfeffer; Kokosöl"},
+ {n:"Rote-Bete-Ei-Salat",c:"Salate",p:"",i:"2 gekochte rote Bete; 2 hart gekochte Eier; 150 g Hüttenkäse; 1 Apfel; 1 EL Apfelessig; Salz; Pfeffer; Schnittlauch"},
+ {n:"Buchweizen-Frühstückspfanne",c:"Herzhaft",p:"",i:"100 g Buchweizenflocken; 200 ml Milch (Hafer oder Kokos); 2 Eier; 100 g Beeren; Zimt; 1 EL Honig; Kokosöl"},
+ {n:"Kichererbsen-Paprika-Pfanne",c:"Herzhaft",p:"",i:"400 g Kichererbsen (gekocht); 1 rote Paprika; 1 gelbe Paprika; 1 Zwiebel; 2 Tomaten; 2 Knoblauchzehen; Kokosöl; Salz; Pfeffer; Paprikapulver; Kreuzkümmel; Kurkuma"},
+ {n:"Hirse-Gemüse-Pfanne",c:"Herzhaft",p:"",i:"200 g Hirse; 1 Zucchini; 2 Karotten; 1 Zwiebel; 2 Knoblauchzehen; 400 ml Gemüsebrühe; Kokosöl; Salz; Pfeffer; Kurkuma; Kreuzkümmel"},
+ {n:"Champignon-Omelett",c:"Eier",p:"",i:"3 Eier; 200 g Champignons; 1 Zwiebel; 1 Knoblauchzehe; 50 g Hüttenkäse; Kokosöl; Salz; Pfeffer; Schnittlauch; Oregano"},
+ {n:"Avocado-Hüttenkäse-Bowl",c:"Basis",p:"",i:"1 Avocado; 200 g Hüttenkäse; 1 Gurke; 2 Tomaten; ½ Zitrone; Salz; Pfeffer; Olivenöl; Schnittlauch"},
+ {n:"Airfryer Zucchini-Sticks mit Joghurt-Dip",c:"Gemüse",p:"",i:"2 Zucchini; 1 Ei; 150 g Joghurt; Salz; Pfeffer; Paprikapulver; Knoblauch; Olivenöl"},
+ {n:"Spinat-Quinoa-Salat mit Feta",c:"Salate",p:"",i:"100 g Quinoa; 150 g Spinat; 100 g Feta; 1 Avocado; 1 Zitrone; 2 EL Olivenöl; Salz; Pfeffer; 1 EL Chiasamen"},
+ {n:"Brokkoli-Ei-Auflauf",c:"Eier",p:"",i:"1 Brokkoli (ca. 400 g); 4 Eier; 150 g Hüttenkäse; 100 ml Milch; 1 Zwiebel; Salz; Pfeffer; Muskatnuss; Olivenöl"},
+ {n:"Thermomix Kartoffel-Lauch-Suppe",c:"Suppe",p:"",i:"400 g Kartoffeln; 2 Stangen Lauch; 1 Zwiebel; 700 ml Gemüsebrühe; Kokosöl; Salz; Pfeffer; Muskatnuss; Schnittlauch"},
+ {n:"Rotes Linsendal",c:"Suppe",p:"",i:"200 g rote Linsen; 400 ml Kokosmilch; 150 g Spinat; 2 Tomaten; 1 Zwiebel; 2 Knoblauchzehen; Ingwer; Kurkuma; Kreuzkümmel; Kokosöl; Salz; Zitrone"},
+ {n:"Hähnchen mit Honig-Senf-Glasur",c:"Fleisch",p:"",i:"200 g Hähnchenbrust; 2 EL Joghurt; 1 EL Honig; 1 TL Senf; 1 Knoblauchzehe; Salz; Pfeffer; Paprikapulver; Kokosöl; 1 Zucchini"},
+ {n:"Airfryer Lachs mit Brokkoli",c:"Fisch & Meer",p:"",i:"150 g Lachsfilet; 1 kleiner Brokkoli; 2 EL Olivenöl; ½ Zitrone; Salz; Pfeffer; Dill; Knoblauch"},
+ {n:"Türkische Hackfleischpfanne",c:"Fleisch",p:"",i:"200 g Rinderhack; 1 Paprika; 2 Tomaten; 1 Zwiebel; 2 Knoblauchzehen; 2 Eier; Kokosöl; Salz; Pfeffer; Paprikapulver; Kreuzkümmel; Petersilie"},
+ {n:"Gefüllte Champignons aus dem Ofen",c:"Fleisch",p:"",i:"6 große Champignons; 150 g Rinderhack; 50 g Feta; 1 Zwiebel; 2 Knoblauchzehen; Salz; Pfeffer; Paprikapulver; Oregano; Olivenöl"},
+ {n:"Hähnchen-Brokkoli-Auflauf",c:"Fleisch",p:"",i:"200 g Hähnchenbrust; 1 Brokkoli; 100 ml Sahne; 30 g Parmesan; 1 Zwiebel; 2 Knoblauchzehen; Salz; Pfeffer; Muskatnuss; Olivenöl"},
+ {n:"Hähnchen-Quinoa-Bowl",c:"Fleisch",p:"",i:"150 g Hähnchenbrust; 100 g Quinoa; 1 Avocado; 1 Gurke; 2 Tomaten; ½ Zitrone; 2 EL Olivenöl; Salz; Pfeffer; Paprikapulver; Knoblauch"},
+ {n:"Airfryer Lammhack-Spieße",c:"Fleisch",p:"",i:"250 g Lammhackfleisch; 1 Zwiebel; 2 Knoblauchzehen; 1 Ei; frische Petersilie; frische Minze; Salz; Pfeffer; Kreuzkümmel; Paprikapulver"},
+ {n:"Thermomix Hähnchen-Kokosmilch-Curry",c:"Fleisch",p:"",i:"200 g Hähnchenbrust; 200 ml Kokosmilch; 2 Karotten; 1 Paprika; 1 Zwiebel; 2 Knoblauchzehen; Ingwer; Currypulver; Kurkuma; Kokosöl; Salz; Limette"},
+ {n:"Sardinen-Buchweizen-Pasta",c:"Fisch & Meer",p:"",i:"100 g Buchweizen-Spaghetti; 1 Dose Bio-Sardinen; 100 g Rucola; 2 Tomaten; 2 Knoblauchzehen; 2 EL Olivenöl; ½ Zitrone; Salz; Pfeffer; Chiliflocken"},
+ {n:"Gebackener Lachs mit Süßkartoffel",c:"Fisch & Meer",p:"",i:"150 g Lachsfilet; 1 große Süßkartoffel; 1 Brokkoli; 1 EL Olivenöl; ½ Zitrone; Salz; Pfeffer; Dill; Knoblauch; 1 TL Honig"},
+ {n:"Steak-Streifen mit Avocado-Salsa",c:"Fleisch",p:"",i:"200 g Rinderfilet; 1 Avocado; 2 Tomaten; ½ rote Zwiebel; 1 Limette; 2 EL Olivenöl; Salz; Pfeffer; Paprikapulver; Koriander; Chiliflocken"},
+ {n:"Airfryer Hähnchen Tikka",c:"Fleisch",p:"",i:"200 g Hähnchenbrust; 150 g Joghurt; 2 Knoblauchzehen; Ingwer; Paprikapulver; Kreuzkümmel; Kurkuma; Salz; Olivenöl; 1 Limette"},
+ {n:"Thermomix Brokkoli-Hüttenkäse-Suppe",c:"Suppe",p:"",i:"1 Brokkoli; 200 g Hüttenkäse; 600 ml Gemüsebrühe; 1 Zwiebel; 2 Knoblauchzehen; Kokosöl; Salz; Pfeffer; Muskatnuss; Chiliflocken"},
+ {n:"Steak mit Rucola und Parmesan",c:"Fleisch",p:"",i:"2 Rindersteaks; 80 g Rucola; 30 g Parmesan; 2 EL Olivenöl; 1 EL Balsamico-Essig; Salz; Pfeffer; Ghee"},
+ {n:"Lachs-Gemüse-Paket aus dem Ofen",c:"Fisch & Meer",p:"",i:"150 g Lachsfilet; 1 Zucchini; 1 Paprika; 1 Zwiebel; 2 EL Olivenöl; ½ Zitrone; Salz; Pfeffer; Dill; Thymian"},
+ {n:"Garnelen-Kokosmilch-Curry",c:"Fisch & Meer",p:"",i:"200 g Bio-Garnelen; 200 ml Kokosmilch; 1 Paprika; 1 Zwiebel; 2 Knoblauchzehen; Ingwer; Currypulver; Kurkuma; Kokosöl; Salz; 1 Limette; Koriander"},
+ {n:"Airfryer Entenbrust knusprig",c:"Fleisch",p:"",i:"1 Entenbrust; 200 g Süßkartoffeln; 2 EL Olivenöl; Salz; Pfeffer; Paprikapulver; Thymian; 1 TL Honig"},
+ {n:"Lammhack-Spinat-Pfanne mit Feta",c:"Fleisch",p:"",i:"250 g Lammhackfleisch; 150 g Spinat; 100 g Feta; 1 Zwiebel; 3 Knoblauchzehen; 2 Tomaten; Kokosöl; Salz; Pfeffer; Kreuzkümmel; Oregano; Paprikapulver"}
 ];
 const CAT_EMOJI={"Salate":"🥗","Eier":"🍳","Fleisch":"🥩","Fisch & Meer":"🐟","Pasta & Nudeln":"🍝","Herzhaft":"🥘","Gemüse":"🥦","Suppe":"🍲","Süßes":"🍫","Getränke":"🥤","Basis":"🫙"};
 const CATS=["Salate","Eier","Fleisch","Fisch & Meer","Pasta & Nudeln","Herzhaft","Gemüse","Suppe","Süßes","Getränke","Basis"];
@@ -413,7 +474,7 @@ const INGS=[
  {g:"Obst & Süße",items:[{l:"Äpfel",k:["apfel","äpfel"]},{l:"Banane",k:["banane"]},{l:"Beeren",k:["beeren","erdbeer","heidelbeer","himbeer","blaubeer"]},{l:"Mango",k:["mango"]},{l:"Datteln",k:["datteln","dattel"]},{l:"Honig",k:["honig"]}]},
  {g:"Sonstiges",items:[{l:"Nüsse (Walnuss, Cashew, Mandel)",k:["walnuss","cashew","mandel","paranüss","pekan","nüsse"]},{l:"Chiasamen",k:["chiasamen"]},{l:"Kokosmilch",k:["kokosmilch","kokosjoghurt"]},{l:"Sahne",k:["sahne"]}]}
 ];
-let cookSel=new Set();
+let cookSel=new Set(),cookTerms=new Set(),ckStrict=false;
 /* ===== NEUE APP-LOGIK ===== */
 const FOCUS=[
  {id:'aufbau',e:'💪',l:'Muskelaufbau',meals:'3 Mahlzeiten (12–20 Uhr)',d:'Maximaler Muskelaufbau – laut NNG 3 Mahlzeiten.'},
@@ -522,6 +583,50 @@ const STEPS = {
 "Erdnussbutter-Kekse":["Backofen auf 180°C vorheizen.","Erdnussmus, Mandelmehl bzw. gemahlene Mandeln und Dattelsirup zu einer Teigmasse vermengen.","Kleine Bällchen formen, auf ein Blech legen und leicht flach drücken.","Ca. 15–20 Minuten goldbraun backen.","Optional die abgekühlten Kekse mit dunkler flüssiger Schokolade garnieren."],
 "Wildbeer-Waffeln mit Kokosnuss-Sahne":["Buchweizen- bzw. glutenfreies Mehl mit zermatschten Bananen, Eiern und einer Prise Zimt zu einem glatten Teig verrühren.","Waffeleisen vorheizen, leicht einfetten und goldbraune Waffeln backen.","Für die Sahne Kokosmilch aus der Dose mit Dattelsirup und Vanillemark in einer gekühlten Schüssel steif schlagen.","Waffeln mit der Kokosnuss-Sahne servieren und nach Belieben mit Beeren garnieren."],
 "Lemon Cake":["Mandeln, Buchweizenflocken, Datteln und Honig zu einer klebrigen Masse mixen und als Boden in eine Form drücken.","Für das Topping griechischen Joghurt (oder Sojaquark) mit Zitronenabrieb, Zitronensaft und Honig verrühren.","Gleichmäßig über den Boden streichen.","Einige Stunden oder über Nacht in den Tiefkühler stellen, bis das Topping fest ist.","Gekühlt in Stücke schneiden und servieren."]
+,
+"Kartoffel-Ei-Pfanne":["Kartoffeln schälen, in Würfel schneiden und ca. 10 Minuten in Salzwasser vorkochen — sie sollen noch leicht bissfest sein, nicht weichkochen.","Zwiebel in Ringe, Paprika in Würfel schneiden. Kokosöl in einer Pfanne erhitzen, Zwiebeln und Paprika anschwitzen bis sie weich sind.","Vorgekochte Kartoffelwürfel dazugeben und auf allen Seiten goldbraun anrösten. Mit Paprikapulver, Kümmel, Salz und Pfeffer würzen.","Zwei Mulden in die Pfannenmischung drücken und je ein Ei hineingleiten lassen. Deckel drauf, 3–4 Minuten stocken lassen.","Sofort in der Pfanne servieren — schnell, günstig, sättigend."],
+"Rote-Linsen-Kokos-Pfanne":["Rote Linsen kalt abspülen. Zwiebel fein würfeln, Karotten in Scheiben schneiden, Knoblauch hacken.","Zwiebel in einem Topf auf mittlerer Stufe im Kokosöl andünsten, Knoblauch kurz mitrösten bis der Duft aufsteigt.","Karotten, Linsen und Gemüsebrühe dazugeben, aufkochen und auf kleiner Stufe ca. 12 Minuten köcheln bis die Linsen weich sind.","Kokosmilch einrühren, mit Kurkuma, Kreuzkümmel und Salz abschmecken. Weitere 3 Minuten leise köcheln lassen.","Optional einen Spritzer Zitrone darüber geben — das hebt alle Aromen. Warm servieren."],
+"Hack-Spinat-Ei-Pfanne":["Zwiebel und Knoblauch fein hacken, Tomaten würfeln. Kokosöl in einer Pfanne erhitzen.","Hackfleisch auf hoher Stufe krümelig anbraten bis es Farbe bekommt, dann Zwiebeln und Knoblauch dazugeben und 2 Minuten weiterbraten.","Tomaten und Gewürze untermischen, kurz einköcheln lassen. Spinat portionsweise unterheben bis er zusammenfällt.","Zwei Mulden in die Pfanne drücken, je ein Ei hineingeben. Deckel drauf, ca. 3 Minuten stocken lassen.","Direkt in der Pfanne servieren — kein Extra-Teller nötig."],
+"Hüttenkäse-Rührei mit Gemüse":["Paprika würfeln, Zwiebel fein hacken. Kokosöl in einer kleinen Pfanne bei mittlerer Hitze erwärmen.","Paprika und Zwiebeln 3 Minuten andünsten bis sie weich werden. Spinat dazugeben und zusammenfallen lassen.","Eier verquirlen, Hüttenkäse unterrühren, mit Salz, Pfeffer und Oregano würzen.","Ei-Käse-Mischung über das Gemüse gießen. Bei niedriger Stufe stocken lassen und dabei sanft durchrühren — cremig, nicht trocken garen.","Sofort servieren. Der Hüttenkäse macht das Rührei besonders cremig und proteinreich."],
+"Airfryer Hähnchenbrust Gyros-Art":["Hähnchenbrust in Streifen schneiden. Olivenöl mit Paprikapulver, Oregano, Kreuzkümmel, Salz und Pfeffer vermengen, Hähnchen darin wenden und 10 Minuten marinieren.","Paprika und Zucchini in mundgerechte Stücke schneiden, leicht salzen.","Airfryer auf 190 °C vorheizen (ca. 2 Minuten). Hähnchen und Gemüse in den Korb geben, nicht übereinanderstapeln.","12–14 Minuten garen, nach der Hälfte der Zeit einmal wenden. Das Hähnchen ist fertig wenn es innen nicht mehr rosa ist.","Joghurt mit Salz und einem Spritzer Zitrone abschmecken und als Dip dazu servieren."],
+"Airfryer Süßkartoffel-Wedges":["Süßkartoffeln schälen und in gleichmäßige Spalten schneiden — je gleichmäßiger, desto gleichmäßiger gar.","Mit Olivenöl, Paprikapulver, Kreuzkümmel, Salz und Pfeffer in einer Schüssel gut vermengen.","Airfryer auf 200 °C vorheizen. Wedges in einer einzigen Schicht in den Korb geben — nicht stapeln.","16–18 Minuten garen, nach 8 Minuten einmal wenden. Fertig wenn sie außen leicht knusprig und innen weich sind.","Joghurt mit etwas Knoblauch, Salz und Pfeffer verrühren und als Dip servieren. Passt auch super als Beilage zu Fleisch."],
+"Airfryer Kichererbsen-Schüssel":["Kichererbsen gut abtropfen lassen und mit Küchenpapier trockentupfen — trockene Kichererbsen werden deutlich knuspriger.","Mit Olivenöl, Paprikapulver, Kreuzkümmel, Kurkuma und Salz vermengen.","Airfryer auf 200 °C vorheizen. Kichererbsen in den Korb geben und 12–15 Minuten rösten bis sie goldbraun und knusprig sind — alle paar Minuten schütteln.","Avocado in Würfel schneiden, mit Zitronensaft, Salz und Pfeffer würzen.","Spinat auf einem Teller anrichten, heiße Kichererbsen drauf, Avocado dazu und mit Zitrone beträufeln."],
+"Backofen-Linsen-Gemüse-Auflauf":["Linsen 15 Minuten in kaltem Wasser einweichen, dann abgießen. Backofen auf 200 °C Ober-Unterhitze vorheizen.","Karotten in Scheiben, Zucchini in Halbmonde, Tomaten in Stücke schneiden. Alles mit den abgetropften Linsen und gehacktem Knoblauch in eine Auflaufform geben.","Gemüsebrühe angießen, mit Olivenöl beträufeln, kräftig mit Oregano, Thymian, Salz und Pfeffer würzen.","Feta in Würfeln darüber verteilen. Mit Alufolie abdecken und 30 Minuten backen.","Folie abnehmen, weitere 10 Minuten offen überbacken bis die Oberfläche leicht gebräunt und die Linsen ganz gar sind."],
+"Backofen-Hähnchen-Karotten-Pfanne":["Backofen auf 200 °C vorheizen. Hähnchen in mundgerechte Stücke, Karotten in Scheiben, Süßkartoffel in Würfel, Zwiebel in Ringe schneiden.","Alles zusammen auf ein Backblech oder in eine Auflaufform geben. Mit Olivenöl beträufeln und mit Paprikapulver, Oregano, Kurkuma, Salz und Pfeffer gut durchmengen.","Ca. 30–35 Minuten im Ofen garen, nach 20 Minuten einmal durchrühren damit alles gleichmäßig bräunt.","Das Hähnchen ist fertig wenn es goldbraun, knusprig und innen durchgegart ist. Kein weiterer Aufwand nötig.","Direkt aus dem Blech servieren — das komplette Gericht aus einer Form, kein extra Abwasch."],
+"Thermomix Rote-Linsen-Suppe":["Zwiebel und Knoblauch in den Mixtopf geben, 5 Sek./Stufe 5 zerkleinern. Mit Spatel nach unten schieben.","Frisch geriebenen Ingwer, Kurkuma, Kreuzkümmel und einen TL Kokosöl zugeben, 3 Min./100 °C/Stufe 1 andünsten.","Abgespülte Linsen, Karottenstücke, Wasser und Kokosmilch dazugeben, 20 Min./100 °C/Stufe 1 garen.","Mit Salz abschmecken. Wer eine glatte Konsistenz mag: 30 Sek./Stufe 8 pürieren. Sonst direkt stückig servieren.","In Schüsseln geben, nach Wunsch mit Zitronensaft und einem Schuss Olivenöl verfeinern."],
+"Thermomix Hähnchen-Gemüse-Eintopf":["Hähnchenbrust in große Würfel schneiden. Karotten in Scheiben, Zucchini in Halbmonde, Zwiebel in Würfel.","Zwiebel und Knoblauch in den Mixtopf geben, 5 Sek./Stufe 5 zerkleinern. Kokosöl dazu, 3 Min./Varoma/Stufe 1 andünsten.","Hähnchen, Gemüse, Brühe, Oregano und Thymian dazugeben. 25 Min./100 °C/Linkslauf/Stufe 1 garen.","Abschmecken und mit Salz nachbessern. Für eine cremigere Version einen Teil der Brühe mit dem Stabmixer kurz aufschlagen.","Stückig in Suppentellern servieren — sättigend, schnell gemacht und sehr günstig."],
+"Hüttenkäse-Obst-Nuss-Bowl":["Hüttenkäse in eine Schüssel geben — das ist die proteinreiche Basis für die Bowl.","Apfel in kleine Würfel schneiden und über den Hüttenkäse verteilen.","Beeren, grob gehackte Walnüsse und Chiasamen drübergeben.","Mit einem TL Honig und etwas Zimt abschmecken. Süße nach eigenem Geschmack dosieren.","Sofort genießen oder die Bowl mit Frischhaltefolie abdecken und über Nacht im Kühlschrank ziehen lassen — die Chiasamen quellen dabei auf und machen alles cremiger."]
+,
+"Ei-Spinat-Wrap":["Eier mit Salz und Pfeffer verquirlen. Etwas Kokosöl in einer Pfanne erhitzen und die Ei-Masse als dünnes Omelett ausbacken.","Spinat in derselben Pfanne kurz zusammenfallen lassen.","Joghurt mit gepresster Knoblauchzehe, Zitronensaft, Salz und Pfeffer verrühren.","Spinat auf das fertige Ei-Omelett legen, Joghurt darüber streichen und fest einrollen. Sofort servieren."],
+"Rote-Bete-Ei-Salat":["Rote Bete und Apfel in kleine Würfel schneiden.","Eier schälen und vierteln.","Hüttenkäse mit Apfelessig, Salz und Pfeffer zu einem cremigen Dressing verrühren.","Rote Bete, Apfel und Eier vorsichtig mit dem Dressing mischen. Mit Schnittlauch bestreuen und sofort servieren."],
+"Buchweizen-Frühstückspfanne":["Buchweizenflocken mit Milch in einem kleinen Topf aufkochen, Hitze reduzieren und 5 Minuten quellen lassen bis sie cremig sind.","In einer zweiten Pfanne Kokosöl erhitzen und 2 Eier als Rührei oder Spiegeleier zubereiten.","Buchweizenbrei in eine Schüssel geben, Eier daneben legen.","Beeren darüber verteilen, mit Honig beträufeln und Zimt darüber streuen."],
+"Kichererbsen-Paprika-Pfanne":["Zwiebeln würfeln und Knoblauch hacken. In Kokosöl bei mittlerer Hitze andünsten bis sie weich sind.","Paprika in Streifen schneiden und hinzufügen, 5 Minuten mitbraten.","Gewürfelte Tomaten, Kichererbsen und alle Gewürze unterrühren.","10 Minuten köcheln lassen bis die Sauce etwas eindickt. Mit einem Spritzer Zitronensaft abschmecken."],
+"Hirse-Gemüse-Pfanne":["Hirse kurz in einem trockenen Topf anrösten bis sie leicht duftet – das bringt Aroma.","Zwiebel und Knoblauch in Kokosöl andünsten. Karotten in Scheiben und Zucchini in Würfel dazugeben, 3 Minuten mitbraten.","Hirse und Gemüsebrühe hinzufügen. Aufkochen, dann bei kleiner Flamme 15 Minuten quellen lassen – Deckel drauf.","Mit Kurkuma, Kreuzkümmel, Salz und Pfeffer abschmecken. Falls noch Flüssigkeit da ist, kurz ohne Deckel einkochen."],
+"Champignon-Omelett":["Champignons in Scheiben, Zwiebel fein würfeln. In Kokosöl anbraten bis sie goldbraun und das Wasser der Pilze verdampft ist.","Knoblauch hinzufügen, 1 Minute mitrösten.","Eier mit Hüttenkäse, Salz, Pfeffer und Oregano verquirlen. Über die Pilze gießen.","Bei mittlerer Hitze stocken lassen, einmal zusammenfalten. Mit Schnittlauch bestreuen und sofort servieren."],
+"Avocado-Hüttenkäse-Bowl":["Avocado halbieren, Kern entfernen und in Würfel schneiden. Sofort mit Zitronensaft beträufeln damit sie nicht braun wird.","Gurke und Tomaten in kleine Würfel schneiden.","Hüttenkäse als Basis in eine tiefe Schüssel geben und leicht mit Salz und Pfeffer würzen.","Avocado, Gurke und Tomaten darüber anrichten. Mit Olivenöl beträufeln und mit Schnittlauch garnieren."],
+"Airfryer Zucchini-Sticks mit Joghurt-Dip":["Zucchini in gleichmäßige Sticks schneiden. Ei verquirlen. Paprikapulver, Salz und Pfeffer mischen.","Zucchini-Sticks durch das verquirlte Ei ziehen, dann in der Gewürzmischung wälzen.","Airfryer auf 200 Grad vorheizen. Sticks in einer Lage in den Korb geben, 12-14 Minuten backen, nach 7 Minuten wenden.","Joghurt mit gepresster Knoblauchzehe, Salz und einem Spritzer Zitrone verrühren. Als Dip dazu servieren."],
+"Spinat-Quinoa-Salat mit Feta":["Quinoa mit der doppelten Menge gesalzenem Wasser aufkochen, dann bei kleiner Hitze 15 Minuten garen. Abkühlen lassen.","Frischen Spinat auf Tellern anrichten.","Abgekühlten Quinoa darüber geben. Avocado in Stücke schneiden und Feta zerbröckeln, beides darüber verteilen.","Mit Zitronensaft, Olivenöl, Salz und Pfeffer abschmecken. Chiasamen darüber streuen."],
+"Brokkoli-Ei-Auflauf":["Backofen auf 180 Grad vorheizen. Brokkoli in Röschen teilen und in Salzwasser 5 Minuten blanchieren, dann abgießen.","Zwiebel würfeln und in Olivenöl weich dünsten. Mit Brokkoli in eine gefettete Auflaufform geben.","Eier, Hüttenkäse, Milch, Salz, Pfeffer und Muskatnuss gründlich verrühren. Über das Gemüse gießen.","25-30 Minuten backen bis die Masse fest und goldbraun gestockt ist. Kurz abkühlen lassen vor dem Servieren."],
+"Thermomix Kartoffel-Lauch-Suppe":["Zwiebel und Lauch in den Mixtopf geben, 5 Sek./Stufe 5 zerkleinern. Mit Kokosöl 3 Min./Varoma/Stufe 1 andünsten.","Kartoffeln schälen und würfeln, zusammen mit der Gemüsebrühe in den Mixtopf geben. 20 Min./100 Grad/Stufe 1 garen.","Mit Salz, Pfeffer und Muskatnuss abschmecken. Für cremige Konsistenz 30 Sek./Stufe 7 pürieren.","In Suppenteller geben und mit frischem Schnittlauch bestreuen."],
+"Rotes Linsendal":["Zwiebeln und Knoblauch fein hacken, in Kokosöl andünsten. Frisch geriebenen Ingwer, Kurkuma und Kreuzkümmel kurz mitrösten.","Linsen abspülen und zusammen mit gewürfelten Tomaten und Kokosmilch hinzufügen. Aufkochen.","Bei mittlerer Hitze ca. 15 Minuten köcheln lassen bis die Linsen vollständig weich sind und eine cremige Masse entstanden ist.","Spinat portionsweise unterheben bis er zusammenfällt. Mit Zitronensaft und Salz abschmecken."],
+"Hähnchen mit Honig-Senf-Glasur":["Hähnchenbrust in gleichmäßige Scheiben schneiden. Joghurt, Honig, Senf, gepressten Knoblauch, Paprika, Salz und Pfeffer zu einer Marinade verrühren.","Hähnchen in der Marinade wenden und mindestens 15 Minuten ziehen lassen.","Kokosöl in einer Pfanne erhitzen. Hähnchenscheiben von jeder Seite 4-5 Minuten bei mittlerer Hitze goldbraun braten.","Zucchini-Scheiben hinzufügen, 3 Minuten mitbraten. Mit frischen Kräutern servieren."],
+"Airfryer Lachs mit Brokkoli":["Brokkoli in kleine Röschen teilen. Lachs trocken tupfen. Beides mit Olivenöl, Salz, Pfeffer, Dill und gepresster Knoblauchzehe marinieren.","Airfryer auf 180 Grad vorheizen. Brokkoli hineinlegen und 5 Minuten vorgaren.","Lachs auf den Brokkoli legen. Weitere 8-10 Minuten garen bis der Lachs innen noch leicht glasig und der Brokkoli bissfest ist.","Mit frischem Zitronensaft beträufeln und sofort servieren."],
+"Türkische Hackfleischpfanne":["Zwiebeln würfeln und in Kokosöl anbraten. Hackfleisch dazugeben und krümelig anbraten bis es gar ist.","Knoblauch, gewürfelte Paprika und Tomaten hinzufügen. Mit Paprikapulver, Kreuzkümmel, Salz und Pfeffer kräftig würzen.","5 Minuten auf mittlerer Hitze köcheln lassen.","Zwei Mulden in die Masse drücken, je ein Ei hineingeben. Deckel drauf, 3-4 Minuten stocken lassen. Mit Petersilie bestreut servieren."],
+"Gefüllte Champignons aus dem Ofen":["Backofen auf 200 Grad vorheizen. Champignon-Stiele herausdrehen und fein hacken.","Zwiebeln und Knoblauch in Kokosöl andünsten. Gehackte Stiele und Hackfleisch mitbraten bis gar. Mit Gewürzen abschmecken, Feta zerbröckeln und untermischen.","Champignon-Köpfe auf ein Backblech legen und mit der Hackfleisch-Feta-Masse befüllen.","Mit Olivenöl beträufeln und 15-18 Minuten backen bis die Pilze weich und die Füllung goldbraun ist."],
+"Hähnchen-Brokkoli-Auflauf":["Backofen auf 200 Grad vorheizen. Brokkoli in Röschen teilen und 4 Minuten in Salzwasser blanchieren.","Hähnchen in mundgerechte Stücke schneiden. In Olivenöl mit Zwiebeln und Knoblauch goldbraun anbraten.","Hähnchen und Brokkoli in eine Auflaufform geben. Sahne darüber gießen, Parmesan, Salz, Pfeffer und Muskatnuss darüber.","25 Minuten backen bis die Oberfläche goldbraun und die Sauce eingedickt ist."],
+"Hähnchen-Quinoa-Bowl":["Quinoa in gesalzenem Wasser nach Packungsangabe kochen und abkühlen lassen.","Hähnchenbrust in Streifen schneiden, mit Paprikapulver, gepresstem Knoblauch, Salz, Pfeffer und Olivenöl würzen. In der Pfanne von beiden Seiten garen.","Gurke und Tomaten würfeln. Avocado in Stücke schneiden.","Quinoa in Schüsseln geben, Gemüse, Avocado und Hähnchen darüber anrichten. Mit Zitronensaft und Olivenöl abschmecken."],
+"Airfryer Lammhack-Spieße":["Lammhack mit sehr fein gehackter Zwiebel, Knoblauch, Ei, gehackter Petersilie und Minze sowie den Gewürzen gründlich verkneten.","Zu länglichen Spießen formen und 30 Minuten im Kühlschrank ruhen lassen damit sie besser zusammenhalten.","Airfryer auf 200 Grad vorheizen. Spieße in den Korb legen, 12-14 Minuten garen, nach der Hälfte einmal wenden.","Mit Joghurt-Dip und frischem Salat servieren."],
+"Thermomix Hähnchen-Kokosmilch-Curry":["Zwiebel, Knoblauch und Ingwer in den Mixtopf geben, 5 Sek./Stufe 5 zerkleinern. Mit Kokosöl 3 Min./100 Grad/Stufe 1 andünsten.","Hähnchenbrust in Würfeln, Karotten in Scheiben, Paprika in Stücken, Gewürze und Kokosmilch hinzufügen.","25 Min./100 Grad/Linkslauf/Stufe 1 garen.","Mit Limettensaft und Salz abschmecken. Über Hirse oder Quinoa servieren."],
+"Sardinen-Buchweizen-Pasta":["Buchweizen-Spaghetti in Salzwasser nach Packungsangabe kochen und dabei 1 Tasse Kochwasser aufbewahren.","Knoblauch in Olivenöl kurz anrösten bis er duftet – nicht verbrennen lassen.","Sardinen zusammen mit dem Öl aus der Dose hinzufügen und grob zerdrücken. Tomaten würfeln und untermischen.","Abgetropfte Pasta und Rucola unterheben. Etwas Kochwasser angießen falls nötig. Mit Zitrone, Chiliflocken und Salz abschmecken."],
+"Gebackener Lachs mit Süßkartoffel":["Backofen auf 200 Grad vorheizen. Süßkartoffel schälen, in Scheiben schneiden, mit Olivenöl, Salz und Pfeffer auf einem Blech verteilen. 15 Minuten vorbacken.","Lachs mit Salz, Pfeffer, Dill, gepresstem Knoblauch und Honig einreiben.","Lachs und Brokkoliröschen auf das Blech neben die Süßkartoffeln legen. Weitere 12-14 Minuten backen bis Lachs durch und Brokkoli bissfest.","Mit frischem Zitronensaft beträufeln und sofort servieren."],
+"Steak-Streifen mit Avocado-Salsa":["Rinderfilet in dünne Streifen schneiden, mit Paprika, Salz, Pfeffer und 1 EL Olivenöl würzen.","Avocado, Tomaten und rote Zwiebel sehr fein würfeln. Mit Limettensaft, restlichem Olivenöl, Koriander, Chiliflocken und Salz zu einer frischen Salsa vermengen.","Pfanne auf hoher Hitze erhitzen. Fleisch-Streifen 2-3 Minuten scharf anbraten, nicht zu lange damit sie saftig bleiben.","Fleisch 3 Minuten ruhen lassen, dann auf der Avocado-Salsa anrichten."],
+"Airfryer Hähnchen Tikka":["Hähnchenbrust in mundgerechte Stücke schneiden. Joghurt mit geriebenem Knoblauch, Ingwer, Paprika, Kreuzkümmel, Kurkuma, Salz, Olivenöl und Limettensaft zu einer Marinade verrühren.","Hähnchen in der Marinade wenden und mindestens 30 Minuten – besser über Nacht – im Kühlschrank marinieren lassen.","Airfryer auf 200 Grad vorheizen. Hähnchenstücke in den Korb legen, 14-16 Minuten garen bis außen leicht karamellisiert und innen gar.","Mit frischer Limette beträufeln und mit frischem Koriander garnieren."],
+"Thermomix Brokkoli-Hüttenkäse-Suppe":["Zwiebel und Knoblauch in den Mixtopf geben, 5 Sek./Stufe 5 zerkleinern. Mit Kokosöl 3 Min./100 Grad/Stufe 1 andünsten.","Brokkoli-Röschen und Gemüsebrühe dazu, 20 Min./100 Grad/Stufe 1 garen.","Hüttenkäse einrühren. Mit Salz, Pfeffer und Muskatnuss abschmecken. 40 Sek./Stufe 7 cremig pürieren.","In Suppenteller geben und mit Chiliflocken garnieren."],
+"Steak mit Rucola und Parmesan":["Steaks 30 Minuten vor dem Braten aus dem Kühlschrank nehmen. Kräftig mit Salz und Pfeffer würzen.","Eine schwere Pfanne ohne Fett stark erhitzen. Ghee dazugeben und die Steaks von jeder Seite 2-3 Minuten scharf braten für medium.","Fleisch aus der Pfanne nehmen und 5 Minuten ruhen lassen – das ist entscheidend für Saftigkeit.","Rucola auf Teller anrichten, dünn gehobelten Parmesan und Balsamico-Essig darüber. Steak in Scheiben schneiden und auf dem Rucola anrichten."],
+"Lachs-Gemüse-Paket aus dem Ofen":["Backofen auf 200 Grad vorheizen. Zucchini, Paprika und Zwiebel in Stücke schneiden, mit Salz, Pfeffer, Thymian und 1 EL Olivenöl würzen.","Gemüse in der Mitte eines großen Stücks Alufolie verteilen. Lachs darauf legen und mit dem restlichen Olivenöl, Dill und Zitronenscheiben belegen.","Folie fest zu einem Paket falten damit kein Dampf entweichen kann. Auf einem Backblech 20-22 Minuten garen.","Paket am Tisch öffnen – Vorsicht vor dem heißen Dampf. Direkt aus der Folie servieren."],
+"Garnelen-Kokosmilch-Curry":["Zwiebeln und Knoblauch in Kokosöl andünsten. Frisch geriebenen Ingwer, Currypulver und Kurkuma 1-2 Minuten mitrösten.","Paprika in Streifen schneiden und hinzufügen, 3 Minuten mitbraten.","Kokosmilch angießen und aufkochen lassen. Garnelen hineingeben und auf mittlerer Hitze 3-4 Minuten garen – sie sind fertig wenn sie rosa und leicht C-förmig sind.","Mit Limettensaft und Salz abschmecken. Mit frischem Koriander bestreut servieren."],
+"Airfryer Entenbrust knusprig":["Entenbrust-Haut mit einem scharfen Messer kreuzweise einschneiden. Kräftig mit Salz, Pfeffer, Paprikapulver, Thymian und Honig einreiben.","Süßkartoffeln schälen und in Spalten schneiden, mit Olivenöl, Salz und Pfeffer würzen.","Airfryer auf 180 Grad vorheizen. Entenbrust mit der Hautseite nach oben für 20-22 Minuten garen. Nach 10 Minuten Süßkartoffeln hinzulegen.","Letzte 3 Minuten auf 200 Grad erhöhen für knusprige Haut. Entenbrust 5 Minuten ruhen lassen, dann in Scheiben schneiden."],
+"Lammhack-Spinat-Pfanne mit Feta":["Zwiebeln würfeln und Knoblauch hacken. In Kokosöl bei mittlerer Hitze andünsten bis sie weich sind.","Lammhackfleisch hinzufügen und krümelig anbraten bis es vollständig durchgegart ist.","Gewürfelte Tomaten, Kreuzkümmel, Oregano, Paprikapulver, Salz und Pfeffer unterrühren. 5 Minuten köcheln lassen.","Spinat portionsweise unterheben bis er zusammenfällt. Feta in Würfeln darüber geben, kurz ziehen lassen und servieren."]
 };
 /* FRAG & CHECK: grobe Preise/Kalorien (€, Richtwerte), Detox-Ausgleich, Antwort-Engine + KI */
 const DETOX=["Spirulina","Chlorella","Koriander","wilde Heidelbeeren","Ingwer"];
@@ -705,6 +810,20 @@ function bindRecCards(scope){ scope.querySelectorAll('.rec').forEach(card=>{ con
   scope.querySelectorAll('.portsel').forEach(ps=>{ ps.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const f=parseInt(b.getAttribute('data-p')); ps.setAttribute('data-port',f); ps.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x===b)); const card=ps.closest('.rec'); card.querySelectorAll('.inglist li').forEach(li=>{ li.textContent=scaleIng(li.getAttribute('data-ing'),f); }); })); }); }
 
 /* HEUTE-SEITE */
+function getMealSlot(isTrain){
+  var h=new Date().getHours();
+  if(h<8) return {slot:0,label:'Fastenzeit',tip:'Essfenster ab 11…12 Uhr — gute Zeit für Training.',emoji:'⏳',rec:null};
+  if(h>=20) return {slot:4,label:'Essfenster geschlossen',tip:'Heute fertig (12–20 Uhr) — Erholung läuft.',emoji:'✅',rec:null};
+  if(isTrain){
+    if(h<13) return {slot:1,label:'Pre-Workout M1',tip:'Kohlenhydrate + Protein — Energie fürs Training 13–14 Uhr.',emoji:'⚡',rec:'rec1'};
+    if(h<17) return {slot:2,label:'Post-Workout M2',tip:'Protein + Fett — Muskeln aufbauen & erholen.',emoji:'💪',rec:'rec2'};
+    return {slot:3,label:'Abend M3',tip:'High Protein · Low Carb · High Fat — für die Nacht.',emoji:'🌙',rec:'rec3'};
+  } else {
+    if(h<15) return {slot:1,label:'Erste Mahlzeit M1',tip:'Protein + moderate Kohlenhydrate — entspannter Start.',emoji:'🌅',rec:'rec1'};
+    if(h<18) return {slot:2,label:'Zweite Mahlzeit M2',tip:'Protein + Fett — hält lange sättig.',emoji:'☀️',rec:'rec2'};
+    return {slot:3,label:'Abend M3',tip:'High Protein · Low Carb · High Fat — für die Nacht.',emoji:'🌙',rec:'rec3'};
+  }
+}
 function renderDash(){
   const s=saved.settings,f=focusObj(),dayName=todayDayName(),wd=saved.wochenplan[dayName],isTrain=wd&&wd.type==='Trainingstag';
   const total=proteinToday(),pct=Math.min(100,Math.round(total/PROT_MAX*100)),rod=recipeOfDay(); const kcToday=saved.protein.reduce((s,x)=>s+(x.kcal||0),0);
@@ -714,6 +833,29 @@ function renderDash(){
   else { today='<div class="today '+(isTrain?'':'ruhe')+'"><div class="lab">Heute · '+dayName+'</div><h3>'+f.e+' '+f.l+'</h3><p>'+esc(f.meals)+'. Lege im „Plan“ fest, ob heute Trainings- oder Ruhetag ist.</p></div>'; }
   let h='<div class="sec"><div class="dash-greet">Hallo'+(s.name?', '+esc(s.name):'')+'! 👋</div><p class="dash-sub">'+esc(new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'}))+'</p>';
   h+=today;
+  (function(){
+    var _ms=getMealSlot(isTrain);
+    if(_ms.slot===0||_ms.slot===4){
+      h+='<div class="meal-now'+(isTrain?'':' ruhe')+'">';
+      h+='<span class="meal-slot-chip">'+_ms.emoji+' '+esc(_ms.label)+'</span>';
+      h+='<div class="muted small" style="margin-top:2px">'+esc(_ms.tip)+'</div></div>';
+      return;
+    }
+    var _rn=wd?wd[_ms.rec]:'',_mRec=_rn?allRecipes().find(function(r){return r.n===_rn;}):null;
+    var _est=_mRec?estimateRecipe(_mRec):null,_pr=_mRec?recipePrice(_mRec):null;
+    h+='<div class="meal-now'+(isTrain?'':' ruhe')+'">';
+    h+='<span class="meal-slot-chip">'+_ms.emoji+' '+esc(_ms.label)+'</span>';
+    h+='<div style="font-weight:700;font-size:.93rem;margin:3px 0 2px">'+esc(_ms.tip)+'</div>';
+    if(_mRec){
+      h+='<div class="meal-rec-row">';
+      h+='<span class="pill cat" style="cursor:pointer" data-showrec="'+esc(_mRec.n)+'">'+(CAT_EMOJI[_mRec.c]||'🍽️')+' '+esc(_mRec.n)+'</span>';
+      h+='<span class="muted small">'+(_est?'~'+Math.round(_est.p)+' g Eiw':'')+(_pr&&_pr.eur>0?' · ~'+fmtEur(_pr.eur)+' €':'')+'</span>';
+      h+='</div>';
+    } else {
+      h+='<div class="muted small" style="margin-top:5px">Noch nichts geplant — <span style="color:var(--olive);font-weight:700;cursor:pointer" data-go="woche">→ Plan öffnen</span></div>';
+    }
+    h+='</div>';
+  })();
   if(typeof checkinDue==='function'&&checkinDue())h+='<div class="remind" data-go="checkin">🔔 <b>Wöchentlicher Check-in fällig</b><div class="small" style="margin-top:2px">Trag dein aktuelles Gewicht ein – dein Protein-Ziel passt sich an. Tippen zum Eintragen.</div></div>';
   h+='<div class="today" data-go="protein" style="cursor:pointer;background:var(--card);color:var(--ink);border:1px solid var(--line)"><div class="ring-wrap"><div class="ring '+(total>=PROT_MIN?'good':'')+'" style="--p:'+pct+'"><div class="inner" style="background:'+(total>=PROT_MIN?'var(--leaf)':'var(--terra)')+'"><b>'+total+'g</b><span>von '+PROT_MIN+'</span></div></div><div style="flex:1"><div style="font-family:Fraunces,serif;font-weight:600;font-size:1.2rem">Protein heute</div><div class="muted small">'+(total>=PROT_MIN?'🎯 Ziel erreicht!':'noch '+(PROT_MIN-total)+' g — tippe „Protein“')+'</div></div></div></div>';
   h+='<div class="kcaldash" data-go="protein">🔥 Kalorien heute: <b>≈ '+kcToday+'</b> / ~'+KCAL_TARGET+' kcal'+(f.id==='aufbau'?' · Aufbau = leichter Überschuss':'')+'</div>';h+='<div class="qrow"><button class="qbtn" data-go="cook"><span class="qe">🧺</span>Was kochen?</button><button class="qbtn" data-go="finder"><span class="qe">🍳</span>Rezepte</button><button class="qbtn" data-go="check"><span class="qe">🔎</span>Check</button></div>';
@@ -727,7 +869,7 @@ function renderMore(){
   app().innerHTML='<div class="sec"><h2>Mehr</h2><p class="lead">Alle weiteren Bereiche.</p>'+items.map(i=>'<button class="pickrow" data-go="'+i.go+'"><span><span style="font-size:1.3rem;margin-right:8px">'+i.e+'</span>'+i.t+'</span><span style="color:var(--ink-soft)">›</span></button>').join('')+'</div>';
 }
 /* REZEPT-FINDER */
-let fCat='all',fDev='all',fQ='',fFav=false;
+let fCat='all',fDev='all',fQ='',fFav=false,fPriceMin=0,fPriceMax=99;
 function renderFinder(){
   let h='<div class="sec"><h2>Rezept-Finder</h2><p class="lead">Tippe ein Rezept an, um Zutaten & Zubereitung zu sehen.</p>'+
     '<div class="search"><span class="ico">🔎</span><input type="text" id="rq" placeholder="Suche nach Name oder Zutat …" value="'+esc(fQ)+'"></div>'+
@@ -735,16 +877,31 @@ function renderFinder(){
   CATS.forEach(c=>h+='<button class="fbtn '+(fCat===c?'on':'')+'" data-cat="'+c+'">'+CAT_EMOJI[c]+' '+c+'</button>');
   h+='</div><div class="filterbar" id="devbar"><button class="fbtn '+(fDev==='all'?'on':'')+'" data-dev="all">Alle Geräte</button>';
   DEVICES.forEach(d=>h+='<button class="fbtn '+(fDev===d?'on':'')+'" data-dev="'+d+'">'+d+'</button>');
-  h+='</div><div class="note">Die Geräte sind automatisch nach Gericht-Typ vorgeschlagen. Tippe ein Rezept an, um Zutaten und Zubereitung zu sehen.</div><div id="reclist"></div><button class="btn ghost full" id="addrec" style="margin-top:6px">➕ Eigenes Rezept hinzufügen</button></div>';
+  h+='</div><div class="filterbar" id="pricebar" style="align-items:center;gap:6px"><span style="font-size:.82rem;font-weight:800;color:var(--olive);padding:0 2px">💶 Preis</span><span class="muted small">von €</span><input type="number" id="fp_min" min="0" max="99" step="1" value="0" style="width:52px;padding:5px 4px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:.9rem"><span class="muted small">bis €</span><input type="number" id="fp_max" min="1" max="99" step="1" value="99" style="width:52px;padding:5px 4px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:.9rem"><button class="fbtn" id="fp_reset">Alle Preise</button><span class="muted small" id="fp_note" style="font-size:.78rem;color:var(--terra);margin-left:2px"></span></div><div class="note">Gerät &amp; Preis automatisch erkannt — tippe ein Rezept an für Zutaten &amp; Zubereitung.</div><div id="reclist"></div><button class="btn ghost full" id="addrec" style="margin-top:6px">➕ Eigenes Rezept hinzufügen</button></div>';
   app().innerHTML=h;
   document.getElementById('rq').addEventListener('input',e=>{ fQ=e.target.value; drawRecs(); });
   document.getElementById('catbar').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; if(b.hasAttribute('data-fav')){fFav=!fFav;}else{fCat=b.getAttribute('data-cat');} renderFinder(); });
   document.getElementById('devbar').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; fDev=b.getAttribute('data-dev'); renderFinder(); });
+  document.getElementById('fp_min').value=fPriceMin;
+  document.getElementById('fp_max').value=fPriceMax;
+  if(fPriceMin>0||fPriceMax<99){ const n=document.getElementById('fp_note'); if(n) n.textContent=' • aktiv'; }
+  document.getElementById('pricebar').addEventListener('input',()=>{
+    fPriceMin=parseFloat(document.getElementById('fp_min').value)||0;
+    fPriceMax=parseFloat(document.getElementById('fp_max').value)||99;
+    const note=document.getElementById('fp_note');
+    if(note) note.textContent=(fPriceMin>0||fPriceMax<99)?' • aktiv':'';
+    drawRecs(); });
+  document.getElementById('fp_reset').addEventListener('click',()=>{
+    fPriceMin=0; fPriceMax=99;
+    document.getElementById('fp_min').value=0;
+    document.getElementById('fp_max').value=99;
+    const note=document.getElementById('fp_note'); if(note) note.textContent='';
+    drawRecs(); });
   document.getElementById('addrec').addEventListener('click',openAddRecipe);
   drawRecs();
 }
 function drawRecs(){ const box=document.getElementById('reclist'); if(!box)return; const q=fQ.trim().toLowerCase();
-  let list=allRecipes().filter(r=>{ if(fFav&&!saved.fav.includes(recId(r)))return false; if(fCat!=='all'&&r.c!==fCat)return false; if(fDev!=='all'&&!devTips(r).includes(fDev))return false; if(q&&!(r.n.toLowerCase().includes(q)||r.i.toLowerCase().includes(q)))return false; return true; });
+  let list=allRecipes().filter(r=>{ if(fFav&&!saved.fav.includes(recId(r)))return false; if(fCat!=='all'&&r.c!==fCat)return false; if(fDev!=='all'&&!devTips(r).includes(fDev))return false; if(fPriceMin>0||fPriceMax<99){ const pr=recipePrice(r); const e=pr?pr.eur:0; if(e<fPriceMin||e>fPriceMax) return false; } if(q&&!(r.n.toLowerCase().includes(q)||r.i.toLowerCase().includes(q)))return false; return true; });
   if(!list.length){ box.innerHTML='<div class="card center muted">Keine Rezepte gefunden. Filter anpassen oder Suche leeren.</div>'; return; }
   box.innerHTML=list.map(r=>recCard(r,false)).join(''); bindRecCards(box);
 }
@@ -767,22 +924,54 @@ function openPicker(onPick){
 
 /* WAS KANN ICH KOCHEN */
 function renderCook(){
-  let h='<div class="sec"><h2>Was kann ich kochen?</h2><p class="lead">Kreuze an, was du zu Hause hast – die App zeigt passende Rezepte.</p>';
-  INGS.forEach(grp=>{ h+='<div class="grouphd">'+grp.g+'</div><div class="checkgrid">'; grp.items.forEach(it=>{ const on=cookSel.has(it.l); h+='<label class="chk '+(on?'on':'')+'"><input type="checkbox" data-ing="'+esc(it.l)+'" '+(on?'checked':'')+'><span>'+esc(it.l)+'</span></label>'; }); h+='</div>'; });
-  h+='<div class="row" style="margin:14px 0"><button class="btn olive grow" id="findcook">🍳 Rezepte zeigen</button><button class="btn ghost" id="clrcook">Leeren</button></div><div id="cookres"></div></div>';
+  const terms=[...cookTerms];
+  const chips=terms.map(function(t){return '<span class="ck-chip">'+esc(t)+'<button data-rm="'+esc(t)+'">×</button></span>';}).join('');
+  let h='<div class="sec"><h2>Was kann ich kochen?</h2><p class="lead">Tippe Zutaten ein, die du zuhause hast — die App zeigt passende Rezepte + was fehlt.</p>';
+  h+='<div class="card">';
+  h+='<label class="fld">Zutat eingeben (mehrere mit Komma trennen)</label>';
+  h+='<div class="row" style="gap:8px"><input type="text" id="ck_in" class="grow" placeholder="z. B. Hähnchen, Eier, Spinat …"><button class="btn olive sm" id="ck_add">+ Hinzufügen</button></div>';
+  h+='<div id="ck_chips" style="margin-top:10px;min-height:28px;display:flex;flex-wrap:wrap;gap:6px">'+chips+'</div>';
+  h+='<div class="row" style="margin-top:10px;gap:8px"><button class="btn olive grow" id="ck_go">🔍 Rezepte finden</button><button class="btn ghost" id="ck_clr">Alle löschen</button></div>';
+  h+='<p class="muted small" style="margin-top:8px">💡 Gewürze, Öle und Knoblauch werden automatisch mitgezählt.</p>';
+  h+='</div>';
+  h+='<div class="filterbar" style="margin-bottom:6px"><button class="fbtn'+(ckStrict?' on':'')+'" id="ck_strict">✅ Nur fast vollständige Rezepte (≥60 %)</button></div>';
+  h+='<div id="ck_res"></div></div>';
   app().innerHTML=h;
-  app().querySelectorAll('[data-ing]').forEach(c=>c.addEventListener('change',()=>{ const l=c.getAttribute('data-ing'); if(c.checked)cookSel.add(l); else cookSel.delete(l); c.closest('.chk').classList.toggle('on',c.checked); }));
-  document.getElementById('findcook').addEventListener('click',drawCook);
-  document.getElementById('clrcook').addEventListener('click',()=>{ cookSel.clear(); renderCook(); });
-  if(cookSel.size)drawCook();
+  const inp=document.getElementById('ck_in');
+  function addTerms(){
+    const raw=inp.value.trim(); if(!raw)return;
+    raw.split(/[,;\s]+/).forEach(function(t){ const lc=t.toLowerCase().trim(); if(lc.length>=3)cookTerms.add(lc); });
+    inp.value=''; renderCook(); if(cookTerms.size)drawCook();
+  }
+  document.getElementById('ck_add').addEventListener('click',addTerms);
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){e.preventDefault();addTerms();} });
+  document.getElementById('ck_clr').addEventListener('click',function(){ cookTerms.clear();ckStrict=false;renderCook(); });
+  document.getElementById('ck_go').addEventListener('click',drawCook);
+  document.getElementById('ck_strict').addEventListener('click',function(){ ckStrict=!ckStrict; renderCook(); if(cookTerms.size)drawCook(); });
+  document.getElementById('ck_chips').querySelectorAll('[data-rm]').forEach(function(b){
+    b.addEventListener('click',function(){ cookTerms.delete(b.getAttribute('data-rm')); renderCook(); if(cookTerms.size)drawCook(); });
+  });
+  if(cookTerms.size)drawCook();
 }
 function drawCook(){
-  const keys=[]; INGS.forEach(g=>g.items.forEach(it=>{ if(cookSel.has(it.l))keys.push(it.k); }));
-  const box=document.getElementById('cookres');
-  if(!keys.length){ box.innerHTML='<div class="note">Wähle oben mindestens eine Zutat aus.</div>'; return; }
-  const scored=allRecipes().map(r=>{ const t=r.i.toLowerCase(); let m=0; keys.forEach(ks=>{ if(ks.some(k=>t.includes(k)))m++; }); return {r,m}; }).filter(x=>x.m>0).sort((a,b)=>b.m-a.m||a.r.n.localeCompare(b.r.n));
-  if(!scored.length){ box.innerHTML='<div class="card center muted">Mit dieser Auswahl finde ich kein passendes Rezept. Probier andere/mehr Zutaten.</div>'; return; }
-  box.innerHTML='<div class="grouphd">'+scored.length+' passende Rezepte</div>'+scored.slice(0,30).map(({r,m})=>recCard(r,false)).join(''); bindRecCards(box);
+  const terms=[...cookTerms]; const box=document.getElementById('ck_res');
+  if(!terms.length||!box){ if(box)box.innerHTML='<div class="note">Tippe zuerst Zutaten ein.</div>'; return; }
+  const CK_STAPLE=['salz','pfeffer','ol','oel','butter','ghee','essig','honig','kurkuma','oregano','knoblauch','ingwer','curry','zimt','muskat','chili','koriander','petersilie','thymian','basilikum','kokosol','olivenol','dattelsir'];
+  function isSt(s){ var lc=s.toLowerCase().replace(/ö/g,'o').replace(/ü/g,'u').replace(/ä/g,'a'); return CK_STAPLE.some(function(k){return lc.includes(k);}); }
+  const scored=allRecipes().map(function(r){
+    var parts=r.i.split(';').map(function(p){return p.trim();}).filter(function(p){return p&&!isSt(p);});
+    var matched=0,missing=[];
+    terms.forEach(function(term){ var found=parts.some(function(p){return p.toLowerCase().includes(term);}); if(found)matched++; else missing.push(term); });
+    return {r:r,matched:matched,pct:matched/terms.length,missing:missing};
+  }).filter(function(x){return x.matched>0;});
+  var filtered=ckStrict?scored.filter(function(x){return x.pct>=0.6;}):scored;
+  filtered.sort(function(a,b){return b.pct-a.pct||a.r.n.localeCompare(b.r.n);});
+  if(!filtered.length){ box.innerHTML='<div class="card center muted">Kein passendes Rezept. Mehr Zutaten eingeben oder Filter deaktivieren.</div>'; return; }
+  box.innerHTML='<div class="grouphd">'+filtered.length+' Rezepte gefunden</div>'+filtered.slice(0,40).map(function(x){
+    var allOk=x.missing.length===0;
+    var mt=x.matched+' von '+terms.length+' Zutaten vorhanden'+(allOk?' ✅':'')+(x.missing.length?' · fehlt: '+x.missing.map(function(m){return m.charAt(0).toUpperCase()+m.slice(1);}).join(', '):'');
+    return '<div class="cook-match '+(allOk?'ok':'warn')+'">'+mt+'</div>'+recCard(x.r,false);
+  }).join(''); bindRecCards(box);
 }
 /* PROTEIN-RECHNER */
 function renderProtein(){
@@ -821,11 +1010,12 @@ function renderTag(){
 const DAYS=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
 function checkinDue(){ if(!saved.checkins||!saved.checkins.length) return true; const ts=saved.checkins.map(c=>c.ts||0).reduce((m,b)=>Math.max(m,b),0); return (Date.now()-ts)>7*86400000; }
 function mealsForFocus(f){ return f==='abnehmen'?1:(f==='schlank'?2:3); }
-function buildDay(focus,target,pool,used,meals){
+function buildDay(focus,target,pool,used,meals,cheap){
   let lo,hi; if(focus==='aufbau'){lo=target;hi=target*1.15;} else if(focus==='abnehmen'){lo=target*0.85;hi=target;} else {lo=target*0.90;hi=target*1.10;}
   const mid=(lo+hi)/2; let three=[],sumK=0;
   for(let slot=0;slot<meals;slot++){ const slotsLeft=meals-slot; const ideal=Math.max(150,(mid-sumK)/slotsLeft);
     let cands=pool.filter(function(x){return !used[x.r.n] && three.indexOf(x)<0;});
+    if(cheap){ var ec=cands.filter(function(x){ var pr=recipePrice(x.r); return pr&&pr.eur<4.5; }); if(ec.length>=2) cands=ec; }
     if(!cands.length) cands=pool.filter(function(x){return three.indexOf(x)<0;});
     if(!cands.length) break;
     cands.sort(function(a,b){return Math.abs(a.kcal-ideal)-Math.abs(b.kcal-ideal);});
@@ -844,12 +1034,16 @@ function generateWeek(){
   const focus=saved.settings.focus||'aufbau'; const cheap=(wkMode==='guenstig'); const meals=mealsForFocus(focus);
   let pool=allRecipes().map(function(r){ const e=estimateRecipe(r); return e?{r:r,p:e.p,kcal:e.kcal,tier:priceTier(r)}:null; }).filter(Boolean);
   if(pool.length<6){ flash('Zu wenige Rezepte mit Nährwerten'); return; }
-  if(cheap){ const cp=pool.filter(function(x){return x.tier!=='€€€';}); if(cp.length>=24) pool=cp; }
+  if(cheap){ const cp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<8; }); if(cp.length>=24) pool=cp; }
+  const _bgt=saved.settings&&saved.settings.wochenbudget;
+  if(_bgt>0){ const _pM=_bgt/(DAYS.length*(mealsForFocus(focus)||3));
+    const _bp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<=_pM*2.2; });
+    if(_bp.length>=20) pool=_bp; }
   const used={};
   const carby=function(x){ return /(kartoffel|süßkartoffel|suesskartoffel|reis|nudel|pasta|spaghetti|gnocchi|lasagne|quinoa|hirse|bulgur|brot|mehl|banane|dattel|honig|waffel|cake|smoothie|obst|pudding)/.test((x.r.i+' '+x.r.n).toLowerCase()); };
   DAYS.forEach(function(d,di){ const o=saved.wochenplan[d]||{};
     if(!o.type) o.type=(di===0||di===2||di===4)?'Trainingstag':'Ruhetag';
-    let three=buildDay(focus, KCAL_TARGET, pool, used, meals);
+    let three=buildDay(focus, KCAL_TARGET, pool, used, meals, cheap);
     three.sort(function(a,b){return (carby(b)?1:0)-(carby(a)?1:0);});
     o.rec1=three[0]?three[0].r.n:''; o.rec2=three[1]?three[1].r.n:''; o.rec3=three[2]?three[2].r.n:'';
     if(meals<3) delete o.rec3; if(meals<2) delete o.rec2;
@@ -861,7 +1055,7 @@ function rerollSlot(day,i){
   const others=[1,2,3].filter(function(k){return String(k)!==String(i);}).map(function(k){return o['rec'+k];}).filter(Boolean);
   const cur=o['rec'+i]?allRecipes().find(function(x){return x.n===o['rec'+i];}):null; const curE=cur?estimateRecipe(cur):null; const aimK=curE?curE.kcal:(KCAL_TARGET/3);
   let pool=allRecipes().map(function(r){ const e=estimateRecipe(r); return e?{r:r,p:e.p,kcal:e.kcal,tier:priceTier(r)}:null; }).filter(Boolean).filter(function(x){ return others.indexOf(x.r.n)<0 && x.r.n!==o['rec'+i]; });
-  if(cheap){ const cp=pool.filter(function(x){return x.tier!=='€€€';}); if(cp.length>=10) pool=cp; }
+  if(cheap){ const cp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<8; }); if(cp.length>=10) pool=cp; }
   if(!pool.length){ flash('Keine Alternative gefunden'); return; }
   pool.sort(function(a,b){ return Math.abs(a.kcal-aimK)-Math.abs(b.kcal-aimK); });
   const top=pool.slice(0,Math.min(pool.length,8)); const pick=top[Math.floor(Math.random()*top.length)];
@@ -876,6 +1070,18 @@ function renderWoche(){
   h+='<div class="card"><h3>🎲 Woche automatisch erstellen</h3><p class="muted small" style="margin:0 0 8px">Füllt alle 7 Tage passend zu deinem Fokus (<b>'+esc(focusObj().l)+'</b>)'+(focus==='aufbau'?' – mit Protein-Deckung pro Tag':'')+'. Fokus änderst du in den Einstellungen. Mahlzeiten/Tag nach Fokus: Aufbau 3 · schlank 2 · Abnehmen 1 (OMAD).</p><div class="seg" id="wk_mode"><button data-mode="ausgewogen" class="'+(wkMode==='ausgewogen'?'on':'')+'">Ausgewogen</button><button data-mode="guenstig" class="'+(wkMode==='guenstig'?'on':'')+'">💶 Günstig</button></div><button class="btn full" id="wk_gen" style="margin-top:10px">🎲 Woche generieren</button><div class="note">Danach kannst du einzelne Mahlzeiten antippen und tauschen.</div></div>';
   let wkP=0,wkK=0,wkD=0; DAYS.forEach(function(dd){ const oo=saved.wochenplan[dd]||{}; let p2=0,k2=0,a2=false; [1,2,3].forEach(function(i){ const rn=oo['rec'+i]; if(rn){ const r=allRecipes().find(function(x){return x.n===rn;}); const e=r?estimateRecipe(r):null; if(e){p2+=e.p;k2+=e.kcal;a2=true;} } }); if(a2){wkP+=p2;wkK+=k2;wkD++;} });
   if(wkD){ h+='<div class="card"><h3>📊 Ø pro Tag (geplant)</h3><div class="daysum" style="font-size:1rem">≈ '+Math.round(wkP/wkD)+' g Eiweiß · ≈ '+(Math.round(wkK/wkD/10)*10)+' kcal</div><p class="muted small" style="margin:4px 0 0">Schnitt über '+wkD+' geplante Tage · Ziel ~'+PROT_MIN+' g Protein · ~'+KCAL_TARGET+' kcal.</p><div class="daysum" style="margin-top:8px">🛒 Einkauf ca. '+fmtEur(weekCost())+' € für die Woche</div><p class="muted small" style="margin:2px 0 0">grobe Schätzung · ohne Gewürze &amp; Vorrat (geteilte Zutaten evtl. doppelt gezählt)</p></div>'; }
+  if(wkD&&saved.settings&&saved.settings.wochenbudget>0){
+    const _wc=weekCost(),_wb=saved.settings.wochenbudget;
+    const _pct=Math.min(100,Math.round(_wc/_wb*100)),_ok=_wc<=_wb;
+    h+='<div class="card" style="padding:10px 12px 8px;margin-top:-6px">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center">';
+    h+='<span style="font-weight:800;font-size:.88rem">💶 Wochenbudget</span>';
+    h+='<span style="font-weight:700;font-size:.9rem;color:'+(_ok?'var(--olive)':'var(--terra)')+'">'+fmtEur(_wc)+' / '+fmtEur(_wb)+' €</span>';
+    h+='</div><div class="meter" style="margin:6px 0 4px">';
+    h+='<div class="fill" style="width:'+_pct+'%;background:'+(_ok?'var(--olive)':'var(--terra)')+'"></div></div>';
+    h+=_ok?'<div class="muted small" style="text-align:right">✅ Im Budget</div>':'<div class="muted small" style="text-align:right">⚠️ '+fmtEur(_wc-_wb)+' € über Budget</div>';
+    h+='</div>';
+  }
   DAYS.forEach(function(d){ const o=saved.wochenplan[d]||{};
     h+='<div class="card" data-day="'+d+'"><h3>'+d+'</h3><div class="daypick"><button data-type="Trainingstag" class="'+(o.type==='Trainingstag'?'on':'')+'">🏋️ Trainingstag</button><button data-type="Ruhetag" class="'+(o.type==='Ruhetag'?'on':'')+'">🛌 Ruhetag</button></div>';
     [1,2,3].forEach(function(i){ const rec=o['rec'+i],txt=o['m'+i]||''; const eaten=saved.protein.some(function(x){return x.pid===d+'#'+i;});
@@ -900,11 +1106,25 @@ function renderWoche(){
   });
   document.getElementById('wk_shop').addEventListener('click',genShoppingFromWeek);
 }
+function foodCat(f){ var k=f.keys[0]; if(['rinderhack','rinderfilet','hähnchen','ente','lamm','sucuk'].indexOf(k)>=0) return '🥩 Fleisch'; if(['lachs','sardine','dorade','gambas'].indexOf(k)>=0) return '🐟 Fisch & Meer'; if(['eier','hüttenkäse','feta','parmesan','ziegenkäse','griechischer joghurt','ziegenjoghurt','sahne','milch'].indexOf(k)>=0) return '🥚 Eier & Milch'; if(['avocado','süßkartoffel','kartoffel','gurke','brokkoli','blumenkohl','zucchini','aubergine','paprika','tomate','zwiebel','karotte','fenchel','kürbis','spinat','champignon','banane','apfel','mango','wassermelone','beere'].indexOf(k)>=0) return '🥦 Gemüse & Obst'; if(['quinoa','wildreis','hirse','bulgur','linsen','kichererbse','bohnen','buchweizen','seidentofu','kokosmilch'].indexOf(k)>=0) return '🌾 Getreide & Hülsenfrüchte'; if(['walnuss','mandel','cashew','paranüsse','kürbiskern','chiasamen','hanfsamen','erdnussmus'].indexOf(k)>=0) return '🥜 Nüsse & Saaten'; if(['dattel','schokolade','honig'].indexOf(k)>=0) return '🍫 Süßes & Snacks'; return '📦 Sonstiges'; }
+var SMART_NAMES={'eier':'Eier','lachs':'Lachs','sardine':'Sardinen','rinderhack':'Rinderhack','rinderfilet':'Rindfleisch \/ Steak','hähnchen':'Hähnchen \/ Geflügel','ente':'Entenbrust','lamm':'Lammfleisch','dorade':'Dorade','gambas':'Garnelen \/ Gambas','hüttenkäse':'Hüttenkäse','feta':'Feta','parmesan':'Parmesan','ziegenkäse':'Ziegenkäse','griechischer joghurt':'Griech. Joghurt','ziegenjoghurt':'Joghurt','seidentofu':'Tofu','kokosmilch':'Kokosmilch','sahne':'Sahne','milch':'Milch \/ Pflanzenmilch','avocado':'Avocados','süßkartoffel':'Süßkartoffeln','kartoffel':'Kartoffeln','quinoa':'Quinoa','wildreis':'Wildreis','hirse':'Hirse','bulgur':'Bulgur','linsen':'Linsen','kichererbse':'Kichererbsen','bohnen':'Bohnen','buchweizen':'Buchweizen \/ Nudeln \/ Mehl','dattel':'Datteln','honig':'Honig','walnuss':'Walnüsse','mandel':'Mandeln','cashew':'Cashews','paranüsse':'Nüsse','kürbiskern':'Kürbiskerne','chiasamen':'Chiasamen','hanfsamen':'Hanfsamen','erdnussmus':'Erdnussmus','banane':'Bananen','apfel':'Äpfel','mango':'Mango','wassermelone':'Wassermelone','beere':'Beeren','gurke':'Gurken','brokkoli':'Brokkoli','blumenkohl':'Blumenkohl','zucchini':'Zucchini','aubergine':'Auberginen','paprika':'Paprika','tomate':'Tomaten','zwiebel':'Zwiebeln','karotte':'Karotten','fenchel':'Fenchel','kürbis':'Kürbis \/ Hokkaido','spinat':'Spinat \/ Salat','champignon':'Champignons \/ Pilze','schokolade':'Dunkle Schokolade','sucuk':'Sucuk'};
+function smartName(k){ return SMART_NAMES[k]||(k.charAt(0).toUpperCase()+k.slice(1)); }
 function genShoppingFromWeek(){
-  const have=new Set(saved.einkauf.map(x=>x.t.toLowerCase().trim())); let added=0;
-  DAYS.forEach(d=>{ const o=saved.wochenplan[d]; if(!o)return; [1,2,3].forEach(i=>{ const rn=o['rec'+i]; if(!rn)return; const r=allRecipes().find(x=>x.n===rn); if(!r)return; r.i.split(';').forEach(ing=>{ const t=ing.trim(); const key=t.toLowerCase(); if(t&&!isStaple(t)&&!have.has(key)){ have.add(key); saved.einkauf.push({t:t,done:false}); added++; } }); }); });
+  var agg={};
+  DAYS.forEach(function(d){ var o=saved.wochenplan[d]; if(!o)return; [1,2,3].forEach(function(i){ var rn=o['rec'+i]; if(!rn)return; var r=allRecipes().find(function(x){return x.n===rn;}); if(!r)return; r.i.split(';').forEach(function(ing){ var t=ing.trim(); if(!t||isStaple(t))return; var lc=t.toLowerCase(); var f=FOOD.find(function(x){return x.keys.some(function(k){return lc.indexOf(k)>=0;});}); if(f){ var k=f.keys[0]; if(!agg[k]) agg[k]={g:0,f:f}; agg[k].g+=gramsOf(t,f); } else { var sk='_raw_'+lc.substring(0,28).replace(/[^a-z0-9äöüß]/g,'_'); if(!agg[sk]) agg[sk]={g:0,f:null,raw:t}; } }); }); });
+  var catOrder=['🥩 Fleisch','🐟 Fisch & Meer','🥚 Eier & Milch','🥦 Gemüse & Obst','🌾 Getreide & Hülsenfrüchte','🥜 Nüsse & Saaten','🍫 Süßes & Snacks','📦 Sonstiges'];
+  var items=[];
+  Object.keys(agg).forEach(function(k){ var a=agg[k],t,cat;
+    if(a.raw){ t=a.raw; cat='📦 Sonstiges'; }
+    else { var f=a.f,g=a.g,nm=smartName(f.keys[0]); cat=foodCat(f);
+      if(f.g){ var cnt=Math.max(1,Math.round(g/f.g)); t='ca. '+cnt+' '+nm; }
+      else { var rg=Math.max(50,Math.round(g/50)*50); t='ca. '+(rg>=1000?(rg/1000).toFixed(1).replace('.',',')+' kg':rg+' g')+' '+nm; } }
+    items.push({t:t,done:false,cat:cat}); });
+  items.sort(function(a,b){ var o=catOrder.indexOf(a.cat),p=catOrder.indexOf(b.cat); return (o<0?99:o)-(p<0?99:p); });
+  var custom=saved.einkauf.filter(function(x){return x.cat==='custom';});
+  saved.einkauf=items.concat(custom);
   Store.set('einkauf',saved.einkauf);
-  if(added){ flash(added+' Zutaten hinzugefügt (Gewürze & Vorrat ausgelassen)'); go('einkauf'); } else { flash('Keine neuen Zutaten (oder keine Rezepte gewählt)'); }
+  flash(items.length+' Zutaten gesammelt & nach Kategorie sortiert'); go('einkauf');
 }
 
 /* CHECK-IN + GEWICHTSKURVE */
@@ -945,16 +1165,29 @@ function drawTop(){ const box=document.getElementById('toplist'); if(!box)return
 
 /* EINKAUF & VORRÄTE */
 function renderEinkauf(){
-  app().innerHTML='<div class="sec"><h2>Einkauf & Vorräte</h2><p class="lead">Deine Basis plus eine eigene, abhakbare Liste.</p><div class="card"><h3>🫙 Immer zu Hause</h3><ul class="plist">'+VORRAT.immer.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="card"><h3>🧊 Wöchentlich frisch</h3><ul class="plist">'+VORRAT.frisch.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="grouphd">🛒 Meine Einkaufsliste</div><div class="card"><div class="row"><input type="text" id="ek_in" class="grow" placeholder="Artikel hinzufügen …"><button class="btn" id="ek_add">+</button></div><div id="ek_list" style="margin-top:10px"></div><button class="btn ghost full" id="ek_clear" style="margin-top:10px">Erledigte entfernen</button></div></div>';
-  const add=()=>{ const v=document.getElementById('ek_in').value.trim(); if(!v)return; saved.einkauf.push({t:v,done:false}); Store.set('einkauf',saved.einkauf); document.getElementById('ek_in').value=''; drawEk(); };
+  app().innerHTML='<div class="sec"><h2>Einkauf & Vorräte</h2><p class="lead">Deine Basis plus eine eigene, abhakbare Liste.</p><div class="card"><h3>🫙 Immer zu Hause</h3><ul class="plist">'+VORRAT.immer.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="card"><h3>🧊 Wöchentlich frisch</h3><ul class="plist">'+VORRAT.frisch.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div class="grouphd">🛒 Meine Einkaufsliste</div><div class="card"><div class="row"><input type="text" id="ek_in" class="grow" placeholder="Artikel hinzufügen …"><button class="btn" id="ek_add">+</button></div><div class="row" style="gap:6px;margin-top:8px"><button class="btn olive grow" id="ek_all">✓ Alle abhaken</button><button class="btn ghost grow" id="ek_clear">Erledigte entfernen</button></div><div id="ek_list" style="margin-top:10px"></div></div></div>';
+  const add=()=>{ const v=document.getElementById('ek_in').value.trim(); if(!v)return; saved.einkauf.push({t:v,done:false,cat:'custom'}); Store.set('einkauf',saved.einkauf); document.getElementById('ek_in').value=''; drawEk(); };
   document.getElementById('ek_add').addEventListener('click',add);
   document.getElementById('ek_in').addEventListener('keydown',e=>{ if(e.key==='Enter')add(); });
   document.getElementById('ek_clear').addEventListener('click',()=>{ saved.einkauf=saved.einkauf.filter(x=>!x.done); Store.set('einkauf',saved.einkauf); drawEk(); });
+  document.getElementById('ek_all').addEventListener('click',()=>{ saved.einkauf.forEach(x=>{x.done=true;}); Store.set('einkauf',saved.einkauf); drawEk(); });
   drawEk();
 }
-function drawEk(){ const box=document.getElementById('ek_list'); if(!box)return;
-  box.innerHTML=saved.einkauf.length?saved.einkauf.map((x,i)=>'<label class="chk '+(x.done?'on':'')+'" style="margin-bottom:8px"><input type="checkbox" data-ek="'+i+'" '+(x.done?'checked':'')+'><span style="'+(x.done?'text-decoration:line-through;opacity:.6':'')+'">'+esc(x.t)+'</span></label>').join(''):'<div class="muted small">Liste ist leer.</div>';
-  box.querySelectorAll('[data-ek]').forEach(c=>c.addEventListener('change',()=>{ saved.einkauf[+c.getAttribute('data-ek')].done=c.checked; Store.set('einkauf',saved.einkauf); drawEk(); }));
+function drawEk(){ var box=document.getElementById('ek_list'); if(!box)return;
+  if(!saved.einkauf.length){ box.innerHTML='<div class="muted small" style="padding:8px 0">Liste leer – aus dem Wochenplan erzeugen ↑</div>'; return; }
+  var catOrder=['🥩 Fleisch','🐟 Fisch & Meer','🥚 Eier & Milch','🥦 Gemüse & Obst','🌾 Getreide & Hülsenfrüchte','🥜 Nüsse & Saaten','🍫 Süßes & Snacks','📦 Sonstiges','custom'];
+  var groups={};
+  saved.einkauf.forEach(function(x,i){ var c=x.cat||'📦 Sonstiges'; if(!groups[c]) groups[c]=[]; groups[c].push({x:x,i:i}); });
+  var h='';
+  catOrder.forEach(function(cat){ if(!groups[cat]||!groups[cat].length)return;
+    var lbl=cat==='custom'?'✏️ Eigene Einträge':cat;
+    var open=groups[cat].filter(function(e){return !e.x.done;}).length;
+    h+='<div class="ekcat"><div class="ekcat-hd"><span>'+esc(lbl)+'</span><span class="ek-op muted small" data-cat="'+esc(cat)+'"> ('+open+' offen)</span></div>';
+    groups[cat].forEach(function(e){ h+='<label class="ekrow'+(e.x.done?' done':'')+'" data-idx="'+e.i+'"><input type="checkbox" data-ek="'+e.i+'"'+(e.x.done?' checked':'')+'>'+
+      '<span>'+esc(e.x.t)+'</span></label>'; });
+    h+='</div>'; });
+  box.innerHTML=h;
+  box.querySelectorAll('[data-ek]').forEach(function(cb){ cb.addEventListener('change',function(){ var idx=+this.getAttribute('data-ek'); saved.einkauf[idx].done=this.checked; Store.set('einkauf',saved.einkauf); this.closest('label').classList.toggle('done',this.checked); var cat=this.closest('.ekcat'); if(cat){ var op=cat.querySelectorAll('[data-ek]:not(:checked)').length; var sp=cat.querySelector('.ek-op'); if(sp) sp.textContent=' ('+op+' offen)'; } }); });
 }
 
 /* LEBENSMITTEL-CHECK */
@@ -1000,11 +1233,13 @@ function renderSettings(){
   h+='<div class="card"><h3>💪 Mein Proteinziel pro Tag</h3><div class="row"><div class="grow"><label class="fld">von (g)</label><input type="number" id="se_min" inputmode="numeric" value="'+(s.pmin||130)+'"></div><div class="grow"><label class="fld">bis (g)</label><input type="number" id="se_max" inputmode="numeric" value="'+(s.pmax||150)+'"></div></div><div class="note">Standard ist dein Profilwert (130–150 g). Jede Person stellt hier ihren eigenen Bereich ein.</div><label class="fld">Optional: Richtwert aus dem Gewicht</label><div class="row"><input type="number" id="se_kg" class="grow" inputmode="numeric" placeholder="Gewicht in kg" value="'+(s.weight||'')+'"><button class="btn ghost" id="se_calc">Berechnen</button></div><div class="note">Faustregel für Muskelaufbau: 1,6–2,2 g pro kg. <b>Hinweis:</b> grobe Orientierung, <u>nicht</u> aus deinen Unterlagen – das NNG-Prinzip sagt eigentlich „nicht tracken, auf das Körpergefühl hören“.</div></div>';
   h+='<div class="card"><div class="switch"><div><div style="font-family:Fraunces,serif;font-weight:600;font-size:1.1rem">🌙 Dunkelmodus</div><div class="muted small">Augenschonend am Abend</div></div><button class="tog '+(s.dark?'on':'')+'" id="se_dark" aria-label="Dunkelmodus"></button></div></div>';
   h+='<div class="card"><h3>🔥 Kalorien-Ziel pro Tag</h3><div class="bignum" style="font-size:1.5rem">~'+KCAL_TARGET+' kcal</div><p class="muted small" style="margin:6px 0 0">Grobe Orientierung aus Gewicht + Fokus. Steigt automatisch, wenn du im Check-in mehr Gewicht einträgst – für Muskelaufbau mit leichtem Überschuss. Kein Zwang: hör auch auf deinen Körper.</p></div>';h+='<div class="card"><h3>🔐 Daten sichern (für alle – ohne Pro)</h3><p class="muted small" style="margin:0 0 10px">Sichere Plan, Favoriten & Einstellungen als Code (z. B. in deinen Notizen) und stelle sie später oder auf einem anderen Gerät wieder her. So behält auch jede Person ohne Pro-Account ihre Daten.</p><div class="row"><button class="btn ghost grow" id="se_export">⬇️ Backup-Code</button><button class="btn ghost grow" id="se_import">⬆️ Backup laden</button></div></div>';
+  h+='<div class="card"><h3>💶 Wochenbudget (optional)</h3><p class="muted small" style="margin:0 0 10px">Wenn du ein Budget setzt, wählt der Plan nur passende Rezepte. Leer = kein Limit.</p><label class="fld">Budget pro Woche (€)</label><input type="number" id="se_budget" inputmode="numeric" min="20" max="500" step="5" value="'+esc(String(s.wochenbudget>0?s.wochenbudget:''))+'" placeholder="z.B. 80"></div>';
   h+='<button class="btn full" id="se_save">Speichern</button></div>';
   app().innerHTML=h;
   document.getElementById('se_dark').addEventListener('click',function(){ this.classList.toggle('on'); document.body.dataset.theme=this.classList.contains('on')?'dark':''; });
   document.getElementById('se_export').addEventListener('click',()=>{ const data=JSON.stringify(collectData()); const ov=document.getElementById('overlay'); ov.innerHTML='<div class="sheet"><h3>Backup-Code</h3><p class="muted small">Markiere den Code, kopiere ihn und speichere ihn (z. B. in deinen Notizen). Damit stellst du deine Daten später oder auf einem anderen Gerät wieder her.</p><textarea id="bk_out" style="height:140px" readonly></textarea><button class="btn full" id="bk_copy" style="margin-top:8px">Kopieren</button><button class="btn ghost full" id="bk_close" style="margin-top:6px">Schließen</button></div>'; ov.classList.add('show'); const ta=document.getElementById('bk_out'); ta.value=data; ta.select(); document.getElementById('bk_copy').addEventListener('click',()=>{ ta.select(); try{ navigator.clipboard.writeText(ta.value); }catch(e){ try{ document.execCommand('copy'); }catch(_){} } flash('Kopiert ✓'); }); document.getElementById('bk_close').addEventListener('click',()=>{ ov.classList.remove('show'); ov.innerHTML=''; }); });
   document.getElementById('se_import').addEventListener('click',()=>{ const ov=document.getElementById('overlay'); ov.innerHTML='<div class="sheet"><h3>Backup laden</h3><p class="muted small">Füge hier deinen Backup-Code ein und tippe auf „Laden“. Deine bisherigen Daten werden dabei ersetzt.</p><textarea id="bk_in" style="height:140px" placeholder="Code hier einfügen …"></textarea><button class="btn full" id="bk_load" style="margin-top:8px">Laden</button><button class="btn ghost full" id="bk_cancel" style="margin-top:6px">Abbrechen</button></div>'; ov.classList.add('show'); document.getElementById('bk_load').addEventListener('click',()=>{ try{ const d=JSON.parse(document.getElementById('bk_in').value); Object.keys(d).forEach(k=>{ saved[k]=d[k]; Store.set(k,d[k]); }); if(saved.settings){ PROT_MIN=saved.settings.pmin||130; PROT_MAX=saved.settings.pmax||150; document.body.dataset.theme=saved.settings.dark?'dark':''; } ov.classList.remove('show'); ov.innerHTML=''; flash('Backup geladen ✓'); go('home'); }catch(e){ alert('Code konnte nicht gelesen werden – bitte prüfen.'); } }); document.getElementById('bk_cancel').addEventListener('click',()=>{ ov.classList.remove('show'); ov.innerHTML=''; }); });
+  document.getElementById('se_budget').addEventListener('change',()=>{ saved.settings.wochenbudget=parseFloat(document.getElementById('se_budget').value)||0; Store.set('settings',saved.settings); });
   document.getElementById('se_calc').addEventListener('click',()=>{ const kg=parseFloat(document.getElementById('se_kg').value); if(!kg)return; const foc=(document.querySelector('input[name=foc]:checked')||{}).value; if(foc)saved.settings.focus=foc; setTargetsFromWeight(kg); document.getElementById('se_min').value=saved.settings.pmin; document.getElementById('se_max').value=saved.settings.pmax; flash('Aus '+kg+' kg: '+saved.settings.pmin+'–'+saved.settings.pmax+' g · ~'+saved.settings.kcal+' kcal'); });
   document.getElementById('se_save').addEventListener('click',()=>{ let mn=parseInt(document.getElementById('se_min').value)||130,mx=parseInt(document.getElementById('se_max').value)||150; if(mx<mn){const t=mn;mn=mx;mx=t;} const foc=(document.querySelector('input[name=foc]:checked')||{}).value||'aufbau'; const dark=document.getElementById('se_dark').classList.contains('on'); const kg=parseFloat(document.getElementById('se_kg').value)||0; saved.settings={name:document.getElementById('se_name').value.trim(),pmin:mn,pmax:mx,focus:foc,dark:dark,weight:kg||saved.settings.weight||0,kcal:saved.settings.kcal||2700}; if(saved.settings.weight){ setTargetsFromWeight(saved.settings.weight); } else { applyTargets(); } document.body.dataset.theme=dark?'dark':''; Store.set('settings',saved.settings); go('home'); });
 }
