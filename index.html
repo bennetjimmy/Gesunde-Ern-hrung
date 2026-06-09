@@ -219,6 +219,24 @@
 .cook-match{padding:5px 14px 4px;font-size:.79rem;font-weight:800;border-radius:10px 10px 0 0;margin-bottom:-4px;border:1px solid transparent}
 .cook-match.ok{background:rgba(88,130,80,.12);color:var(--olive);border-color:rgba(88,130,80,.2)}
 .cook-match.warn{background:rgba(178,90,60,.08);color:var(--terra);border-color:rgba(178,90,60,.15)}
+.chat-wrap{display:flex;flex-direction:column;gap:10px;padding:4px 0;max-height:52vh;overflow-y:auto;scroll-behavior:smooth}
+.chat-msg{max-width:86%;border-radius:16px;padding:10px 14px;font-size:.9rem;line-height:1.5;word-break:break-word;white-space:pre-wrap}
+.chat-msg.u{align-self:flex-end;background:var(--olive);color:#fff;border-bottom-right-radius:4px}
+.chat-msg.a{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px}
+.chat-msg.a.loading{opacity:.7;font-style:italic}
+.chat-chip{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.8rem;cursor:pointer;white-space:nowrap;transition:background .15s}
+.chat-chip:hover{background:var(--card)}
+.notif-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
+.notif-row:last-child{border-bottom:none}
+.notif-row .lbl{font-weight:700;font-size:.92rem}
+.notif-row .sub{font-size:.8rem;color:var(--muted);margin-top:2px}
+.ntoggle{width:44px;height:26px;border-radius:13px;background:var(--line);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.ntoggle.on{background:var(--olive)}
+.ntoggle::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s}
+.ntoggle.on::after{left:21px}
+.perm-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:.82rem;font-weight:700}
+.perm-badge.ok{background:rgba(88,130,80,.15);color:var(--olive)}
+.perm-badge.no{background:rgba(178,90,60,.12);color:var(--terra)}
 </style>
 </head>
 <body>
@@ -227,7 +245,7 @@
   <button class="homebtn" data-go="home">← Start</button>
 </div></header>
 <div class="wrap"><div id="app"></div></div>
-<div class="saved-flash" id="flash">Gespeichert ✓</div>
+<div class="saved-flash" id="flash">Gespeichert ✓</div><div id="rate_bar" style="display:none;position:fixed;bottom:70px;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:8px 14px;z-index:90;display:none;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-weight:700">🍽️ Wie war es?</span><span id="rate_name" style="font-size:.82rem;color:var(--muted);flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis"></span><button class="btn ghost sm" onclick="rateRec(_rateN,1)">😐 Okay</button><button class="btn ghost sm" onclick="rateRec(_rateN,2)">🙂 Gut</button><button class="btn olive sm" onclick="rateRec(_rateN,3)">🤩 Liebling!</button><button class="btn ghost sm" style="padding:2px 6px;opacity:.5" onclick="document.getElementById('rate_bar').style.display='none'">×</button></div>
 <nav class="tabbar" id="tabbar"></nav>
 <div class="overlay" id="overlay"></div>
 <script>
@@ -446,11 +464,11 @@ const Store={
   async get(k,f){ if(mem[k]!==undefined)return mem[k]; try{ const r=localStorage.getItem('nng_'+k); const v=(r!==null)?JSON.parse(r):f; mem[k]=v; return v; }catch(e){ mem[k]=f; return f; } },
   async set(k,v){ mem[k]=v; try{ localStorage.setItem('nng_'+k,JSON.stringify(v)); flash(); return true; }catch(e){ flash('Speichern gerade nicht möglich'); return false; } }
 };
-let saved={wochenplan:{},checkins:[],top:[],fav:[],einkauf:[],protein:[],customRec:[],settings:{name:'',pmin:130,pmax:150,focus:'aufbau',dark:false}};
+let saved={wochenplan:{},checkins:[],top:[],fav:[],einkauf:[],protein:[],customRec:[],skip:[],ratings:{},notifs:{morning:true,training:true,evening:true,water:false,morningTime:'11:50',trainingTime:'13:30',eveningTime:'19:30'},settings:{name:'',pmin:130,pmax:150,focus:'aufbau',dark:false}};
 async function loadAll(){ await Store.probe();
   saved.wochenplan=await Store.get('wochenplan',{}); saved.checkins=await Store.get('checkins',[]);
   saved.top=await Store.get('top',TOP_SEED.slice()); saved.fav=await Store.get('fav',[]);
-  saved.einkauf=await Store.get('einkauf',[]); saved.protein=await Store.get('protein',[]); saved.customRec=await Store.get('customRec',[]); { const _today=new Date().toDateString(); const _pd=await Store.get('proteinDate',_today); if(_pd!==_today){ saved.protein=[]; await Store.set('protein',[]); } await Store.set('proteinDate',_today); }
+  saved.einkauf=await Store.get('einkauf',[]); saved.protein=await Store.get('protein',[]); saved.customRec=await Store.get('customRec',[]); saved.skip=await Store.get('skip',[]); saved.ratings=await Store.get('ratings',{}); saved.notifs=await Store.get('notifs',{morning:true,training:true,evening:true,water:false,morningTime:'11:50',trainingTime:'13:30',eveningTime:'19:30'}); { const _today=new Date().toDateString(); const _pd=await Store.get('proteinDate',_today); if(_pd!==_today){ saved.protein=[]; await Store.set('protein',[]); } await Store.set('proteinDate',_today); }
   saved.settings=await Store.get('settings',{name:'',pmin:130,pmax:150,focus:'aufbau',dark:false}); if(!saved.settings.focus)saved.settings.focus='aufbau'; PROT_MIN=saved.settings.pmin||130; PROT_MAX=saved.settings.pmax||150; if(saved.settings.dark)document.body.dataset.theme='dark'; applyTargets(); }
 let flashT;
 function flash(msg){ const f=document.getElementById('flash'); f.textContent=msg||'Gespeichert ✓'; f.classList.add('show'); clearTimeout(flashT); flashT=setTimeout(()=>f.classList.remove('show'),1600); }
@@ -474,7 +492,7 @@ const INGS=[
  {g:"Obst & Süße",items:[{l:"Äpfel",k:["apfel","äpfel"]},{l:"Banane",k:["banane"]},{l:"Beeren",k:["beeren","erdbeer","heidelbeer","himbeer","blaubeer"]},{l:"Mango",k:["mango"]},{l:"Datteln",k:["datteln","dattel"]},{l:"Honig",k:["honig"]}]},
  {g:"Sonstiges",items:[{l:"Nüsse (Walnuss, Cashew, Mandel)",k:["walnuss","cashew","mandel","paranüss","pekan","nüsse"]},{l:"Chiasamen",k:["chiasamen"]},{l:"Kokosmilch",k:["kokosmilch","kokosjoghurt"]},{l:"Sahne",k:["sahne"]}]}
 ];
-let cookSel=new Set(),cookTerms=new Set(),ckStrict=false;
+let cookSel=new Set(),cookTerms=new Set(),ckStrict=false,_rateN=''; let chatHistory=[];
 /* ===== NEUE APP-LOGIK ===== */
 const FOCUS=[
  {id:'aufbau',e:'💪',l:'Muskelaufbau',meals:'3 Mahlzeiten (12–20 Uhr)',d:'Maximaler Muskelaufbau – laut NNG 3 Mahlzeiten.'},
@@ -503,7 +521,7 @@ document.addEventListener('click',e=>{ const g=e.target.closest('[data-go]'); if
 function render(){ try{ return renderView(); }catch(e){ try{ app().innerHTML='<div class="sec"><div class="card"><b>Hoppla – dieser Bereich konnte gerade nicht geladen werden.</b><div class="small muted" style="margin-top:6px">'+esc((e&&e.message)||String(e))+'</div><button class="btn full" data-go="home" style="margin-top:10px">Zur Startseite</button></div></div>'; }catch(_){} } }
 function renderView(){ const v=view;
   if(v==='home')return renderDash(); if(v==='more')return renderMore(); if(v==='finder')return renderFinder();
-  if(v==='cook')return renderCook(); if(v==='protein')return renderProtein(); if(v==='tag')return renderTag();
+  if(v==='cook')return renderCook(); if(v==='skip')return renderSkip(); if(v==='chat')return renderChat(); if(v==='notifs')return renderNotifs(); if(v==='protein')return renderProtein(); if(v==='tag')return renderTag();
   if(v==='woche')return renderWoche(); if(v==='checkin')return renderCheckin(); if(v==='top')return renderTop();
   if(v==='einkauf')return renderEinkauf(); if(v==='check')return renderCheck(); if(v==='prinzip')return renderPrinzip();
   if(v==='nng')return renderNNG(); if(v==='settings')return renderSettings(); if(v==='help')return renderHelp(); }
@@ -791,6 +809,11 @@ function fmtEur(x){ if(x==null||isNaN(x))return '?'; return x<10?(Math.round(x*1
 var STAPLE=["ursalz","meersalz","keltisches salz","steinsalz","salz","pfeffer","öl","oel","kokosfett","ghee","fassbutter","butter","apfelessig","balsamico","essig","dijon","senf","rohhonig","honig","dattelsirup","kurkuma","oregano","paprikapulver","paprika süß","paprika scharf","kreuzkümmel","kümmel","currypulver","curry","zimt","muskat","chiliflocken","chilipulver","chili","cayenne","papayapfeffer","thymian","rosmarin","basilikum","koriander","petersilie","schnittlauch","dill","minze","bohnenkraut","ingwer","knoblauch","backpulver","reinweinstein","natron","vanille","rosenwasser","senfkörner","gewürz","kräuter"];
 function isStaple(t){ var lc=t.toLowerCase(); return STAPLE.some(function(k){ return lc.indexOf(k)>=0; }); }
 function recipePrice(r){ if(!r||!r.i) return null; var e=0,known=0; r.i.split(';').forEach(function(ing){ var t=ing.trim(); if(!t||isStaple(t))return; var lc=t.toLowerCase(); var f=FOOD.find(function(x){return x.keys.some(function(k){return lc.indexOf(k)>=0;});}); if(!f||f.eur==null)return; known++; e+=gramsOf(t,f)*f.eur/100; }); return {eur:e, known:known}; }
+function weekCostAgg(){
+  var agg={};
+  DAYS.forEach(function(d){var o=saved.wochenplan[d];if(!o)return;[1,2,3].forEach(function(i){var r=allRecipes().find(function(x){return x.n===o['rec'+i];});if(!r)return;r.i.split(';').forEach(function(ing){var t=ing.trim();if(!t||isStaple(t))return;var lc=t.toLowerCase();var f=FOOD.find(function(x){return x.keys.some(function(k){return lc.indexOf(k)>=0;});});if(f){var k=f.keys[0];if(!agg[k])agg[k]={g:0,f:f};agg[k].g+=gramsOf(t,f);}});});});
+  var total=0;Object.keys(agg).forEach(function(k){var a=agg[k];if(a.f&&a.f.eur)total+=a.g*a.f.eur/100;});return total;
+}
 function weekCost(){ var e=0; DAYS.forEach(function(d){ var o=saved.wochenplan[d]; if(!o)return; [1,2,3].forEach(function(i){ var r=allRecipes().find(function(x){return x.n===o['rec'+i];}); if(r){ var p=recipePrice(r); if(p)e+=p.eur; } }); }); return e; }
 function recCard(r,open){ const id=recId(r),fav=saved.fav.includes(id);
   const devs=devTips(r).map(d=>'<span class="pill dev">'+d+'</span>').join('');
@@ -801,12 +824,13 @@ function recCard(r,open){ const id=recId(r),fav=saved.fav.includes(id);
   const portions='<div class="portsel" data-port="1">Portionen: '+[1,2,3,4].map(n=>'<button class="pbtn'+(n===1?' on':'')+'" data-p="'+n+'">'+n+'×</button>').join('')+'</div>';
   const st=(typeof STEPS!=='undefined'&&STEPS[r.n])?STEPS[r.n]:(r.steps||[]);
   const zub=st.length?'<div class="zub"><b>Zubereitung</b><ol>'+st.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol></div>':'';
-  const est=(typeof estimateRecipe!=='undefined')?estimateRecipe(r):null; const pr=(typeof recipePrice!=='undefined')?recipePrice(r):null; const nutriPills=(est?'<span class="pill nut">≈ '+est.p+' g Eiweiß</span><span class="pill nut">≈ '+est.kcal+' kcal</span>':'')+(pr&&pr.eur>0?'<span class="pill nut">≈ '+fmtEur(pr.eur)+' €</span>':'');
-  return '<div class="rec '+(open?'open':'')+'"><div class="head" data-toggle><span class="emo">'+(CAT_EMOJI[r.c]||'🍽️')+'</span><span class="ttl">'+esc(r.n)+(r.custom?' <span class="pill">eigenes</span>':'')+'</span><button class="fav '+(fav?'on':'')+'" data-favbtn="'+esc(id)+'">'+(fav?'★':'☆')+'</button></div><div class="meta"><div class="chips"><span class="pill cat">'+esc(r.c)+'</span>'+nutriPills+(isProteinRich(r)?'<span class="pill prot">💪 proteinreich</span>':'')+devs+'</div></div><div class="body">'+warnBox+'<b>Zutaten</b>'+portions+'<ul class="inglist">'+ings+'</ul>'+(est?'<div class="small muted" style="margin:6px 0 0">Eiweiß, kcal &amp; Preis ≈ fürs ganze Rezept · grobe Schätzung · Preis ohne Gewürze/Vorrat</div>':'')+zub+(est?'<button class="btn olive sm" data-eatrec="'+esc(r.n)+'" style="margin-top:10px;width:100%">✓ Heute gegessen (+'+est.p+' g · +'+est.kcal+' kcal)</button>':'')+(r.custom?'<button class="btn ghost sm" data-delrec="'+esc(id)+'" style="margin-top:10px">Löschen</button>':'')+'</div></div>'; }
+  const est=(typeof estimateRecipe!=='undefined')?estimateRecipe(r):null; const pr=(typeof recipePrice!=='undefined')?recipePrice(r):null; const nutriPills=(est?'<span class="pill nut">≈ '+est.p+' g Eiweiß</span><span class="pill nut">≈ '+est.kcal+' kcal</span>':'')+(pr&&pr.eur>0?'<span class="pill nut">≈ '+fmtEur(pr.eur)+' €</span>':'')+(est&&est.p>5&&pr&&pr.eur>0?'<span class="pill nut" title="Kosten pro 10g Protein">'+Math.round(pr.eur/est.p*1000)+' ct/10g 💪</span>':'');
+  return '<div class="rec '+(open?'open':'')+'"><div class="head" data-toggle><span class="emo">'+(CAT_EMOJI[r.c]||'🍽️')+'</span><span class="ttl">'+esc(r.n)+(r.custom?' <span class="pill">eigenes</span>':'')+'</span><button class="fav '+(fav?'on':'')+'" data-favbtn="'+esc(id)+'">'+(fav?'★':'☆')+'</button></div><div class="meta"><div class="chips"><span class="pill cat">'+esc(r.c)+'</span>'+nutriPills+(isProteinRich(r)?'<span class="pill prot">💪 proteinreich</span>':'')+devs+'<span class="pill">⏱ ~'+cookTime(r)+' Min</span>'+'</div></div><div class="body">'+warnBox+'<b>Zutaten</b>'+portions+'<ul class="inglist">'+ings+'</ul>'+(est?'<div class="small muted" style="margin:6px 0 0">Eiweiß, kcal &amp; Preis ≈ fürs ganze Rezept · grobe Schätzung · Preis ohne Gewürze/Vorrat</div>':'')+zub+(est?'<button class="btn olive sm" data-eatrec="'+esc(r.n)+'" style="margin-top:10px;width:100%">✓ Heute gegessen (+'+est.p+' g · +'+est.kcal+' kcal)</button>':'')+'<button class="btn ghost sm" data-skiprec="'+esc(r.n)+'" style="margin-top:6px;opacity:.75;font-size:.78rem">👎 Nie wieder vorschlagen</button>'+(r.custom?'<button class="btn ghost sm" data-delrec="'+esc(id)+'" style="margin-top:10px">Löschen</button>':'')+'</div></div>'; }
 function bindRecCards(scope){ scope.querySelectorAll('.rec').forEach(card=>{ const t=card.querySelector('[data-toggle]'); if(t)t.addEventListener('click',()=>card.classList.toggle('open')); });
   scope.querySelectorAll('[data-favbtn]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const id=b.getAttribute('data-favbtn'); if(saved.fav.includes(id))saved.fav=saved.fav.filter(x=>x!==id); else saved.fav.push(id); Store.set('fav',saved.fav); const on=saved.fav.includes(id); b.textContent=on?'★':'☆'; b.classList.toggle('on',on); }));
   scope.querySelectorAll('[data-delrec]').forEach(b=>b.addEventListener('click',()=>{ saved.customRec=saved.customRec.filter(r=>'c_'+r.n!==b.getAttribute('data-delrec')); Store.set('customRec',saved.customRec); render(); }));
-  scope.querySelectorAll('[data-eatrec]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); logEaten(b.getAttribute('data-eatrec')); }));
+  scope.querySelectorAll('[data-eatrec]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const _n=b.getAttribute('data-eatrec'); logEaten(_n); _rateN=_n; const rb=document.getElementById('rate_bar'),rn=document.getElementById('rate_name'); if(rb){if(rn)rn.textContent=_n; rb.style.display='flex'; setTimeout(function(){if(rb)rb.style.display='none';},10000);} }));
+  scope.querySelectorAll('[data-skiprec]').forEach(function(b){ b.addEventListener('click',function(ev){ ev.stopPropagation(); const n=b.getAttribute('data-skiprec'); if(!saved.skip)saved.skip=[]; if(!saved.skip.includes(n)){saved.skip.push(n);Store.set('skip',saved.skip);} flash('„'+n+'“ wird nicht mehr vorgeschlagen'); const ov=document.getElementById('overlay'); if(ov&&ov.classList.contains('show')){ov.classList.remove('show');ov.innerHTML='';} }); });
   scope.querySelectorAll('.portsel').forEach(ps=>{ ps.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',ev=>{ ev.stopPropagation(); const f=parseInt(b.getAttribute('data-p')); ps.setAttribute('data-port',f); ps.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('on',x===b)); const card=ps.closest('.rec'); card.querySelectorAll('.inglist li').forEach(li=>{ li.textContent=scaleIng(li.getAttribute('data-ing'),f); }); })); }); }
 
 /* HEUTE-SEITE */
@@ -823,6 +847,124 @@ function getMealSlot(isTrain){
     if(h<18) return {slot:2,label:'Zweite Mahlzeit M2',tip:'Protein + Fett — hält lange sättig.',emoji:'☀️',rec:'rec2'};
     return {slot:3,label:'Abend M3',tip:'High Protein · Low Carb · High Fat — für die Nacht.',emoji:'🌙',rec:'rec3'};
   }
+}
+
+/* ── BENACHRICHTIGUNGEN ─────────────────────────────────────────────── */
+function canNotif(){ return 'Notification' in window; }
+function notifPerm(){ return canNotif()?Notification.permission:'unsupported'; }
+async function requestNotifPerm(){
+  if(!canNotif()) return false;
+  const p=await Notification.requestPermission();
+  saved.notifs=saved.notifs||{};
+  saved.notifs.perm=(p==='granted');
+  Store.set('notifs',saved.notifs);
+  return p==='granted';
+}
+function fireNotif(title,body,tag){
+  if(!canNotif()||Notification.permission!=='granted') return;
+  const opts={body:body,tag:tag||'nng',icon:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><text y=%2250%22 font-size=%2260%22>\U0001f955</text></svg>',badge:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><text y=%2228%22 font-size=%2232%22>\U0001f4aa</text></svg>',vibrate:[150,50,150]};
+  if('serviceWorker' in navigator && navigator.serviceWorker.controller){
+    navigator.serviceWorker.controller.postMessage({type:'notify',title:title,options:opts});
+  } else { new Notification(title,opts); }
+}
+function msUntil(hhmm){
+  const [h,m]=(hhmm||'12:00').split(':').map(Number);
+  const now=new Date(),fire=new Date(now);
+  fire.setHours(h,m,0,0);
+  return fire-now;
+}
+function scheduleNotifs(){
+  if(!canNotif()||Notification.permission!=='granted') return;
+  const n=saved.notifs||{}; const pmin=saved.settings.pmin||130;
+  const isTDay=(new Date().getDay()===1||new Date().getDay()===3||new Date().getDay()===5);
+  const suf=function(t,fn){ const ms=msUntil(t); if(ms>0&&ms<86400000) setTimeout(fn,ms); };
+  if(n.morning!==false) suf(n.morningTime||'11:50',function(){
+    fireNotif(isTDay?'\U0001f4aa Trainingstag — Essfenster auf!':'\u2600\ufe0f Essfenster ab jetzt offen',
+      isTDay?'Pre-Workout: Datteln + Butter + Eier. Viel Kraft heute!':'Mahlzeit 1: Protein + Kohlenhydrate. Guten Hunger!','nng-morning');
+  });
+  if(n.training!==false&&isTDay) suf(n.trainingTime||'13:30',function(){
+    fireNotif('\U0001f3cb\ufe0f Post-Workout-Zeit!','Jetzt Fleisch oder Fisch + Kartoffeln \u2014 Muskeln wachsen lassen \U0001f4aa','nng-training');
+  });
+  if(n.evening!==false) suf(n.eveningTime||'19:30',function(){
+    const total=(saved.protein||[]).reduce(function(s,x){return s+x.prot;},0);
+    const pmax=saved.settings.pmax||150;
+    const ok=total>=pmin;
+    fireNotif(ok?'\U0001f3af Proteinziel erreicht!':'\u26a0\ufe0f Protein-Check',
+      ok?total+' g heute \u2014 stark! Letzte Mahlzeit: High Fat + Protein.':'Erst '+total+' g von '+pmin+' g \u2014 noch '+(pmin-total)+' g fehlen. Hüttenkäse oder Eier?','nng-evening');
+  });
+  if(n.water) ['13:00','15:30','18:00'].forEach(function(t){
+    suf(t,function(){ fireNotif('\U0001f4a7 Wasser trinken!','3\u20135 Liter heute \u2014 Muskelaufbau braucht Wasser.','nng-water-'+t); });
+  });
+}
+function renderNotifs(){
+  const perm=notifPerm(); const n=saved.notifs||{};
+  const badge=perm==='granted'?'<span class="perm-badge ok">\u2705 Erlaubt</span>':
+    perm==='denied'?'<span class="perm-badge no">\U0001f512 Blockiert \u2014 in Browser-Einstellungen freigeben</span>':
+    '<span class="perm-badge no">\u274c Noch nicht erlaubt</span>';
+  function row(key,label,sub,defOn,timeKey){
+    const on=(n[key]!==false&&defOn)||(n[key]===true);
+    let h='<div class="notif-row"><div><div class="lbl">'+label+'</div><div class="sub">'+sub+'</div></div>';
+    h+='<button class="ntoggle'+(on?' on':'')+'" data-ntog="'+key+'"></button></div>';
+    return h;
+  }
+  let h='<div class="sec"><h2>\U0001f514 Erinnerungen</h2>';
+  h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><div class="lbl">Status</div><div class="sub">Benachrichtigungen im Browser</div></div>'+badge+'</div>';
+  if(perm!=='granted'){
+    h+='<button class="btn olive full" style="margin-top:8px" id="notif_req">\U0001f514 Benachrichtigungen erlauben</button>';
+  }
+  h+='<div class="card" style="margin-top:10px">';
+  h+=row('morning','\u2600\ufe0f Essfenster-Erinnerung','T\u00e4glich um '+(n.morningTime||'11:50')+' Uhr \u2014 Essfenster \u00f6ffnet gleich',true,'morningTime');
+  h+=row('training','\U0001f3cb\ufe0f Training-Reminder','Trainingstage um '+(n.trainingTime||'13:30')+' \u2014 Post-Workout-Zeit!',true,'trainingTime');
+  h+=row('evening','\U0001f319 Abend-Protein-Check','T\u00e4glich um '+(n.eveningTime||'19:30')+' \u2014 sieht dein Protein-Tracking ein',true,'eveningTime');
+  h+=row('water','\U0001f4a7 Wasser-Erinnerungen','3\u00d7 am Tag (13:00, 15:30, 18:00 Uhr)',false,'');
+  h+='</div>';
+  h+='<div class="row" style="gap:8px;margin-top:10px">';
+  h+='<button class="btn olive grow" id="notif_test">\U0001f514 Test-Benachrichtigung</button>';
+  h+='<button class="btn ghost" id="notif_save">Speichern</button>';
+  h+='</div>';
+  h+='<p class="muted small" style="margin-top:8px">\U0001f4f1 Tipp: f\u00fcge die App zum Homescreen hinzu \u2014 dann funktionieren Erinnerungen auch wenn die App zu ist.</p>';
+  h+='</div>';
+  app().innerHTML=h;
+  app().querySelectorAll('[data-ntog]').forEach(function(b){
+    b.addEventListener('click',function(){
+      const k=b.getAttribute('data-ntog');
+      if(!saved.notifs)saved.notifs={};
+      saved.notifs[k]=!b.classList.contains('on');
+      b.classList.toggle('on');
+    });
+  });
+  const req=document.getElementById('notif_req');
+  if(req) req.addEventListener('click',async function(){
+    const ok=await requestNotifPerm();
+    if(ok){flash('\u2705 Erinnerungen aktiviert! App neu laden.'); renderNotifs();}
+    else flash('\u274c Erlaubnis verweigert \u2014 bitte in den Browser-Einstellungen aktivieren.');
+  });
+  document.getElementById('notif_test').addEventListener('click',function(){
+    if(Notification.permission!=='granted'){flash('Erst Benachrichtigungen erlauben \u2191');return;}
+    fireNotif('\U0001f955 NNG-App Test!','Erinnerungen funktionieren \u2014 alles bereit \U0001f44d','nng-test');
+    flash('Test-Benachrichtigung gesendet!');
+  });
+  document.getElementById('notif_save').addEventListener('click',function(){
+    Store.set('notifs',saved.notifs); scheduleNotifs();
+    flash('Gespeichert \u2714 \u2014 Erinnerungen f\u00fcr heute geplant!');
+  });
+}
+/* ── SERVICE WORKER registrieren ────────────────────────────────────── */
+function initSW(){
+  if(!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('./sw.js').then(function(reg){
+    console.log('SW registriert, scope:', reg.scope);
+    return navigator.serviceWorker.ready;
+  }).then(function(){
+    scheduleNotifs();
+  }).catch(function(){
+    scheduleNotifs(); // SW nicht gefunden, direkt planen
+  });
+}
+function rateRec(n,s){
+  if(!saved.ratings)saved.ratings={}; saved.ratings[n]=s; Store.set('ratings',saved.ratings);
+  if(s===3&&!saved.fav.includes(n)){saved.fav.push(n);Store.set('fav',saved.fav);}
+  flash(s===3?'🤩 Liebling gespeichert!':'👍 Bewertet!'); const rb=document.getElementById('rate_bar'); if(rb) rb.style.display='none';
 }
 function renderDash(){
   const s=saved.settings,f=focusObj(),dayName=todayDayName(),wd=saved.wochenplan[dayName],isTrain=wd&&wd.type==='Trainingstag';
@@ -850,6 +992,7 @@ function renderDash(){
       h+='<div class="meal-rec-row">';
       h+='<span class="pill cat" style="cursor:pointer" data-showrec="'+esc(_mRec.n)+'">'+(CAT_EMOJI[_mRec.c]||'🍽️')+' '+esc(_mRec.n)+'</span>';
       h+='<span class="muted small">'+(_est?'~'+Math.round(_est.p)+' g Eiw':'')+(_pr&&_pr.eur>0?' · ~'+fmtEur(_pr.eur)+' €':'')+'</span>';
+      h+='<button class="btn olive sm" style="width:100%;margin-top:8px" data-showrec="'+esc(_mRec.n)+'">🍳 Jetzt kochen →</button>';
       h+='</div>';
     } else {
       h+='<div class="muted small" style="margin-top:5px">Noch nichts geplant — <span style="color:var(--olive);font-weight:700;cursor:pointer" data-go="woche">→ Plan öffnen</span></div>';
@@ -865,11 +1008,25 @@ function renderDash(){
 }
 /* MEHR-MENÜ */
 function renderMore(){
-  const items=[{go:'cook',e:'🧺',t:'Was kann ich kochen?'},{go:'tag',e:'🕛',t:'Tagesplan & Struktur'},{go:'checkin',e:'✅',t:'Wöchentlicher Check-in'},{go:'top',e:'⭐',t:'Meine Favoriten'},{go:'einkauf',e:'🛒',t:'Einkauf & Vorräte'},{go:'check',e:'🔎',t:'Frag & Check'},{go:'prinzip',e:'📜',t:'Meine Prinzipien'},{go:'nng',e:'📖',t:'NNG-Prinzip erklärt'},{go:'settings',e:'⚙️',t:'Einstellungen'},{go:'help',e:'❓',t:'Hilfe & Erklärung'}];
+  const items=[{go:'chat',e:'💬',t:'NNG-Assistent (KI)'},{go:'notifs',e:'🔔',t:'Erinnerungen'},
+{go:'cook',e:'🧺',t:'Was kann ich kochen?'},{go:'skip',e:'🚫',t:'Versteckte Rezepte'},{go:'tag',e:'🕛',t:'Tagesplan & Struktur'},{go:'checkin',e:'✅',t:'Wöchentlicher Check-in'},{go:'top',e:'⭐',t:'Meine Favoriten'},{go:'einkauf',e:'🛒',t:'Einkauf & Vorräte'},{go:'check',e:'🔎',t:'Frag & Check'},{go:'prinzip',e:'📜',t:'Meine Prinzipien'},{go:'nng',e:'📖',t:'NNG-Prinzip erklärt'},{go:'settings',e:'⚙️',t:'Einstellungen'},{go:'help',e:'❓',t:'Hilfe & Erklärung'}];
   app().innerHTML='<div class="sec"><h2>Mehr</h2><p class="lead">Alle weiteren Bereiche.</p>'+items.map(i=>'<button class="pickrow" data-go="'+i.go+'"><span><span style="font-size:1.3rem;margin-right:8px">'+i.e+'</span>'+i.t+'</span><span style="color:var(--ink-soft)">›</span></button>').join('')+'</div>';
 }
 /* REZEPT-FINDER */
-let fCat='all',fDev='all',fQ='',fFav=false,fPriceMin=0,fPriceMax=99;
+let fCat='all',fDev='all',fQ='',fFav=false,fPriceMin=0,fPriceMax=99,fQuick=false;
+function cookTime(r){
+  var steps=STEPS[r.n]||[],t=0;
+  steps.forEach(function(s){
+    var ms=s.match(/(\d+)\s*(?:bis\s*(\d+)\s*)?Min/gi)||[];
+    ms.forEach(function(m){var n=parseInt(m);if(!isNaN(n))t+=n;});
+  });
+  if(!t){ var d=devTips(r);
+    if(d.includes('Backofen'))return 45;
+    if(d.includes('Thermomix'))return 35;
+    if(d.includes('Airfryer'))return 20;
+    return 20; }
+  return Math.min(t,120);
+}
 function renderFinder(){
   let h='<div class="sec"><h2>Rezept-Finder</h2><p class="lead">Tippe ein Rezept an, um Zutaten & Zubereitung zu sehen.</p>'+
     '<div class="search"><span class="ico">🔎</span><input type="text" id="rq" placeholder="Suche nach Name oder Zutat …" value="'+esc(fQ)+'"></div>'+
@@ -877,7 +1034,7 @@ function renderFinder(){
   CATS.forEach(c=>h+='<button class="fbtn '+(fCat===c?'on':'')+'" data-cat="'+c+'">'+CAT_EMOJI[c]+' '+c+'</button>');
   h+='</div><div class="filterbar" id="devbar"><button class="fbtn '+(fDev==='all'?'on':'')+'" data-dev="all">Alle Geräte</button>';
   DEVICES.forEach(d=>h+='<button class="fbtn '+(fDev===d?'on':'')+'" data-dev="'+d+'">'+d+'</button>');
-  h+='</div><div class="filterbar" id="pricebar" style="align-items:center;gap:6px"><span style="font-size:.82rem;font-weight:800;color:var(--olive);padding:0 2px">💶 Preis</span><span class="muted small">von €</span><input type="number" id="fp_min" min="0" max="99" step="1" value="0" style="width:52px;padding:5px 4px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:.9rem"><span class="muted small">bis €</span><input type="number" id="fp_max" min="1" max="99" step="1" value="99" style="width:52px;padding:5px 4px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:.9rem"><button class="fbtn" id="fp_reset">Alle Preise</button><span class="muted small" id="fp_note" style="font-size:.78rem;color:var(--terra);margin-left:2px"></span></div><div class="note">Gerät &amp; Preis automatisch erkannt — tippe ein Rezept an für Zutaten &amp; Zubereitung.</div><div id="reclist"></div><button class="btn ghost full" id="addrec" style="margin-top:6px">➕ Eigenes Rezept hinzufügen</button></div>';
+  h+='<button class="fbtn'+(fQuick?' on':'')+' " id="fq_toggle">⏱ Unter 25 Min</button></div><div class="filterbar" id="pricebar" style="align-items:center;gap:6px"><span style="font-size:.82rem;font-weight:800;color:var(--olive);padding:0 2px">💶 Preis</span><span class="muted small">von €</span><input type="number" id="fp_min" min="0" max="99" step="1" value="0" style="width:52px;padding:5px 4px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:.9rem"><span class="muted small">bis €</span><input type="number" id="fp_max" min="1" max="99" step="1" value="99" style="width:52px;padding:5px 4px;border:1px solid var(--line);border-radius:8px;text-align:center;font-size:.9rem"><button class="fbtn" id="fp_reset">Alle Preise</button><span class="muted small" id="fp_note" style="font-size:.78rem;color:var(--terra);margin-left:2px"></span></div><div class="note">Gerät &amp; Preis automatisch erkannt — tippe ein Rezept an für Zutaten &amp; Zubereitung.</div><div id="reclist"></div><button class="btn ghost full" id="addrec" style="margin-top:6px">➕ Eigenes Rezept hinzufügen</button></div>';
   app().innerHTML=h;
   document.getElementById('rq').addEventListener('input',e=>{ fQ=e.target.value; drawRecs(); });
   document.getElementById('catbar').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; if(b.hasAttribute('data-fav')){fFav=!fFav;}else{fCat=b.getAttribute('data-cat');} renderFinder(); });
@@ -891,6 +1048,7 @@ function renderFinder(){
     const note=document.getElementById('fp_note');
     if(note) note.textContent=(fPriceMin>0||fPriceMax<99)?' • aktiv':'';
     drawRecs(); });
+  document.getElementById('fq_toggle').addEventListener('click',()=>{ fQuick=!fQuick; renderFinder(); });
   document.getElementById('fp_reset').addEventListener('click',()=>{
     fPriceMin=0; fPriceMax=99;
     document.getElementById('fp_min').value=0;
@@ -901,7 +1059,7 @@ function renderFinder(){
   drawRecs();
 }
 function drawRecs(){ const box=document.getElementById('reclist'); if(!box)return; const q=fQ.trim().toLowerCase();
-  let list=allRecipes().filter(r=>{ if(fFav&&!saved.fav.includes(recId(r)))return false; if(fCat!=='all'&&r.c!==fCat)return false; if(fDev!=='all'&&!devTips(r).includes(fDev))return false; if(fPriceMin>0||fPriceMax<99){ const pr=recipePrice(r); const e=pr?pr.eur:0; if(e<fPriceMin||e>fPriceMax) return false; } if(q&&!(r.n.toLowerCase().includes(q)||r.i.toLowerCase().includes(q)))return false; return true; });
+  let list=allRecipes().filter(r=>{ if(fFav&&!saved.fav.includes(recId(r)))return false; if(fCat!=='all'&&r.c!==fCat)return false; if(fDev!=='all'&&!devTips(r).includes(fDev))return false; if(fPriceMin>0||fPriceMax<99){ const pr=recipePrice(r); const e=pr?pr.eur:0; if(e<fPriceMin||e>fPriceMax) return false; } if(fQuick&&cookTime(r)>25) return false; if(q&&!(r.n.toLowerCase().includes(q)||r.i.toLowerCase().includes(q)))return false; return true; });
   if(!list.length){ box.innerHTML='<div class="card center muted">Keine Rezepte gefunden. Filter anpassen oder Suche leeren.</div>'; return; }
   box.innerHTML=list.map(r=>recCard(r,false)).join(''); bindRecCards(box);
 }
@@ -923,6 +1081,74 @@ function openPicker(onPick){
 }
 
 /* WAS KANN ICH KOCHEN */
+
+function buildChatSysPrompt(){
+  const n=saved.settings.name||'Bennet';
+  const pmin=saved.settings.pmin||130, pmax=saved.settings.pmax||150;
+  const foc={'aufbau':'Muskelaufbau','halten':'Halten','cut':'Abnehmen'}[saved.settings.focus]||'Muskelaufbau';
+  const recs=allRecipes().map(function(r){return r.n;}).join(', ');
+  const plan=DAYS.map(function(d){ const o=saved.wochenplan[d]||{}; const meals=[o.rec1,o.rec2,o.rec3].filter(Boolean); return meals.length?d+': '+meals.join(', '):''; }).filter(Boolean).join('\n');
+  return 'Du bist der NNG-Ernaehrungsassistent fuer '+n+'. Antworte kurz, praktisch und immer auf Deutsch.\n\nProfil: 19 Jahre, ~75 kg, Ziel: '+foc+', 3x Training pro Woche, Supplements: Kreatin + Omega-3, kein Proteinpulver. Proteinziel: '+pmin+'-'+pmax+' g/Tag.\n\nNNG-Prinzip: Makros 0.8:1:0.3 (Protein:KH:Fett). Essfenster 12-20 Uhr. Intervallfasten 16/8 optimal. Je spaeter desto weniger Kohlenhydrate. Trainingstag: Pre-Workout = KH+Protein, Post-Workout = Protein+Fett, Abend = High Protein Low Carb.\n\nVerfuegbare Rezepte ('+allRecipes().length+' Stueck):\n'+recs+'\n\nAktueller Wochenplan:\n'+(plan||'(kein Plan erstellt)')+'\n\nRegeln:\n- Empfehle NUR Rezepte aus der obigen Liste\n- Antworte auf Deutsch, maximal 150 Woerter\n- Sei wie ein Kumpel, nicht wie ein Arzt\n- Bei Rezeptfragen: Name + kurz warum es passt';
+}
+async function sendChat(msg){
+  if(!msg||!msg.trim())return;
+  chatHistory.push({role:'user',content:msg.trim()});
+  renderChatMessages(true);
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:buildChatSysPrompt(),messages:chatHistory})
+    });
+    const d=await resp.json();
+    const txt=(d.content&&d.content.find(function(b){return b.type==='text';}))||{text:'Keine Antwort erhalten.'};
+    chatHistory.push({role:'assistant',content:txt.text});
+  }catch(e){
+    chatHistory.push({role:'assistant',content:'Verbindungsfehler - bitte nochmal versuchen. (' + e.message + ')'});
+  }
+  renderChatMessages(false);
+}
+function renderChatMessages(loading){
+  const wrap=document.getElementById('chat_wrap'); if(!wrap)return;
+  let h=chatHistory.map(function(m){
+    return '<div class="chat-msg '+(m.role==='user'?'u':'a')+'">'+esc(m.content)+'</div>';
+  }).join('');
+  if(loading) h+='<div class="chat-msg a loading">tippt\u2026</div>';
+  wrap.innerHTML=h||'<div class="muted small" style="text-align:center;padding:20px">Stell mir eine Frage zur NNG-Ernaehrung, Rezepten oder deinem Training \U0001f4aa</div>';
+  wrap.scrollTop=wrap.scrollHeight;
+  const inp=document.getElementById('chat_in'); const btn=document.getElementById('chat_send');
+  if(inp) inp.disabled=loading;
+  if(btn) btn.disabled=loading;
+}
+function renderChat(){
+  const chips=[
+    'Was kann ich heute kochen?',
+    'Schnelles Rezept unter 20 Min?',
+    'Was esse ich nach dem Training?',
+    'Wie erreiche ich 150 g Protein?',
+    'Welches Rezept ist am guenstigsten?'
+  ];
+  let h='<div class="sec"><h2>\U0001f4ac NNG-Assistent</h2><p class="lead">Frag mich alles rund um Ernaehrung, Rezepte und dein Training.</p>';
+  h+='<div class="chat-wrap" id="chat_wrap"></div>';
+  h+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0">'+chips.map(function(c){return '<span class="chat-chip" data-chip="'+esc(c)+'">'+esc(c)+'</span>';}).join('')+'</div>';
+  h+='<div class="row" style="gap:8px;margin-top:6px"><input type="text" id="chat_in" class="grow" placeholder="Deine Frage\u2026" maxlength="300"><button class="btn olive" id="chat_send">\U0001f4e4</button></div>';
+  h+='<p class="muted small" style="margin-top:6px">\U0001f916 Powered by Claude \u00b7 Antwortet nur auf Deutsch \u00b7 Empfiehlt nur Rezepte aus deiner App</p></div>';
+  app().innerHTML=h;
+  renderChatMessages(false);
+  function doSend(){const inp=document.getElementById('chat_in'); if(!inp||!inp.value.trim())return; const v=inp.value; inp.value=''; sendChat(v);}
+  document.getElementById('chat_send').addEventListener('click',doSend);
+  document.getElementById('chat_in').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doSend();}});
+  app().querySelectorAll('[data-chip]').forEach(function(c){c.addEventListener('click',function(){sendChat(c.getAttribute('data-chip'));});});
+}
+function renderSkip(){
+  const sk=saved.skip||[];
+  let h='<div class="sec"><h2>🚫 Versteckte Rezepte</h2><p class="lead">'+sk.length+' Rezepte ausgeblendet — tippe Wiederherstellen um sie zurückzubringen.</p>';
+  if(!sk.length){h+='<div class="card muted center">Noch nichts ausgeblendet.</div></div>';app().innerHTML=h;return;}
+  h+=sk.map(function(n){return '<div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px"><span>'+esc(n)+'</span><button class="btn olive sm" data-unrec="'+esc(n)+'">↩ Wiederherstellen</button></div>';}).join('');
+  h+='<button class="btn ghost full" style="margin-top:8px" id="sk_all">Alle wiederherstellen</button></div>';
+  app().innerHTML=h;
+  app().querySelectorAll('[data-unrec]').forEach(function(b){b.addEventListener('click',function(){const n=b.getAttribute('data-unrec');saved.skip=saved.skip.filter(function(x){return x!==n;});Store.set('skip',saved.skip);renderSkip();flash(n+' wieder aktiv!');});});
+  document.getElementById('sk_all').addEventListener('click',function(){saved.skip=[];Store.set('skip',saved.skip);renderSkip();flash('Alle Rezepte wiederhergestellt!');});
+}
 function renderCook(){
   const terms=[...cookTerms];
   const chips=terms.map(function(t){return '<span class="ck-chip">'+esc(t)+'<button data-rm="'+esc(t)+'">×</button></span>';}).join('');
@@ -1010,12 +1236,20 @@ function renderTag(){
 const DAYS=["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
 function checkinDue(){ if(!saved.checkins||!saved.checkins.length) return true; const ts=saved.checkins.map(c=>c.ts||0).reduce((m,b)=>Math.max(m,b),0); return (Date.now()-ts)>7*86400000; }
 function mealsForFocus(f){ return f==='abnehmen'?1:(f==='schlank'?2:3); }
-function buildDay(focus,target,pool,used,meals,cheap){
+function protGroup(r){ var i=(r&&r.i||'').toLowerCase();
+  if(/rinderhack|hackfleisch|gulasch|rinderbrust|rindfleisch/.test(i)) return 'rind';
+  if(/hähnchen|geflügel/.test(i)) return 'huhn';
+  if(/lachs|dorade|sardine/.test(i)) return 'fisch';
+  if(/garnelen|gambas|scampi/.test(i)) return 'meer';
+  if(/lamm/.test(i)) return 'lamm'; if(/ente/.test(i)) return 'ente'; return 'andere';
+}
+function buildDay(focus,target,pool,used,meals,cheap,protUsed){
   let lo,hi; if(focus==='aufbau'){lo=target;hi=target*1.15;} else if(focus==='abnehmen'){lo=target*0.85;hi=target;} else {lo=target*0.90;hi=target*1.10;}
   const mid=(lo+hi)/2; let three=[],sumK=0;
   for(let slot=0;slot<meals;slot++){ const slotsLeft=meals-slot; const ideal=Math.max(150,(mid-sumK)/slotsLeft);
     let cands=pool.filter(function(x){return !used[x.r.n] && three.indexOf(x)<0;});
     if(cheap){ var ec=cands.filter(function(x){ var pr=recipePrice(x.r); return pr&&pr.eur<4.5; }); if(ec.length>=2) cands=ec; }
+    if(protUsed){ var over=Object.keys(protUsed).filter(function(k){return protUsed[k]>=3;}); if(over.length){ var vrd=cands.filter(function(x){return !over.includes(protGroup(x.r));}); if(vrd.length>=2) cands=vrd; } }
     if(!cands.length) cands=pool.filter(function(x){return three.indexOf(x)<0;});
     if(!cands.length) break;
     cands.sort(function(a,b){return Math.abs(a.kcal-ideal)-Math.abs(b.kcal-ideal);});
@@ -1039,13 +1273,15 @@ function generateWeek(){
   if(_bgt>0){ const _pM=_bgt/(DAYS.length*(mealsForFocus(focus)||3));
     const _bp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<=_pM*2.2; });
     if(_bp.length>=20) pool=_bp; }
-  const used={};
+  pool=pool.filter(function(x){return !(saved.skip&&saved.skip.includes(x.r.n));});
+  const used={}; var protUsed={};
   const carby=function(x){ return /(kartoffel|süßkartoffel|suesskartoffel|reis|nudel|pasta|spaghetti|gnocchi|lasagne|quinoa|hirse|bulgur|brot|mehl|banane|dattel|honig|waffel|cake|smoothie|obst|pudding)/.test((x.r.i+' '+x.r.n).toLowerCase()); };
   DAYS.forEach(function(d,di){ const o=saved.wochenplan[d]||{};
     if(!o.type) o.type=(di===0||di===2||di===4)?'Trainingstag':'Ruhetag';
-    let three=buildDay(focus, KCAL_TARGET, pool, used, meals, cheap);
+    let three=buildDay(focus, KCAL_TARGET, pool, used, meals, cheap, protUsed);
     three.sort(function(a,b){return (carby(b)?1:0)-(carby(a)?1:0);});
     o.rec1=three[0]?three[0].r.n:''; o.rec2=three[1]?three[1].r.n:''; o.rec3=three[2]?three[2].r.n:'';
+    [three[0],three[1],three[2]].forEach(function(x){if(x){var g=protGroup(x.r);protUsed[g]=(protUsed[g]||0)+1;}});
     if(meals<3) delete o.rec3; if(meals<2) delete o.rec2;
     saved.wochenplan[d]=o; });
   Store.set('wochenplan',saved.wochenplan); renderWoche(); flash('Woche erstellt ✓ ('+focusObj().l+')');
@@ -1069,7 +1305,7 @@ function renderWoche(){
   let h='<div class="sec"><h2>Wochenplan</h2><p class="lead">Automatisch erstellen oder selbst wählen – wird gespeichert.</p>';
   h+='<div class="card"><h3>🎲 Woche automatisch erstellen</h3><p class="muted small" style="margin:0 0 8px">Füllt alle 7 Tage passend zu deinem Fokus (<b>'+esc(focusObj().l)+'</b>)'+(focus==='aufbau'?' – mit Protein-Deckung pro Tag':'')+'. Fokus änderst du in den Einstellungen. Mahlzeiten/Tag nach Fokus: Aufbau 3 · schlank 2 · Abnehmen 1 (OMAD).</p><div class="seg" id="wk_mode"><button data-mode="ausgewogen" class="'+(wkMode==='ausgewogen'?'on':'')+'">Ausgewogen</button><button data-mode="guenstig" class="'+(wkMode==='guenstig'?'on':'')+'">💶 Günstig</button></div><button class="btn full" id="wk_gen" style="margin-top:10px">🎲 Woche generieren</button><div class="note">Danach kannst du einzelne Mahlzeiten antippen und tauschen.</div></div>';
   let wkP=0,wkK=0,wkD=0; DAYS.forEach(function(dd){ const oo=saved.wochenplan[dd]||{}; let p2=0,k2=0,a2=false; [1,2,3].forEach(function(i){ const rn=oo['rec'+i]; if(rn){ const r=allRecipes().find(function(x){return x.n===rn;}); const e=r?estimateRecipe(r):null; if(e){p2+=e.p;k2+=e.kcal;a2=true;} } }); if(a2){wkP+=p2;wkK+=k2;wkD++;} });
-  if(wkD){ h+='<div class="card"><h3>📊 Ø pro Tag (geplant)</h3><div class="daysum" style="font-size:1rem">≈ '+Math.round(wkP/wkD)+' g Eiweiß · ≈ '+(Math.round(wkK/wkD/10)*10)+' kcal</div><p class="muted small" style="margin:4px 0 0">Schnitt über '+wkD+' geplante Tage · Ziel ~'+PROT_MIN+' g Protein · ~'+KCAL_TARGET+' kcal.</p><div class="daysum" style="margin-top:8px">🛒 Einkauf ca. '+fmtEur(weekCost())+' € für die Woche</div><p class="muted small" style="margin:2px 0 0">grobe Schätzung · ohne Gewürze &amp; Vorrat (geteilte Zutaten evtl. doppelt gezählt)</p></div>'; }
+  if(wkD){ h+='<div class="card"><h3>📊 Ø pro Tag (geplant)</h3><div class="daysum" style="font-size:1rem">≈ '+Math.round(wkP/wkD)+' g Eiweiß · ≈ '+(Math.round(wkK/wkD/10)*10)+' kcal</div><p class="muted small" style="margin:4px 0 0">Schnitt über '+wkD+' geplante Tage · Ziel ~'+PROT_MIN+' g Protein · ~'+KCAL_TARGET+' kcal.</p><div class="daysum" style="margin-top:8px">🛒 Einkauf ca. '+fmtEur(weekCostAgg())+' € für die Woche</div><p class="muted small" style="margin:2px 0 0">grobe Schätzung · ohne Gewürze &amp; Vorrat (geteilte Zutaten evtl. doppelt gezählt)</p></div>'; }
   if(wkD&&saved.settings&&saved.settings.wochenbudget>0){
     const _wc=weekCost(),_wb=saved.settings.wochenbudget;
     const _pct=Math.min(100,Math.round(_wc/_wb*100)),_ok=_wc<=_wb;
@@ -1151,7 +1387,10 @@ function drawHist(){ const ch=document.getElementById('ci_chart'); if(ch)ch.inne
 /* FAVORITEN */
 function renderTop(){
   const favRecs=allRecipes().filter(r=>saved.fav.includes(recId(r)));
-  let h='<div class="sec"><h2>Meine Favoriten</h2><p class="lead">Gemerkte Rezepte und deine schnellen Top-Gerichte.</p><div class="grouphd">★ Gemerkte Rezepte ('+favRecs.length+')</div><div id="favbox">';
+  const ratedRecs=allRecipes().filter(function(r){return saved.ratings&&saved.ratings[r.n];}).sort(function(a,b){return (saved.ratings[b.n]||0)-(saved.ratings[a.n]||0);});
+  let h='<div class="sec"><h2>Meine Favoriten</h2><p class="lead">Bewertete &amp; gemerkte Rezepte auf einen Blick.</p><div class="grouphd">★ Gemerkte Rezepte ('+favRecs.length+')</div><div id="favbox">';
+  h+='<div class="grouphd">🤩 Bewertet ('+(ratedRecs.length||0)+')</div>'+(ratedRecs.length?ratedRecs.slice(0,8).map(r=>recCard(r,false)).join(''):'<div class="muted small">Noch keine Bewertungen — tippe nach dem Essen auf 🤩.</div>');
+  h+='<div class="grouphd">⭐ Favoriten ('+(favRecs.length||0)+')</div><div id="favbox">';
   h+= favRecs.length?favRecs.map(r=>recCard(r,false)).join(''):'<div class="muted small">Noch nichts gemerkt – im Rezept-Finder auf ☆ tippen.</div>';
   h+='</div><div class="grouphd">⚡ Schnelle Top-Gerichte</div><div id="toplist"></div><div class="card"><b>Neues Schnellgericht</b><label class="fld">Name</label><input type="text" id="t_n" placeholder="z. B. Thunfisch-Bowl"><div class="row"><div class="grow"><label class="fld">Protein</label><input type="text" id="t_p" placeholder="~ g"></div><div class="grow"><label class="fld">Zeit</label><input type="text" id="t_z" placeholder="min"></div></div><label class="fld">Gerät</label><input type="text" id="t_g" placeholder="Herd / Airfryer …"><button class="btn full" id="t_add" style="margin-top:12px">Hinzufügen</button></div></div>';
   app().innerHTML=h; bindRecCards(document.getElementById('favbox'));
@@ -1289,7 +1528,7 @@ function scaleIng(text,f){ if(!f||f===1)return text;
     return m; });
 }
 function collectData(){ return {wochenplan:saved.wochenplan,checkins:saved.checkins,top:saved.top,fav:saved.fav,einkauf:saved.einkauf,protein:saved.protein,customRec:saved.customRec,settings:saved.settings}; }
-(async function(){ await loadAll(); renderTabbar(); go('home'); })();
+(async function(){ await loadAll(); renderTabbar(); go('home'); initSW(); })();
 </script>
 </body>
 </html>
