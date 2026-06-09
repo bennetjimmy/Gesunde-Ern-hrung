@@ -237,6 +237,17 @@
 .perm-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:.82rem;font-weight:700}
 .perm-badge.ok{background:rgba(88,130,80,.15);color:var(--olive)}
 .perm-badge.no{background:rgba(178,90,60,.12);color:var(--terra)}
+.more-grp{margin-bottom:6px}
+.more-grp-hd{font-size:.72rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:14px 4px 4px}
+.more-grp-hd:first-child{padding-top:4px}
+.pickrow{width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:background .15s}
+.pickrow:hover{background:var(--bg)}
+.pickrow .pr-icon{font-size:1.3rem;flex-shrink:0}
+.pickrow .pr-txt{flex:1}
+.pickrow .pr-lbl{font-weight:700;font-size:.92rem}
+.pickrow .pr-sub{font-size:.78rem;color:var(--muted);margin-top:1px}
+.pickrow .pr-arr{color:var(--muted);font-size:1rem}
+.api-key-box{background:rgba(88,130,80,.08);border:1px solid rgba(88,130,80,.3);border-radius:12px;padding:12px 14px;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -492,6 +503,7 @@ const INGS=[
  {g:"Obst & Süße",items:[{l:"Äpfel",k:["apfel","äpfel"]},{l:"Banane",k:["banane"]},{l:"Beeren",k:["beeren","erdbeer","heidelbeer","himbeer","blaubeer"]},{l:"Mango",k:["mango"]},{l:"Datteln",k:["datteln","dattel"]},{l:"Honig",k:["honig"]}]},
  {g:"Sonstiges",items:[{l:"Nüsse (Walnuss, Cashew, Mandel)",k:["walnuss","cashew","mandel","paranüss","pekan","nüsse"]},{l:"Chiasamen",k:["chiasamen"]},{l:"Kokosmilch",k:["kokosmilch","kokosjoghurt"]},{l:"Sahne",k:["sahne"]}]}
 ];
+const PROXY_URL='https://nng-proxy.bennetbarth06.workers.dev';
 let cookSel=new Set(),cookTerms=new Set(),ckStrict=false,_rateN=''; let chatHistory=[];
 /* ===== NEUE APP-LOGIK ===== */
 const FOCUS=[
@@ -1008,9 +1020,26 @@ function renderDash(){
 }
 /* MEHR-MENÜ */
 function renderMore(){
-  const items=[{go:'chat',e:'💬',t:'NNG-Assistent (KI)'},{go:'notifs',e:'🔔',t:'Erinnerungen'},
-{go:'cook',e:'🧺',t:'Was kann ich kochen?'},{go:'skip',e:'🚫',t:'Versteckte Rezepte'},{go:'tag',e:'🕛',t:'Tagesplan & Struktur'},{go:'checkin',e:'✅',t:'Wöchentlicher Check-in'},{go:'top',e:'⭐',t:'Meine Favoriten'},{go:'einkauf',e:'🛒',t:'Einkauf & Vorräte'},{go:'check',e:'🔎',t:'Frag & Check'},{go:'prinzip',e:'📜',t:'Meine Prinzipien'},{go:'nng',e:'📖',t:'NNG-Prinzip erklärt'},{go:'settings',e:'⚙️',t:'Einstellungen'},{go:'help',e:'❓',t:'Hilfe & Erklärung'}];
-  app().innerHTML='<div class="sec"><h2>Mehr</h2><p class="lead">Alle weiteren Bereiche.</p>'+items.map(i=>'<button class="pickrow" data-go="'+i.go+'"><span><span style="font-size:1.3rem;margin-right:8px">'+i.e+'</span>'+i.t+'</span><span style="color:var(--ink-soft)">›</span></button>').join('')+'</div>';
+  function row(go,e,lbl,sub){ return '<button class="pickrow" data-go="'+go+'"><span class="pr-icon">'+e+'</span><span class="pr-txt"><div class="pr-lbl">'+lbl+'</div><div class="pr-sub">'+sub+'</div></span><span class="pr-arr">›</span></button>'; }
+  let h='<div class="sec" style="padding-bottom:90px"><h2>Mehr</h2>';
+  h+='<div class="more-grp-hd">🤖 Assistent & Suche</div>';
+  h+=row('chat','💬','KI-Assistent','Rezept- & Ernährungsfragen auf Deutsch');
+  h+=row('cook','🧺','Was kann ich kochen?','Zutaten eingeben → passende Rezepte');
+  h+='<div class="more-grp-hd">❤️ Meine Sachen</div>';
+  h+=row('top','⭐','Favoriten & Bewertungen','Lieblings-Gerichte und Smileys');
+  h+=row('skip','🚫','Versteckte Rezepte','Nie-wieder-Liste verwalten');
+  h+='<div class="more-grp-hd">📋 Planung</div>';
+  h+=row('einkauf','🛒','Einkaufsliste','Wocheneinkauf aus dem Plan generieren');
+  h+=row('checkin','✅','Wöchentlicher Check-in','Fortschritt & Notizen');
+  h+='<div class="more-grp-hd">📚 Wissen</div>';
+  h+=row('tag','🕛','Tagesplan-Struktur','Trainings- & Ruhetag erklärt');
+  h+=row('nng','📖','NNG-Prinzip','Makros, Fasten, 90-Tage-Detox');
+  h+=row('prinzip','📜','Meine Ernährungs-Prinzipien','Persönliche Regeln & Liste');
+  h+='<div class="more-grp-hd">⚙️ App</div>';
+  h+=row('notifs','🔔','Erinnerungen','Tägliche Push-Benachrichtigungen');
+  h+=row('settings','⚙️','Einstellungen','Name, Proteinziel, Budget, Design');
+  h+='</div>';
+  app().innerHTML=h;
 }
 /* REZEPT-FINDER */
 let fCat='all',fDev='all',fQ='',fFav=false,fPriceMin=0,fPriceMax=99,fQuick=false;
@@ -1095,15 +1124,18 @@ async function sendChat(msg){
   chatHistory.push({role:'user',content:msg.trim()});
   renderChatMessages(true);
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:buildChatSysPrompt(),messages:chatHistory})
-    });
+    const body={
+      systemInstruction:{parts:[{text:buildChatSysPrompt()}]},
+      contents:chatHistory.map(function(m){return{role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]};}),
+      generationConfig:{maxOutputTokens:600,temperature:0.7}
+    };
+    const resp=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const d=await resp.json();
-    const txt=(d.content&&d.content.find(function(b){return b.type==='text';}))||{text:'Keine Antwort erhalten.'};
-    chatHistory.push({role:'assistant',content:txt.text});
+    if(d.error){throw new Error(d.error.message||'API-Fehler');}
+    const txt=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts&&d.candidates[0].content.parts[0]?d.candidates[0].content.parts[0].text:'Keine Antwort erhalten.';
+    chatHistory.push({role:'assistant',content:txt});
   }catch(e){
-    chatHistory.push({role:'assistant',content:'Verbindungsfehler - bitte nochmal versuchen. (' + e.message + ')'});
+    chatHistory.push({role:'assistant',content:'❌ Verbindungsfehler: '+e.message});
   }
   renderChatMessages(false);
 }
@@ -1120,6 +1152,7 @@ function renderChatMessages(loading){
   if(btn) btn.disabled=loading;
 }
 function renderChat(){
+  const keyBox='';
   const chips=[
     'Was kann ich heute kochen?',
     'Schnelles Rezept unter 20 Min?',
@@ -1128,6 +1161,7 @@ function renderChat(){
     'Welches Rezept ist am guenstigsten?'
   ];
   let h='<div class="sec"><h2>\U0001f4ac NNG-Assistent</h2><p class="lead">Frag mich alles rund um Ernaehrung, Rezepte und dein Training.</p>';
+  h+=keyBox;
   h+='<div class="chat-wrap" id="chat_wrap"></div>';
   h+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0">'+chips.map(function(c){return '<span class="chat-chip" data-chip="'+esc(c)+'">'+esc(c)+'</span>';}).join('')+'</div>';
   h+='<div class="row" style="gap:8px;margin-top:6px"><input type="text" id="chat_in" class="grow" placeholder="Deine Frage\u2026" maxlength="300"><button class="btn olive" id="chat_send">\U0001f4e4</button></div>';
@@ -1138,6 +1172,7 @@ function renderChat(){
   document.getElementById('chat_send').addEventListener('click',doSend);
   document.getElementById('chat_in').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doSend();}});
   app().querySelectorAll('[data-chip]').forEach(function(c){c.addEventListener('click',function(){sendChat(c.getAttribute('data-chip'));});});
+  /* Key wird über Worker gehandelt */
 }
 function renderSkip(){
   const sk=saved.skip||[];
