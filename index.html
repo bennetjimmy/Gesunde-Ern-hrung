@@ -1364,6 +1364,7 @@ function renderWoche(){
   h+='<button class="btn olive full" id="wk_shop" style="margin:6px 0 4px">🛒 Einkaufsliste aus dieser Woche erzeugen</button><div class="note">Sammelt die Zutaten aller gewählten Rezepte in deine Einkaufsliste. Mengen ggf. nach Personenzahl anpassen.</div></div>';
   app().innerHTML=h;
   const mode=document.getElementById('wk_mode'); if(mode){ mode.querySelectorAll('[data-mode]').forEach(function(b){ b.addEventListener('click',function(){ wkMode=b.getAttribute('data-mode'); renderWoche(); }); }); }
+  bindRecCards(app());
   const gen=document.getElementById('wk_gen'); if(gen) gen.addEventListener('click',generateWeek);
   app().querySelectorAll('[data-day]').forEach(function(card){ const d=card.getAttribute('data-day');
     const ensure=function(){ saved.wochenplan[d]=saved.wochenplan[d]||{}; return saved.wochenplan[d]; };
