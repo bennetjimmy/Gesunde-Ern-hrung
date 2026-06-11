@@ -530,6 +530,7 @@ function go(v){ view=v; render(); renderTabbar(); window.scrollTo(0,0);
   const hb=document.querySelector('.homebtn'); const sub=(TABOF[v]==='more'&&v!=='more');
   if(sub){ hb.classList.add('show'); hb.setAttribute('data-go','more'); hb.textContent='← Zurück'; } else { hb.classList.remove('show'); hb.setAttribute('data-go','home'); hb.textContent='← Start'; } }
 document.addEventListener('click',e=>{ const g=e.target.closest('[data-go]'); if(g){ go(g.getAttribute('data-go')); } });
+document.addEventListener('click',e=>{ const sr=e.target.closest('[data-showrec]'); if(sr){ e.stopPropagation(); showRecipe(sr.getAttribute('data-showrec')); } });
 function render(){ try{ return renderView(); }catch(e){ try{ app().innerHTML='<div class="sec"><div class="card"><b>Hoppla – dieser Bereich konnte gerade nicht geladen werden.</b><div class="small muted" style="margin-top:6px">'+esc((e&&e.message)||String(e))+'</div><button class="btn full" data-go="home" style="margin-top:10px">Zur Startseite</button></div></div>'; }catch(_){} } }
 function renderView(){ const v=view;
   if(v==='home')return renderDash(); if(v==='more')return renderMore(); if(v==='finder')return renderFinder();
@@ -1375,7 +1376,7 @@ function renderWoche(){
     card.querySelectorAll('[data-rmrec]').forEach(function(b){ b.addEventListener('click',function(){ const i=b.getAttribute('data-rmrec'); const o=ensure(); delete o['rec'+i]; Store.set('wochenplan',saved.wochenplan); renderWoche(); }); });
     card.querySelectorAll('[data-reroll]').forEach(function(b){ b.addEventListener('click',function(){ rerollSlot(d, b.getAttribute('data-reroll')); }); });
     card.querySelectorAll('[data-eat]').forEach(function(b){ b.addEventListener('click',function(){ toggleEaten(d, b.getAttribute('data-eat')); }); });
-    card.querySelectorAll('[data-showrec]').forEach(function(b){ b.addEventListener('click',function(){ showRecipe(b.getAttribute('data-showrec')); }); });
+    /* data-showrec wird global behandelt */
   });
   document.getElementById('wk_shop').addEventListener('click',genShoppingFromWeek);
 }
@@ -1430,7 +1431,9 @@ function renderTop(){
   h+='<div class="grouphd">⭐ Favoriten ('+(favRecs.length||0)+')</div><div id="favbox">';
   h+= favRecs.length?favRecs.map(r=>recCard(r,false)).join(''):'<div class="muted small">Noch nichts gemerkt – im Rezept-Finder auf ☆ tippen.</div>';
   h+='</div><div class="grouphd">⚡ Schnelle Top-Gerichte</div><div id="toplist"></div><div class="card"><b>Neues Schnellgericht</b><label class="fld">Name</label><input type="text" id="t_n" placeholder="z. B. Thunfisch-Bowl"><div class="row"><div class="grow"><label class="fld">Protein</label><input type="text" id="t_p" placeholder="~ g"></div><div class="grow"><label class="fld">Zeit</label><input type="text" id="t_z" placeholder="min"></div></div><label class="fld">Gerät</label><input type="text" id="t_g" placeholder="Herd / Airfryer …"><button class="btn full" id="t_add" style="margin-top:12px">Hinzufügen</button></div></div>';
-  app().innerHTML=h; bindRecCards(document.getElementById('favbox'));
+  app().innerHTML=h;
+  const _rb=document.getElementById('ratedbox'),_fb=document.getElementById('favbox');
+  if(_rb)bindRecCards(_rb); if(_fb)bindRecCards(_fb);
   document.getElementById('t_add').addEventListener('click',()=>{ const n=document.getElementById('t_n').value.trim(); if(!n)return; saved.top.push({name:n,protein:document.getElementById('t_p').value,zeit:document.getElementById('t_z').value,geraet:document.getElementById('t_g').value}); Store.set('top',saved.top); renderTop(); });
   drawTop();
 }
