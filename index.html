@@ -985,11 +985,13 @@ async function subscribePush(reg){
       userVisibleOnly:true,
       applicationServerKey:urlBase64ToUint8Array(vapidKey)
     });
+    const deviceId=getDeviceId();
     await fetch(PROXY_URL+'/subscribe',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(sub.toJSON())
+      body:JSON.stringify({...sub.toJSON(),deviceId:deviceId,pmin:saved.settings.pmin||130})
     });
-    console.log('Push-Abo registriert');
+    saved.notifs.subscribed=true; Store.set('notifs',saved.notifs);
+    console.log('Push-Abo OK, deviceId:',deviceId);
   }catch(e){ console.warn('Push-Abo fehlgeschlagen:',e.message); }
 }
 function urlBase64ToUint8Array(base64String){
@@ -1366,7 +1368,28 @@ function rerollSlot(day,i){
   const top=pool.slice(0,Math.min(pool.length,8)); const pick=top[Math.floor(Math.random()*top.length)];
   o['rec'+i]=pick.r.n; saved.wochenplan[day]=o; Store.set('wochenplan',saved.wochenplan); renderWoche();
 }
-async function logEaten(name){ const r=allRecipes().find(function(x){return x.n===name;}); const e=r?estimateRecipe(r):null; if(!e){ flash('Keine Nährwerte für dieses Rezept'); return; } saved.protein.push({n:name,amount:'(gekocht)',prot:e.p,kcal:e.kcal}); await Store.set('protein',saved.protein); flash('Zu heute: +'+e.p+' g · +'+e.kcal+' kcal ✓'); }
+async function getDeviceId(){
+  if(!saved.notifs)saved.notifs={};
+  if(!saved.notifs.deviceId){
+    saved.notifs.deviceId='dev_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
+    Store.set('notifs',saved.notifs);
+  }
+  return saved.notifs.deviceId;
+}
+async function sendProteinUpdate(){
+  try{
+    if(!saved.notifs||!saved.notifs.subscribed) return;
+    const today=new Date().toDateString();
+    const total=(saved.protein||[]).filter(function(x){
+      return new Date(x.ts||Date.now()).toDateString()===today;
+    }).reduce(function(s,x){return s+(x.prot||0);},0);
+    fetch(PROXY_URL+'/protein',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({deviceId:getDeviceId(),total:Math.round(total),
+        pmin:saved.settings.pmin||130,pmax:saved.settings.pmax||150})});
+  }catch(e){/* silent */}
+}
+async function logEaten(name){ const r=allRecipes().find(function(x){return x.n===name;}); const e=r?estimateRecipe(r):null; if(!e){ flash('Keine Nährwerte für dieses Rezept'); return; } saved.protein.push({n:name,amount:'(gekocht)',prot:e.p,kcal:e.kcal}); await Store.set('protein',saved.protein); flash('Zu heute: +'+e.p+' g · +'+e.kcal+' kcal ✓'); sendProteinUpdate(); }
 async function toggleEaten(day,i){ const o=saved.wochenplan[day]||{}; const rn=o['rec'+i]; if(!rn)return; const pid=day+'#'+i; const idx=saved.protein.findIndex(function(x){return x.pid===pid;}); if(idx>=0){ saved.protein.splice(idx,1); } else { const r=allRecipes().find(function(x){return x.n===rn;}); const e=r?estimateRecipe(r):null; saved.protein.push({n:rn,amount:'(Plan)',prot:e?e.p:0,kcal:e?e.kcal:0,pid:pid}); } await Store.set('protein',saved.protein); renderWoche(); }
 function showRecipe(name){ const r=allRecipes().find(function(x){return x.n===name;}); if(!r)return; const ov=document.getElementById('overlay'); ov.innerHTML='<div class="sheet"><button class="btn ghost full" id="rv_close" style="margin-bottom:10px">✕ Schließen</button>'+recCard(r,true)+'</div>'; ov.classList.add('show'); bindRecCards(ov); document.getElementById('rv_close').addEventListener('click',function(){ ov.classList.remove('show'); ov.innerHTML=''; }); }
 function renderWoche(){
