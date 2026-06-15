@@ -1331,9 +1331,17 @@ function generateWeek(){
   if(pool.length<6){ flash('Zu wenige Rezepte mit Nährwerten'); return; }
   if(cheap){ const cp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<8; }); if(cp.length>=24) pool=cp; }
   const _bgt=saved.settings&&saved.settings.wochenbudget;
-  if(_bgt>0){ const _pM=_bgt/(DAYS.length*(mealsForFocus(focus)||3));
-    const _bp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<=_pM*2.2; });
-    if(_bp.length>=20) pool=_bp; }
+  if(_bgt>0){
+    const _meals=DAYS.length*(mealsForFocus(focus)||3);
+    const _pM=_bgt/_meals;
+    /* Erst strikt: max 10% über Stückkostenbudget */
+    let _bp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<=_pM*1.1; });
+    /* Falls zu wenig: auf 40% lockern */
+    if(_bp.length<12) _bp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<=_pM*1.4; });
+    /* Falls immer noch zu wenig: auf 70% lockern */
+    if(_bp.length<8) _bp=pool.filter(function(x){ const pr=recipePrice(x.r); return !pr||pr.eur<=_pM*1.7; });
+    if(_bp.length>=6) pool=_bp;
+  }
   pool=pool.filter(function(x){return !(saved.skip&&saved.skip.includes(x.r.n));});
   const used={}; var protUsed={};
   const carby=function(x){ return /(kartoffel|süßkartoffel|suesskartoffel|reis|nudel|pasta|spaghetti|gnocchi|lasagne|quinoa|hirse|bulgur|brot|mehl|banane|dattel|honig|waffel|cake|smoothie|obst|pudding)/.test((x.r.i+' '+x.r.n).toLowerCase()); };
@@ -1368,7 +1376,7 @@ function renderWoche(){
   let wkP=0,wkK=0,wkD=0; DAYS.forEach(function(dd){ const oo=saved.wochenplan[dd]||{}; let p2=0,k2=0,a2=false; [1,2,3].forEach(function(i){ const rn=oo['rec'+i]; if(rn){ const r=allRecipes().find(function(x){return x.n===rn;}); const e=r?estimateRecipe(r):null; if(e){p2+=e.p;k2+=e.kcal;a2=true;} } }); if(a2){wkP+=p2;wkK+=k2;wkD++;} });
   if(wkD){ h+='<div class="card"><h3>📊 Ø pro Tag (geplant)</h3><div class="daysum" style="font-size:1rem">≈ '+Math.round(wkP/wkD)+' g Eiweiß · ≈ '+(Math.round(wkK/wkD/10)*10)+' kcal</div><p class="muted small" style="margin:4px 0 0">Schnitt über '+wkD+' geplante Tage · Ziel ~'+PROT_MIN+' g Protein · ~'+KCAL_TARGET+' kcal.</p><div class="daysum" style="margin-top:8px">🛒 Einkauf ca. '+fmtEur(weekCostAgg())+' € für die Woche</div><p class="muted small" style="margin:2px 0 0">grobe Schätzung · ohne Gewürze &amp; Vorrat (geteilte Zutaten evtl. doppelt gezählt)</p></div>'; }
   if(wkD&&saved.settings&&saved.settings.wochenbudget>0){
-    const _wc=weekCost(),_wb=saved.settings.wochenbudget;
+    const _wc=weekCostAgg(),_wb=saved.settings.wochenbudget;
     const _pct=Math.min(100,Math.round(_wc/_wb*100)),_ok=_wc<=_wb;
     h+='<div class="card" style="padding:10px 12px 8px;margin-top:-6px">';
     h+='<div style="display:flex;justify-content:space-between;align-items:center">';
