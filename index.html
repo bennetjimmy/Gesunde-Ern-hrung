@@ -960,10 +960,11 @@ function renderNotifs(){
   if(stBtn) stBtn.addEventListener('click',async function(){
     if(Notification.permission!=='granted'){flash('Erst erlauben ↑');return;}
     try{
+      flash('Registriere Gerät …');
       const reg=await navigator.serviceWorker.ready;
-      await subscribePush(reg,true);
-      await new Promise(function(r){setTimeout(r,800);});
-      const r=await fetch(PROXY_URL+'/testpush',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:getDeviceId()})});
+      const devId=await subscribePush(reg,true);
+      await new Promise(function(r){setTimeout(r,1500);});
+      const r=await fetch(PROXY_URL+'/testpush',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:devId||getDeviceId()})});
       const d=await r.json();
       if(d.ok){ flash('✅ Server-Push gesendet!'); }
       else { alert('Push-Fehler:\n\n'+(d.error||'unbekannt')+'\n\nHost: '+(d.endpoint_host||'?')); flash('❌ Fehler (siehe Meldung)'); }
@@ -1007,13 +1008,17 @@ async function subscribePush(reg,force){
       applicationServerKey:urlBase64ToUint8Array(vapidKey)
     });
     const deviceId=getDeviceId();
-    await fetch(PROXY_URL+'/subscribe',{
+    const subData=sub.toJSON();
+    const resp=await fetch(PROXY_URL+'/subscribe',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({...sub.toJSON(),deviceId:deviceId,pmin:saved.settings.pmin||130})
+      body:JSON.stringify({endpoint:subData.endpoint,keys:subData.keys,deviceId:deviceId,pmin:saved.settings.pmin||130})
     });
+    const rj=await resp.json();
+    if(!rj.ok) throw new Error('Server lehnte Abo ab');
     saved.notifs.subscribed=true; Store.set('notifs',saved.notifs);
     console.log('Push-Abo OK, deviceId:',deviceId);
-  }catch(e){ console.warn('Push-Abo fehlgeschlagen:',e.message); }
+    return deviceId;
+  }catch(e){ console.warn('Push-Abo fehlgeschlagen:',e.message); throw e; }
 }
 function urlBase64ToUint8Array(base64String){
   const padding='='.repeat((4-base64String.length%4)%4);
