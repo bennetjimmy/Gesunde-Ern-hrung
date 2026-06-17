@@ -961,7 +961,8 @@ function renderNotifs(){
     if(Notification.permission!=='granted'){flash('Erst erlauben ↑');return;}
     try{
       const reg=await navigator.serviceWorker.ready;
-      await subscribePush(reg);
+      await subscribePush(reg,true);
+      await new Promise(function(r){setTimeout(r,800);});
       const r=await fetch(PROXY_URL+'/testpush',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:getDeviceId()})});
       const d=await r.json();
       flash(d.ok?'✅ Server-Push gesendet! Kommt in ~5 Sek.':'❌ '+(d.error||'Fehler'));
@@ -994,9 +995,12 @@ function initSW(){
     scheduleNotifs();
   });
 }
-async function subscribePush(reg){
+async function subscribePush(reg,force){
   try{
     const vapidKey='BPBenPT0nca2WLn6-DzZXguBtLvAJnULU_KBWKsxfDxLaFhIKUHyvogZVu2aw4fQXxfbP5Og6ZXSTLvOE98dEgI';
+    /* Altes Abo entfernen falls vorhanden (wichtig bei Key-Wechsel) */
+    const old=await reg.pushManager.getSubscription();
+    if(old&&force){ await old.unsubscribe(); }
     const sub=await reg.pushManager.subscribe({
       userVisibleOnly:true,
       applicationServerKey:urlBase64ToUint8Array(vapidKey)
