@@ -958,17 +958,38 @@ function renderNotifs(){
   });
   const stBtn=document.getElementById('notif_servertest');
   if(stBtn) stBtn.addEventListener('click',async function(){
-    if(Notification.permission!=='granted'){flash('Erst erlauben ↑');return;}
+    if(Notification.permission!=='granted'){alert('Erst Benachrichtigungen erlauben!');return;}
+    let log='';
     try{
-      flash('Registriere Gerät …');
+      log+='1. Service Worker bereit?\n';
       const reg=await navigator.serviceWorker.ready;
-      const devId=await subscribePush(reg,true);
+      log+='   OK\n';
+
+      log+='2. Altes Abo entfernen …\n';
+      const oldSub=await reg.pushManager.getSubscription();
+      if(oldSub){ await oldSub.unsubscribe(); log+='   altes entfernt\n'; } else { log+='   keins vorhanden\n'; }
+
+      log+='3. Neues Abo erstellen …\n';
+      const vapidKey='BPBenPT0nca2WLn6-DzZXguBtLvAJnULU_KBWKsxfDxLaFhIKUHyvogZVu2aw4fQXxfbP5Og6ZXSTLvOE98dEgI';
+      const sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(vapidKey)});
+      log+='   OK\n';
+
+      const deviceId=getDeviceId();
+      const subData=sub.toJSON();
+      log+='4. Beim Server registrieren (ID: '+deviceId+') …\n';
+      const sr=await fetch(PROXY_URL+'/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({endpoint:subData.endpoint,keys:subData.keys,deviceId:deviceId,pmin:saved.settings.pmin||130})});
+      const srj=await sr.json();
+      log+='   Server: '+JSON.stringify(srj)+'\n';
+      saved.notifs.subscribed=true; Store.set('notifs',saved.notifs);
+
       await new Promise(function(r){setTimeout(r,1500);});
-      const r=await fetch(PROXY_URL+'/testpush',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:devId||getDeviceId()})});
+
+      log+='5. Test-Push anfordern …\n';
+      const r=await fetch(PROXY_URL+'/testpush',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:deviceId})});
       const d=await r.json();
-      if(d.ok){ flash('✅ Server-Push gesendet!'); }
-      else { alert('Push-Fehler:\n\n'+(d.error||'unbekannt')+'\n\nHost: '+(d.endpoint_host||'?')); flash('❌ Fehler (siehe Meldung)'); }
-    }catch(e){ flash('❌ '+e.message); }
+      log+='   '+JSON.stringify(d);
+      alert(d.ok?'✅ ERFOLG! Push wurde gesendet.\n\n'+log:'Diagnose:\n\n'+log);
+    }catch(e){ alert('Fehler bei Schritt:\n\n'+log+'\n\nFEHLER: '+e.message); }
   });
   document.getElementById('notif_test').addEventListener('click',function(){
     if(Notification.permission!=='granted'){flash('Erst Benachrichtigungen erlauben \u2191');return;}
