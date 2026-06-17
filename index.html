@@ -1415,7 +1415,7 @@ function rerollSlot(day,i){
   const top=pool.slice(0,Math.min(pool.length,8)); const pick=top[Math.floor(Math.random()*top.length)];
   o['rec'+i]=pick.r.n; saved.wochenplan[day]=o; Store.set('wochenplan',saved.wochenplan); renderWoche();
 }
-async function getDeviceId(){
+function getDeviceId(){
   if(!saved.notifs)saved.notifs={};
   if(!saved.notifs.deviceId){
     saved.notifs.deviceId='dev_'+Math.random().toString(36).slice(2)+Date.now().toString(36);
