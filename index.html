@@ -965,7 +965,8 @@ function renderNotifs(){
       await new Promise(function(r){setTimeout(r,800);});
       const r=await fetch(PROXY_URL+'/testpush',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:getDeviceId()})});
       const d=await r.json();
-      flash(d.ok?'✅ Server-Push gesendet! Kommt in ~5 Sek.':'❌ '+(d.error||'Fehler'));
+      if(d.ok){ flash('✅ Server-Push gesendet!'); }
+      else { alert('Push-Fehler:\n\n'+(d.error||'unbekannt')+'\n\nHost: '+(d.endpoint_host||'?')); flash('❌ Fehler (siehe Meldung)'); }
     }catch(e){ flash('❌ '+e.message); }
   });
   document.getElementById('notif_test').addEventListener('click',function(){
