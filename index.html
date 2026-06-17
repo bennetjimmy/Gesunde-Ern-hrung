@@ -996,7 +996,7 @@ function initSW(){
 }
 async function subscribePush(reg){
   try{
-    const vapidKey='BIXOUJoyq82mjyW7aHMDYJEHGcYvormF2NZGBQFzkUeI5Dkz24s0f8-IT4P5Vgtz-tb-5CRkK9RwDtu0hOSUwmc';
+    const vapidKey='BPBenPT0nca2WLn6-DzZXguBtLvAJnULU_KBWKsxfDxLaFhIKUHyvogZVu2aw4fQXxfbP5Og6ZXSTLvOE98dEgI';
     const sub=await reg.pushManager.subscribe({
       userVisibleOnly:true,
       applicationServerKey:urlBase64ToUint8Array(vapidKey)
